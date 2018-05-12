@@ -5,6 +5,7 @@ import torchvision.datasets as dsets
 from torch.autograd import Variable
 import torch.nn.functional as F
 
+### SWS model replicates the model in the soft-weight sharing paper
 class SWSModel(nn.Module):
     def __init__(self):
         super(SWSModel, self).__init__()
@@ -43,7 +44,7 @@ class SWSModel(nn.Module):
         return out
     
     
-    
+### LeNet 300 - 100 has 2 hidden layers with 300 nodes and 100 nodes
 class LeNet_300_100(nn.Module):
     def __init__(self):
         super(LeNet_300_100, self).__init__()
@@ -57,56 +58,15 @@ class LeNet_300_100(nn.Module):
         self.fc3 = nn.Linear(100,10)
         self.sm1 = nn.Softmax()
     
-    def forward(self, x):
+    def forward(self, x, kd=False):
         x = x.view(-1, 28 * 28)
         out = self.fc1(x)
         out = self.relu1(out)
         out = self.fc2(out)
         out = self.relu2(out)
         out = self.fc3(out)
-        out = self.sm1(out)
+        if (kd):
+            return out
         
+        out = self.sm1(out)
         return out
-    
-def test_accuracy(test_loader,model):
-    # Calculate Accuracy         
-    correct = 0
-    total = 0
-    # Iterate through test dataset
-    for images, labels in test_loader:
-        #if use_cuda:
-        images=images.cuda()
-        images = Variable(images)
-        # Forward pass only to get logits/output
-        outputs = model(images)
-        # Get predictions from the maximum value
-        _, predicted = torch.max(outputs.data, 1)
-        # Total number of labels
-        total += labels.size(0)
-        #if use_cuda:
-        correct += (predicted.cpu() == labels.cpu()).sum()
-        #else:
-        #    correct += (predicted == labels).sum()
-
-    accuracy = 100.0 * correct / total
-    return accuracy
-    
-def train_epoch(model, optimizer, criterion, train_loader):
-    for i, (images, labels) in enumerate(train_loader):
-
-        #if(use_cuda):
-        images=images.cuda()
-        labels=labels.cuda()
-        images = Variable(images)
-        labels = Variable(labels)
-        # Clear gradients w.r.t. parameters
-        optimizer.zero_grad()
-        # Forward pass to get output/logits
-        outputs = model(images)
-        # Calculate Loss: softmax --> cross entropy loss
-        loss = criterion(outputs, labels)
-        # Getting gradients w.r.t. parameters
-        loss.backward()
-        # Updating parameters
-        optimizer.step()
-    return model, loss
