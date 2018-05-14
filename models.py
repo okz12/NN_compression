@@ -58,16 +58,24 @@ class LeNet_300_100(nn.Module):
         self.fc3 = nn.Linear(100,10)
         self.sm1 = nn.Softmax()
     
-    def forward(self, x, kd=False):
+    def forward(self, x):
         x = x.view(-1, 28 * 28)
         out = self.fc1(x)
         out = self.relu1(out)
         out = self.fc2(out)
         out = self.relu2(out)
         out = self.fc3(out)
-        if (kd):
-            return out
-        
+        out = self.sm1(out)
+        return out
+    
+    def kd_targets(self, x, T=1.0):
+        x = x.view(-1, 28 * 28)
+        out = self.fc1(x)
+        out = self.relu1(out)
+        out = self.fc2(out)
+        out = self.relu2(out)
+        out = self.fc3(out)
+        out = out / T
         out = self.sm1(out)
         return out
     

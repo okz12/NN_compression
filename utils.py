@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 ###Training and testing NN
-def test_accuracy(test_loader,model, kd=False, get_loss=False):
+def test_accuracy(test_loader,model, get_loss=False):
     # Calculate Accuracy         
     correct = 0
     total = 0
@@ -22,7 +22,7 @@ def test_accuracy(test_loader,model, kd=False, get_loss=False):
         images = images.cuda()
         images = Variable(images)
         # Forward pass only to get logits/output
-        outputs = model.forward(images, kd)
+        outputs = model(images)
         #CE Loss
         if get_loss:
             loss_criterion = nn.CrossEntropyLoss()
@@ -41,7 +41,7 @@ def test_accuracy(test_loader,model, kd=False, get_loss=False):
         return accuracy, loss
     return accuracy
     
-def train_epoch(model, optimizer, criterion, train_loader, kd=False):
+def train_epoch(model, optimizer, criterion, train_loader):
     for i, (images, labels) in enumerate(train_loader):
 
         #if(use_cuda):
@@ -52,7 +52,7 @@ def train_epoch(model, optimizer, criterion, train_loader, kd=False):
         # Clear gradients w.r.t. parameters
         optimizer.zero_grad()
         # Forward pass to get output/logits
-        outputs = model.forward(images, kd)
+        outputs = model(images)
         # Calculate Loss: softmax --> cross entropy loss
         loss = criterion(outputs, labels)
         # Getting gradients w.r.t. parameters
@@ -63,7 +63,7 @@ def train_epoch(model, optimizer, criterion, train_loader, kd=False):
 
 ###
 def show_weights(model):
-    weight_list = [x for x in model_kd.state_dict().keys() if 'weight' in x]
+    weight_list = [x for x in model.state_dict().keys() if 'weight' in x]
     plt.clf()
     plt.figure(figsize=(18, 3))
     for i,weight in enumerate(weight_list):
@@ -90,28 +90,52 @@ def get_weight_penalty(model):
         wp += np.sqrt( ( model.state_dict()[layer + ".weight"].pow(2).sum() + model.state_dict()[layer + ".bias"].pow(2).sum() ) )
     return wp 
 
-###
-class layer_utils():
-    def __init__(self, weight):
-        self.weight = weight
-        self.org_weight = weight.clone()
-        self.num_weights = weight.size()[0] * weight.size()[1]
-        
-        weight_np = np.abs((weight.clone().cpu().numpy()))
-        weight_np = weight_np.reshape(-1)
-        percentile_limits = [x for x in range (0,101)]
-        self.percentile_values = np.percentile(weight_np, percentile_limits)
-        
-        self.num_pruned = 0
-        
-    def prune(self, percentile):
-        self.weight = self.org_weight.clone()
-        zero_idx = self.weight.abs()<self.percentile_values[percentile]
-        self.num_pruned = zero_idx.sum()
-        self.weight[zero_idx] = 0
-        return self.weight
+def get_kd_targets(dataset, model, temp):
+    targets_loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=len(dataset), shuffle=False)
+    for i, (images, labels) in enumerate(targets_loader):
+        kd_outputs = model.kd_targets(Variable(images).cuda(),T=temp)
+
+    features = torch.zeros(len(dataset), dataset[0][0].size()[1], dataset[0][0].size()[2])
+    for i in range(0,len(dataset)):
+        features[i] = dataset[i][0][0]
+    kd_dataset = torch.utils.data.TensorDataset(features, kd_outputs.data)#.data turns variable -> tensor
     
-    def plot(self):
-        plt.clf()
-        sns.distplot(self.weight.clone().view(-1).cpu().numpy())
-        plt.show()
+    return kd_dataset
+
+###
+class model_prune():
+    def __init__(self, state_dict):
+        self.state_dict = copy.deepcopy(state_dict)
+        self.std = {}
+        self.mean = {}
+        self.num_weights = {}
+        self.percentile_limits = {}
+        self.prune_list = [x for x in self.state_dict.keys() if 'weight' in x]
+        self.num_pruned = 0
+        for layer in self.state_dict:
+            self.std[layer] = self.state_dict[layer].std()
+            self.mean[layer] = self.state_dict[layer].mean()
+            self.num_weights[layer] = 1
+            for dim in self.state_dict[layer].size():
+                self.num_weights[layer] *= dim
+            weight_np = np.abs((self.state_dict[layer].clone().cpu().numpy())).reshape(-1)
+            self.percentile_limits[layer] = np.percentile(weight_np, range(0,101))
+        self.total_weights = sum(self.num_weights.values())
+            
+    def percentile_prune(self, percentile):
+        new_state_dict = copy.deepcopy(self.state_dict)
+        self.num_pruned = 0
+        for layer in self.prune_list:
+            zero_idx = new_state_dict[layer].abs()<self.percentile_limits[layer][percentile]
+            new_state_dict[layer][zero_idx] = 0
+            self.num_pruned += zero_idx.sum()
+        return new_state_dict
+    
+    def deviation_prune(self, deviation):
+        new_state_dict = copy.deepcopy(self.state_dict)
+        self.num_pruned = 0
+        for layer in self.prune_list:
+            zero_idx = (new_state_dict[layer] - self.mean[layer]).abs() < self.std[layer] * deviation
+            new_state_dict[layer][zero_idx] = self.mean[layer]
+            self.num_pruned += zero_idx.sum()
+        return new_state_dict
