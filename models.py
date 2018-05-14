@@ -70,3 +70,24 @@ class LeNet_300_100(nn.Module):
         
         out = self.sm1(out)
         return out
+    
+class LeNet_300_100_kd(nn.Module):
+    def __init__(self):
+        super(LeNet_300_100_kd, self).__init__()
+        
+        self.name = 'LeNet_300_100_kd'
+        
+        self.fc1 = nn.Linear(28*28, 300) 
+        self.relu1 = nn.ReLU()
+        self.fc2 = nn.Linear(300,100)
+        self.relu2 = nn.ReLU()
+        self.fc3 = nn.Linear(100,10)
+    
+    def forward(self, x, kd=False):
+        x = x.view(-1, 28 * 28)
+        out = self.fc1(x)
+        out = self.relu1(out)
+        out = self.fc2(out)
+        out = self.relu2(out)
+        out = self.fc3(out)
+        return out

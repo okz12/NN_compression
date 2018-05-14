@@ -23,6 +23,7 @@ def test_accuracy(test_loader,model, kd=False, get_loss=False):
         outputs = model.forward(images, kd)
         #CE Loss
         if get_loss:
+            loss_criterion = nn.CrossEntropyLoss()
             loss = loss_criterion(outputs, Variable(labels).cuda()).cpu().data[0]
         # Get predictions from the maximum value
         _, predicted = torch.max(outputs.data, 1)
@@ -60,13 +61,14 @@ def train_epoch(model, optimizer, criterion, train_loader, kd=False):
 
 ###
 def show_weights(model):
-    weight_list = ['fc1.weight', 'fc2.weight', 'fc3.weight']
+    weight_list = [x for x in model_kd.state_dict().keys() if 'weight' in x]
     plt.clf()
     plt.figure(figsize=(18, 3))
     for i,weight in enumerate(weight_list):
         plt.subplot(131 + i)
         fc_w = model.state_dict()[weight]
         sns.distplot(fc_w.view(-1).cpu().numpy())
+        plt.title('Layer: {}'.format(weight))
     plt.show()
     
 def print_dims(model):
@@ -78,6 +80,13 @@ def print_dims(model):
             dim_str = "x".join(param_list)
         else:
             print dim_str + " + " + "x".join(param_list)
+            
+def get_weight_penalty(model):
+    layer_list = [x.replace(".weight","") for x in model_kd.state_dict().keys() if 'weight' in x]
+    wp=0
+    for layer in layer_list:
+        wp += np.sqrt( ( model.state_dict()[layer + ".weight"].pow(2) + model.state_dict()[layer + ".bias"].pow(2) ).sum() )
+    return wp 
 
 ###
 class layer_utils():
