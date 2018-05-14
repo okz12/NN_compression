@@ -81,7 +81,7 @@ def print_dims(model):
         if i%2==0:
             dim_str = "x".join(param_list)
         else:
-            print dim_str + " + " + "x".join(param_list)
+            print (dim_str + " + " + "x".join(param_list))
             
 def get_weight_penalty(model):
     layer_list = [x.replace(".weight","") for x in model.state_dict().keys() if 'weight' in x]
