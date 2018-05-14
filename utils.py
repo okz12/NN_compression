@@ -4,6 +4,8 @@ import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 from torch.autograd import Variable
 import torch.nn.functional as F
+import numpy as np
+import copy
 
 import seaborn as sns
 import matplotlib.pyplot as plt
