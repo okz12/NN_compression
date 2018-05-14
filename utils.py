@@ -84,10 +84,10 @@ def print_dims(model):
             print dim_str + " + " + "x".join(param_list)
             
 def get_weight_penalty(model):
-    layer_list = [x.replace(".weight","") for x in model_kd.state_dict().keys() if 'weight' in x]
+    layer_list = [x.replace(".weight","") for x in model.state_dict().keys() if 'weight' in x]
     wp=0
     for layer in layer_list:
-        wp += np.sqrt( ( model.state_dict()[layer + ".weight"].pow(2) + model.state_dict()[layer + ".bias"].pow(2) ).sum() )
+        wp += np.sqrt( ( model.state_dict()[layer + ".weight"].pow(2).sum() + model.state_dict()[layer + ".bias"].pow(2).sum() ) )
     return wp 
 
 ###
