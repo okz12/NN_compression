@@ -56,7 +56,7 @@ class LeNet_300_100(nn.Module):
         self.fc2 = nn.Linear(300,100)
         self.relu2 = nn.ReLU()
         self.fc3 = nn.Linear(100,10)
-        self.sm1 = nn.Softmax()
+        self.sm1 = nn.Softmax(dim=1)
     
     def forward(self, x):
         x = x.view(-1, 28 * 28)
