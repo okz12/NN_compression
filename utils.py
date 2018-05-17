@@ -13,38 +13,18 @@ import matplotlib.pyplot as plt
 
 
 ###Training and testing NN
-def test_accuracy(test_loader,model, get_loss=False):
-    # Calculate Accuracy         
-    correct = 0
-    total = 0
-    # Iterate through test dataset
-    for images, labels in test_loader:
-        #if use_cuda:
-        images = images.cuda()
-        images = Variable(images)
-        # Forward pass only to get logits/output
-        outputs = model(images)
-        #CE Loss
-        if get_loss:
-            loss_criterion = nn.CrossEntropyLoss()
-            loss = loss_criterion(outputs, Variable(labels).cuda()).cpu().data[0]
-        # Get predictions from the maximum value
-        _, predicted = torch.max(outputs.data, 1)
-        # Total number of labels
-        total += labels.size(0)
-        #if use_cuda:
-        correct += (predicted.cpu() == labels.cpu()).sum()
-        #else:
-        #    correct += (predicted == labels).sum()
-
-    accuracy = 100.0 * correct / total
-    if get_loss:
-        return accuracy, loss
-    return accuracy
+def test_accuracy(data, labels, model):
+    model.eval()
+    outputs = model(data)
+    loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
+    _, predicted = torch.max(outputs.data, 1)
+    correct = (predicted == labels.data).sum()
+    accuracy = 100.0 * correct/len(labels)
+    return accuracy, loss
     
 def train_epoch(model, optimizer, criterion, train_loader):
+    model.train()
     for i, (images, labels) in enumerate(train_loader):
-
         #if(use_cuda):
         images=images.cuda()
         labels=labels.cuda()
@@ -90,18 +70,6 @@ def get_weight_penalty(model):
     for layer in layer_list:
         wp += np.sqrt( ( model.state_dict()[layer + ".weight"].pow(2).sum() + model.state_dict()[layer + ".bias"].pow(2).sum() ) )
     return wp 
-
-def get_kd_targets(dataset, model, temp):
-    targets_loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=len(dataset), shuffle=False)
-    for i, (images, labels) in enumerate(targets_loader):
-        kd_outputs = model.kd_targets(Variable(images).cuda(),T=temp)
-
-    features = torch.zeros(len(dataset), dataset[0][0].size()[1], dataset[0][0].size()[2])
-    for i in range(0,len(dataset)):
-        features[i] = dataset[i][0][0]
-    kd_dataset = torch.utils.data.TensorDataset(features, kd_outputs.data)#.data turns variable -> tensor
-    
-    return kd_dataset
 
 ###
 class model_prune():
