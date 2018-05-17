@@ -108,3 +108,71 @@ class model_prune():
             new_state_dict[layer][zero_idx] = self.mean[layer]
             self.num_pruned += zero_idx.sum()
         return new_state_dict
+    
+    
+    
+def prune_plot(temp, dev_res, perc_res, test_acc_o, train_acc_o, weight_penalty_o, test_acc_kd, train_acc_kd, weight_penalty_kd):
+    c1 = '#2ca02c'
+    c2 = '#1f77b4'
+    c3 = '#ff7f0e'
+    c4 = '#d62728'
+    plt.clf()
+    ncols = 5
+    nrows = 1
+
+    plt.figure(figsize=(25,4))
+    plt.subplot(nrows, ncols, 1)
+    plt.plot(perc_res['pruned'], perc_res['train ce'], color = c1, label = "0-Mean Pruning")
+    plt.plot(dev_res['pruned'], perc_res['train ce'], color = c2, label = "Mean-Deviation Pruning")
+    plt.axhline(y=train_acc_o[1], label="Original", color = c3, linestyle='--')
+    plt.axhline(y=train_acc_kd[1], label="Distilled", color = c4, linestyle='--')
+    plt.xlim([0, 100])
+    plt.ylabel("Cross Entropy Loss")
+    plt.xlabel("Parameters Pruned(%)")
+    plt.legend(loc=2)
+    plt.title("Train CE Loss")
+
+    plt.subplot(nrows, ncols, 2)
+    plt.plot(perc_res['pruned'], perc_res['test ce'], color = c1, label = "0-Mean Pruning")
+    plt.plot(dev_res['pruned'], perc_res['test ce'], color = c2, label = "Mean-Deviation Pruning")
+    plt.axhline(y=test_acc_o[1], label="Original", color = c3, linestyle='--')
+    plt.axhline(y=test_acc_kd[1], label="Distilled", color = c4, linestyle='--')
+    plt.xlim([0, 100])
+    plt.ylabel("Cross Entropy Loss")
+    plt.xlabel("Parameters Pruned(%)")
+    plt.legend(loc=2)
+    plt.title("Test CE Loss")
+
+    plt.subplot(nrows, ncols, 3)
+    plt.plot(perc_res['pruned'], perc_res['train acc'], color = c1, label = "0-Mean Pruning")
+    plt.plot(dev_res['pruned'], perc_res['train acc'], color = c2, label = "Mean-Deviation Pruning")
+    plt.axhline(y=train_acc_o[0], label="Original", color = c3, linestyle='--')
+    plt.axhline(y=train_acc_kd[0], label="Distilled", color = c4, linestyle='--')
+    plt.xlim([0, 100])
+    plt.ylabel("Accuracy(%)")
+    plt.xlabel("Parameters Pruned(%)")
+    plt.legend(loc=6)
+    plt.title("Train Accuracy")
+
+    plt.subplot(nrows, ncols, 4)
+    plt.plot(perc_res['pruned'], perc_res['test acc'], color = c1, label = "0-Mean Pruning")
+    plt.plot(dev_res['pruned'], perc_res['test acc'], color = c2, label = "Mean-Deviation Pruning")
+    plt.axhline(y=test_acc_o[0], label="Original", color = c3, linestyle='--')
+    plt.axhline(y=test_acc_kd[0], label="Distilled", color = c4, linestyle='--')
+    plt.xlim([0, 100])
+    plt.ylabel("Accuracy(%)")
+    plt.xlabel("Parameters Pruned(%)")
+    plt.legend(loc=6)
+    plt.title("Test Accuracy")
+
+    plt.subplot(nrows, ncols, 5)
+    plt.plot(perc_res['pruned'], perc_res['L2'], color = c1, label = "0-Mean Pruning")
+    plt.plot(dev_res['pruned'], perc_res['L2'], color = c2, label = "Mean-Deviation Pruning")
+    plt.axhline(y=weight_penalty_o, label="Original", color = c3, linestyle='--')
+    plt.axhline(y=weight_penalty_kd, label="Distilled", color = c4, linestyle='--')
+    plt.xlim([0, 100])
+    plt.ylabel("L2")
+    plt.xlabel("Parameters Pruned(%)")
+    plt.legend(loc=6)
+    plt.title("Model L2")
+    plt.show()
