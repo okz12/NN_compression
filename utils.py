@@ -26,7 +26,7 @@ def test_accuracy(data, labels, model):
     loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
     _, predicted = torch.max(outputs.data, 1)
     correct = (predicted == labels.data).sum()
-    accuracy = 100.0 * correct/len(labels)
+    accuracy = 100.0 * float(correct)/len(labels)
     return accuracy, loss
     
 def train_epoch(model, optimizer, criterion, train_loader):
@@ -50,7 +50,7 @@ def train_epoch(model, optimizer, criterion, train_loader):
         # Forward pass to get output/logits
         outputs = model(images)
         # Calculate Loss: softmax --> cross entropy loss
-        loss = criterion(outputs, labels) + 0.001 * get_weight_penalty(model)
+        loss = criterion(outputs, labels)# + 0.001 * (model.fc1.weight.norm() + model.fc2.weight.norm() + model.fc3.weight.norm())
         # Getting gradients w.r.t. parameters
         loss.backward()
         # Updating parameters
