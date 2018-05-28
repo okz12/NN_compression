@@ -14,30 +14,15 @@ import matplotlib.pyplot as plt
 
 ###Training and testing NN
 def test_accuracy(data, labels, model):
-    """
-    get model accuracy on a dataset
-    
-    data: features tensor
-    labels: targets tensor
-    model: trained model
-    """
     model.eval()
     outputs = model(data)
     loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
     _, predicted = torch.max(outputs.data, 1)
     correct = (predicted == labels.data).sum()
-    accuracy = 100.0 * float(correct)/len(labels)
+    accuracy = 100.0 * correct/len(labels)
     return accuracy, loss
     
 def train_epoch(model, optimizer, criterion, train_loader):
-    """
-    train model
-    
-    model: neural network model
-    optimizer: optimization algorithm/configuration
-    criterion: loss function
-    train_loader: training dataset dataloader
-    """
     model.train()
     for i, (images, labels) in enumerate(train_loader):
         #if(use_cuda):
@@ -50,7 +35,7 @@ def train_epoch(model, optimizer, criterion, train_loader):
         # Forward pass to get output/logits
         outputs = model(images)
         # Calculate Loss: softmax --> cross entropy loss
-        loss = criterion(outputs, labels)# + 0.001 * (model.fc1.weight.norm() + model.fc2.weight.norm() + model.fc3.weight.norm())
+        loss = criterion(outputs, labels)
         # Getting gradients w.r.t. parameters
         loss.backward()
         # Updating parameters
@@ -59,9 +44,6 @@ def train_epoch(model, optimizer, criterion, train_loader):
 
 ###
 def show_weights(model):
-    """
-    shows histograms of each parameter layer in model except biases
-    """
     weight_list = [x for x in model.state_dict().keys() if 'weight' in x]
     plt.clf()
     plt.figure(figsize=(18, 3))
@@ -73,9 +55,6 @@ def show_weights(model):
     plt.show()
     
 def print_dims(model):
-    """
-    prints dimensions of a model
-    """
     for i,params in enumerate(model.parameters()):
         param_list = []
         for pdim in params.size():
@@ -86,9 +65,6 @@ def print_dims(model):
             print (dim_str + " + " + "x".join(param_list))
             
 def get_weight_penalty(model):
-    """
-    get L2 for weights in each layer in the model
-    """
     layer_list = [x.replace(".weight","") for x in model.state_dict().keys() if 'weight' in x]
     wp=0
     for layer in layer_list:
@@ -97,14 +73,7 @@ def get_weight_penalty(model):
 
 ###
 class model_prune():
-    """
-    class to help with pruning of layers in a model
-    """
     def __init__(self, state_dict):
-        """
-        model state_dict used to initialise class
-        standard deviation and percentile limits for removing 
-        """
         self.state_dict = copy.deepcopy(state_dict)
         self.std = {}
         self.mean = {}
@@ -123,9 +92,6 @@ class model_prune():
         self.total_weights = sum(self.num_weights.values())
             
     def percentile_prune(self, percentile):
-        """
-        
-        """
         new_state_dict = copy.deepcopy(self.state_dict)
         self.num_pruned = 0
         for layer in self.prune_list:
@@ -146,9 +112,6 @@ class model_prune():
     
     
 def prune_plot(temp, dev_res, perc_res, test_acc_o, train_acc_o, weight_penalty_o, test_acc_kd, train_acc_kd, weight_penalty_kd):
-    """
-    plot model pruning graphs
-    """
     c1 = '#2ca02c'
     c2 = '#1f77b4'
     c3 = '#ff7f0e'
