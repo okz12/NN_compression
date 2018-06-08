@@ -176,3 +176,161 @@ def prune_plot(temp, dev_res, perc_res, test_acc_o, train_acc_o, weight_penalty_
     plt.legend(loc=6)
     plt.title("Model L2")
     plt.show()
+    
+    
+###
+def retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, criterion, train_loader, tau):
+    """
+    train model
+    
+    model: neural network model
+    optimizer: optimization algorithm/configuration
+    criterion: loss function
+    train_loader: training dataset dataloader
+    """
+    model.train()
+    gmp.print_batch = True
+    for i, (images, labels) in enumerate(train_loader):
+        #if(use_cuda):
+        images=images.cuda()
+        labels=labels.cuda()
+        images = Variable(images)
+        labels = Variable(labels)
+        # Clear gradients w.r.t. parameters
+        optimizer.zero_grad()
+        optimizer_gmp.zero_grad()
+        optimizer_gmp2.zero_grad()
+        # Forward pass to get output/logits
+        outputs = model(images)
+        # Calculate Loss: softmax --> cross entropy loss
+        #loss = criterion(outputs, labels) + 0.001 * ( (model.fc1.weight - 0.05).norm() + (model.fc2.weight - 0.05).norm() + (model.fc3.weight - 0.05).norm() + (model.fc1.weight + 0.05).norm() + (model.fc2.weight + 0.05).norm() + (model.fc3.weight + 0.05).norm())
+        loss = criterion(outputs, labels)
+        #print (criterion(outputs, labels))
+        #print (gmp.call())
+        # Getting gradients w.r.t. parameters
+        gmp_loss = tau * gmp.call()
+        loss.backward()
+        gmp_loss.backward()
+        # Updating parameters
+        optimizer.step()
+        optimizer_gmp.step()
+        optimizer_gmp2.step()
+    return model, criterion(outputs, labels)
+
+###
+def show_sws_weights(model, means=0, precisions=0, epoch=-1, accuracy=-1, savefile = ""):
+    weights = np.array([], dtype=np.float32)
+    for layer in model.state_dict():
+        weights = np.hstack( (weights, model.state_dict()[layer].view(-1).cpu().numpy()) )
+        
+    plt.clf()
+    plt.figure(figsize=(20, 6))
+    
+    #1 - Non-log plot
+    plt.subplot(2,1,1)
+    
+    #Title
+    if (epoch !=-1 and accuracy == -1):
+        plt.title("Epoch: {:0=3d}".format(epoch+1))
+    if (accuracy != -1 and epoch == -1):
+        plt.title("Accuracy: {:.2f}".format(accuracy))
+    if (accuracy != -1 and epoch != -1):
+        plt.title("Epoch: {:0=3d} - Accuracy: {:.2f}".format(epoch+1, accuracy))
+    
+    sns.distplot(weights, kde=False, color="g",bins=200,norm_hist=True, hist_kws={'log':False})
+    
+    #plot mean and precision
+    if not (means==0 or precisions==0):
+        plt.axvline(0, linewidth = 1)
+        std_dev0 = np.sqrt(1/np.exp(precisions[0]))
+        plt.axvspan(xmin=-std_dev0, xmax=std_dev0, alpha=0.3)
+
+        for mean, precision in zip(means, precisions[1:]):
+            plt.axvline(mean, linewidth = 1)
+            std_dev = np.sqrt(1/np.exp(precision))
+            plt.axvspan(xmin=mean - std_dev, xmax=mean + std_dev, alpha=0.1)
+    
+    #plt.xticks([])
+    #plt.xlabel("Weight Value")
+    plt.ylabel("Occurrence")
+    
+    plt.xlim([-1, 1])
+    plt.ylim([0, 60])
+    
+    #2-Logplot
+    plt.subplot(2,1,2)
+    sns.distplot(weights, kde=False, color="g",bins=200,norm_hist=True, hist_kws={'log':True})
+    #plot mean and precision
+    if not (means==0 or precisions==0):
+        plt.axvline(0, linewidth = 1)
+        std_dev0 = np.sqrt(1/np.exp(precisions[0]))
+        plt.axvspan(xmin=-std_dev0, xmax=std_dev0, alpha=0.3)
+
+        for mean, precision in zip(means, precisions[1:]):
+            plt.axvline(mean, linewidth = 1)
+            std_dev = np.sqrt(1/np.exp(precision))
+            plt.axvspan(xmin=mean - std_dev, xmax=mean + std_dev, alpha=0.1)
+    plt.xlabel("Weight Value")
+    plt.ylabel("Occurrence")
+    plt.xlim([-1, 1])
+    plt.ylim([1e-5, 1e3])
+    
+    if savefile!="":
+        plt.savefig("./figs/{}_{}.png".format(savefile, epoch+1), bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
+        
+        
+###
+def draw_sws_graphs(means = -1, stddev = -1, mixprop = -1, acc = -1, savefile=""):
+    plt.clf()
+    plt.figure(figsize=(20, 10))
+    plt.subplot(2,2,1)
+    plt.plot(means)
+    plt.title("Mean")
+    plt.xlim([0, means.shape[0]-1])
+    plt.xlabel("Epoch")
+
+    plt.subplot(2,2,2)
+    plt.plot(mixprop[:,1:])
+    plt.yscale("log")
+    plt.title("Mixing Proportions")
+    plt.xlim([0, mixprop.shape[0]-1])
+    plt.xlabel("Epoch")
+
+    plt.subplot(2,2,3)
+    plt.plot(stddev[:,1:])
+    plt.yscale("log")
+    plt.title("Standard Deviations")
+    plt.xlim([0, stddev.shape[0]-1])
+    plt.xlabel("Epoch")
+
+    plt.subplot(2,2,4)
+    plt.plot(acc)
+    plt.title("Accuracy")
+    plt.xlim([0, acc.shape[0]-1])
+    plt.xlabel("Epoch")
+    plt.show()
+    
+    if savefile!="":
+        plt.savefig("./exp/{}.png".format(savefile), bbox_inches='tight')
+        plt.close()
+    else:
+        plt.show()
+        
+        
+def trueAfterN(ip, N):
+    return ((N-1)==ip%N)
+
+def logsumexp(t, w=1, axis=1):
+    #print (t.shape)
+    t_max, _ = t.max(dim=1)
+    if (axis==1):
+        t = t-t_max.repeat(t.size(1), 1).t()
+    else:
+        t = t-t_max.repeat(1, t.size(0)).t()
+    t = w * t.exp()
+    t = t.sum(dim=axis)
+    t.log_()
+    return t + t_max
