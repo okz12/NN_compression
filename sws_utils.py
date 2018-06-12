@@ -8,7 +8,7 @@ import numpy as np
 import copy
 from tensorboardX import SummaryWriter
 from torch.nn.modules import Module
-from helpers import logsumexp
+from helpers import logsumexp, nplogsumexp
 
 import seaborn as sns
 import matplotlib.pyplot as plt

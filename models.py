@@ -45,10 +45,10 @@ class SWSModel(nn.Module):
     
     def kd_targets(self, x, T=1.0):
         # Convolution 1
-        out = self.cnn1(x)
+        out = self.conv1(x)
         out = self.relu1(out)
         # Convolution 2 
-        out = self.cnn2(out)
+        out = self.conv2(out)
         #print "{} {},{},{},{}".format("cnn2", out.size(0), out.size(1), out.size(2), out.size(3))
         out = self.relu2(out)
         # Max pool 2 
