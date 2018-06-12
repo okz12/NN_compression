@@ -16,16 +16,25 @@ import models
 from utils import show_sws_weights, test_accuracy, train_epoch, retrain_sws_epoch, show_weights, model_prune, print_dims, get_weight_penalty, prune_plot, draw_sws_graphs, trueAfterN, logsumexp
 import copy
 from tensorboardX import SummaryWriter
+import pickle
 
 writeTensorboard = False
 if(writeTensorboard):
     writer = SummaryWriter('tensorboard/run1/')
 
 import seaborn as sns
-%matplotlib inline
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 sns.set(color_codes=True)
 sns.set_style("whitegrid")
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--alpha', dest = "alpha", help="Gamma Prior Alpha", required=True)
+parser.add_argument('--beta', dest = "beta", help="Gamma Prior Beta", required=True)
+args = parser.parse_args()
+alpha = float(args.alpha)
+beta = float(args.beta)
 
 
 #Data
@@ -141,7 +150,7 @@ sws_param2 = [gmp.gammas, gmp.rhos]
 #ipd.display(ipd.Markdown("**Default Training**"))
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 optimizer_gmp = torch.optim.Adam(sws_param1, lr=1e-4)
 optimizer_gmp2 = torch.optim.Adam(sws_param2, lr=3e-3)
 graph_title='original_model/'
@@ -151,10 +160,10 @@ decay = np.linspace(5e-7, 5e-6, retraining_epochs)
 #decay = 5e-7 * np.power(10, decay)
 #decay = 5e-5 * (1 - 1 / np.power(10, decay))
 
-exp_name = "{}_{}".format(alpha, beta)
+exp_name = "a{}_b{}_r{}".format(alpha, beta, retraining_epochs)
 
 for epoch in range(retraining_epochs):
-    ipd.display(ipd.Markdown("**Epoch: {}**".format(epoch+1)))
+    print("Epoch: {}".format(epoch+1))
     #tau = float(decay[epoch])
     tau=5e-7
     model, loss = retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, criterion, train_loader, tau)
@@ -175,6 +184,7 @@ for epoch in range(retraining_epochs):
         for name, param in model.named_parameters():
             writer.add_histogram(graph_title + name, param.clone().cpu().data.numpy(), epoch+1, bins='doane')
     if (trueAfterN(epoch, 10)):
+        gmp.print_batch = True
         print ('Tau:{}'.format(tau))
         print('Epoch: {}. Training Accuracy: {:.2f}. Test Accuracy: {}'.format(epoch+1, train_acc[0], test_acc[0]))
         print ( "Means: {}".format(list(np.around(gmp.means.data.clone().cpu().numpy(),3))) )
@@ -189,4 +199,6 @@ filenames = ["figs/{}_{}.png".format(exp_name, x) for x in range(1,retraining_ep
 for filename in filenames:
     images.append(imageio.imread(filename))
 imageio.mimsave('./exp/{}.gif'.format(exp_name), images)
-#torch.save(model, model_dir + 'mnist_{}_{}.m'.format(model.name, training_epochs))
+torch.save(model, model_dir + 'mnist_retrain_m{}_a{}_b{}_r{}.m'.format(model.name, alpha, beta, retraining_epochs))
+with open(model_dir + 'mnist_retrain_m{}_a{}_b{}_r{}_gmp.p'.format(model.name, alpha, beta, retraining_epochs),'wb') as f:
+    pickle.dump(gmp, f)
