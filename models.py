@@ -60,7 +60,7 @@ class SWSModel(nn.Module):
 		out = self.fc1(out)
 		out = self.relu3(out)
 		out = self.fc2(out)
-		out = out / T
+		#out = out / T
 		out = self.sm1(out)
 		return out
 		

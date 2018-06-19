@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 
 ###Training and testing NN
 def test_accuracy(data, labels, model):
-	model.eval()
 	outputs = model(data)
 	loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
 	_, predicted = torch.max(outputs.data, 1)
@@ -23,7 +22,6 @@ def test_accuracy(data, labels, model):
 	return accuracy, loss
 	
 def train_epoch(model, optimizer, criterion, train_loader):
-	model.train()
 	for i, (images, labels) in enumerate(train_loader):
 		#if(use_cuda):
 		images=images.cuda()
