@@ -24,7 +24,7 @@ class SWSModel(nn.Module):
 	
 	def forward(self, x):
 		#print (x.shape)
-		#x = x.view(-1, 1, 1, 28 * 28)
+		x = x.view(-1, 1, 28, 28)
 		# Convolution 1
 		out = self.conv1(x)
 		out = self.relu1(out)
@@ -46,6 +46,7 @@ class SWSModel(nn.Module):
 	def kd_targets(self, x, T=1.0):
 		# Convolution 1
 		layer_out = {}
+		x = x.view(-1, 1, 28, 28)
 		out = self.conv1(x)
 		out = self.relu1(out)
 		# Convolution 2 
@@ -67,6 +68,7 @@ class SWSModel(nn.Module):
 	def kd_layer_targets(self, x, T=1.0):
 		# Convolution 1
 		layer_out = {}
+		x = x.view(-1, 1, 28, 28)
 		out = self.conv1(x)
 		layer_out['conv1'] = out
 		out = self.relu1(out)
