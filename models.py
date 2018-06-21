@@ -70,23 +70,28 @@ class SWSModel(nn.Module):
 		layer_out = {}
 		x = x.view(-1, 1, 28, 28)
 		out = self.conv1(x)
-		layer_out['conv1'] = out
+		layer_out['conv1.out'] = out
 		out = self.relu1(out)
+		layer_out['conv1.act'] = out
 		# Convolution 2 
 		out = self.conv2(out)
-		layer_out['conv2'] = out
+		layer_out['conv2.out'] = out
 		#print "{} {},{},{},{}".format("cnn2", out.size(0), out.size(1), out.size(2), out.size(3))
 		out = self.relu2(out)
+		layer_out['conv2.act'] = out
 		# Max pool 2 
 		# New out size: (100, 32*7*7)
 		out = out.view(out.size(0), -1)
 		#print "{} {},{}".format("rs", out.size(0), out.size(1))
 		# Linear function (readout)
 		out = self.fc1(out)
-		layer_out['fc1'] = out
+		layer_out['fc1.out'] = out
 		out = self.relu3(out)
+		layer_out['fc1.act'] = out
 		out = self.fc2(out)
-		layer_out['fc2'] = out
+		layer_out['fc2.out'] = out
+		out = self.sm1(out)
+		layer_out['fc2.act'] = out
 		return layer_out
 		
 		
@@ -97,6 +102,7 @@ class SWSModelConv1(nn.Module):
 		self.conv1 = nn.Conv2d(in_channels=1, out_channels=25, kernel_size=5, stride=2, padding=0)
 	
 	def forward(self, x):
+		x = x.view(-1, 1, 28, 28)
 		out = self.conv1(x)
 		return out
 		
@@ -117,6 +123,7 @@ class SWSModelFC1(nn.Module):
 		self.fc1 = nn.Linear(1250, 500) 
 	
 	def forward(self, x):
+		x = x.view(x.size(0), -1)
 		out = self.fc1(x)
 		return out
 		
@@ -164,24 +171,16 @@ class LeNet_300_100(nn.Module):
 		out = out / T
 		out = self.sm1(out)
 		return out
-	
-class LeNet_300_100_kd(nn.Module):
-	def __init__(self):
-		super(LeNet_300_100_kd, self).__init__()
 		
-		self.name = 'LeNet_300_100_kd'
-		
-		self.fc1 = nn.Linear(28*28, 300) 
-		self.relu1 = nn.ReLU()
-		self.fc2 = nn.Linear(300,100)
-		self.relu2 = nn.ReLU()
-		self.fc3 = nn.Linear(100,10)
-	
-	def forward(self, x, kd=False):
+	def kd_layer_targets(self, x, T=1.0):		
 		x = x.view(-1, 28 * 28)
+		layer_out = {}
 		out = self.fc1(x)
+		layer_out['fc1'] = out
 		out = self.relu1(out)
 		out = self.fc2(out)
+		layer_out['fc2'] = out
 		out = self.relu2(out)
 		out = self.fc3(out)
-		return out
+		layer_out['fc3'] = out
+		return layer_out

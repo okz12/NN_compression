@@ -5,7 +5,6 @@ import torchvision.datasets as dsets
 from torch.nn.modules import Module
 from torch.autograd import Variable
 import torch.nn.functional as F
-import numpy as np
 
 model_dir = "./models/"
 import models
