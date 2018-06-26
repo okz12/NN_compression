@@ -32,7 +32,6 @@ test_labels_full = Variable(test_dataset.test_labels).cuda()
 
 if model_name == "SWSModel":
 	model = models.SWSModel().cuda()
-	#test_data_full = test_data_full.view(10000, 1, 28, 28)
 else:
 	model = models.LeNet_300_100().cuda()
 	
