@@ -1,0 +1,32 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "retrain_model.py",
+    "experiment-name" : "test_accuracy_prune",
+    "likelihood"      : "Gaussian",
+    "variables" : {
+        "mean" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0.001,
+            "max"  : 100000
+        },
+        "var" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0.01,
+            "max"  : 100
+        },
+		"tau" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 1e-8,
+            "max"  : 1e-3
+        },
+		"mixtures" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 3,
+            "max"  : 16
+        }
+    }
+}

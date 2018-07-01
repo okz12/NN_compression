@@ -3,7 +3,6 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 from torch.autograd import Variable
-import torch.nn.functional as F
 import numpy as np
 import copy
 from tensorboardX import SummaryWriter

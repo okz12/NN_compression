@@ -3,15 +3,14 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 from torch.autograd import Variable
-import torch.nn.functional as F
 import numpy as np
 import copy
 from tensorboardX import SummaryWriter
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sws_utils import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
-from helpers import trueAfterN
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
+from utils_misc import trueAfterN
 import pickle
 
 
@@ -121,13 +120,16 @@ def retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, crit
 		#print (gmp.call())
 		# Getting gradients w.r.t. parameters
 		gmp_loss = tau * gmp.call()
+		
+		#print( float(loss), float(gmp_loss) )
+		
 		loss.backward()
 		gmp_loss.backward()
 		# Updating parameters
 		optimizer.step()
 		optimizer_gmp.step()
 		optimizer_gmp2.step()
-	return model, criterion(outputs, labels)
+	return model, loss + gmp_loss
 	
 ###
 def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
@@ -183,8 +185,8 @@ def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_l
 			layer_accuracy(model_retrain, gmp, model_orig, test_data_full, test_labels_full)
 			
 	exp_name = "{}_a{}_b{}_t{}m_{}".format(model_retrain.name, alpha, beta, tau, mixtures)
-	torch.save(model_retrain, model_dir + '/mnist_layer_{}.m'.format(exp_name))
-	with open(model_dir + '/mnist_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
+	torch.save(model_retrain, model_dir + '/mnist_layer_retrain_{}.m'.format(exp_name))
+	with open(model_dir + '/mnist_layer_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
 		pickle.dump(gmp, f)
 			
 	return model_retrain, gmp
