@@ -1,0 +1,19 @@
+Job launching after 0.18 seconds in submission.
+Running python job.
+Changed into dir /home/okz21/NNC/NN_compression
+Importing retrain_model.py
+Running retrain_model.main()
+Got result {'score': 33040.56522763507, 'min_sparsity': 10.426983781091423, 'min_accuracy': -57.21}
+Completed successfully in 247.26 seconds. [{'score': 33040.56522763507, 'min_sparsity': 10.426983781091423, 'min_accuracy': -57.21}]
+{'tau': array([0.00097881]), 'mixtures': array([3]), 'var': array([43.96217918]), 'mean': array([552.89564534])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 552.895645336116 Variance: 43.96217917654955
+Epoch: 10. Test Accuracy: 98.75
+Epoch: 20. Test Accuracy: 97.55
+Epoch: 30. Test Accuracy: 38.05
+Epoch: 40. Test Accuracy: 36.38
+Epoch: 50. Test Accuracy: 35.86
+Retrain Test: 35.86, Retrain Validation: 36.61, Prune Test: 34.98, Prune Validation: 35.79, Prune Sparsity: 98.43
+Final Score: 33040.56522763507 Acc Score: 33037.46186160959 Sp Score: 3.1033660254732847
+=====================================
+

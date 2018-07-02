@@ -1,8 +1,14 @@
 {
     "language"        : "PYTHON",
     "main-file"       : "retrain_model.py",
-    "experiment-name" : "test_accuracy_prune",
-    "likelihood"      : "Gaussian",
+    "experiment-name" : "retrain_constrained",
+	"resources" : {
+        "my-machine" : {
+            "scheduler"         : "local",
+            "max-concurrent"    : 2,
+            "max-finished-jobs" : 200
+        }
+	},
     "variables" : {
         "mean" : {
             "type" : "FLOAT",
@@ -28,5 +34,20 @@
             "min"  : 3,
             "max"  : 16
         }
-    }
+    },
+	"tasks": {
+      "score" : {
+          "type"        : "OBJECTIVE",
+          "likelihood"  : "GAUSSIAN"
+      },
+      "min_sparsity" : {
+          "type"        : "CONSTRAINT",
+          "likelihood"  : "GAUSSIAN"
+      },
+      "min_accuracy" : {
+          "type"        : "CONSTRAINT",
+          "likelihood"  : "GAUSSIAN"
+      }
+    },
+    "polling-time" : 1
 }

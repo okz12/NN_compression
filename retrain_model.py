@@ -44,6 +44,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size):
 
     exp_name = "m{}_a{}_b{}_r{}_t{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, temp, data_size)
     gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta))
+    gmp.print_batch = False
 
     sws_param1 = [gmp.means]
     sws_param2 = [gmp.gammas, gmp.rhos]
@@ -53,7 +54,6 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size):
     opt_gmp2 = torch.optim.Adam(sws_param2, lr=3e-3)
 
     for epoch in range(retraining_epochs):
-        print("Epoch: {}".format(epoch+1))
         model, loss = retrain_sws_epoch(model, gmp, opt_weight, opt_gmp, opt_gmp2, criterion, loader, tau)
 
         if (trueAfterN(epoch, 10)):
@@ -109,8 +109,13 @@ def main(job_id, params):
     beta = mean/var
     alpha = mean * beta
     acc, sp = retrain_model(alpha, beta, float(params['tau']), 0, int(params['mixtures']), 'SWSModel', 'search')
-    acc_score = np.exp(10-acc/10)
-    sp_score = np.exp(10-sp/10)
+    acc_score = (100-acc)**2.5
+    sp_score = (100-sp)**2.5
     score = acc_score + sp_score
     print ("Final Score: {} Acc Score: {} Sp Score: {}".format(score, acc_score, sp_score))
-    return score
+    print ("=====================================\n")
+    return {
+        "score"       : score, 
+        "min_sparsity" : sp-88, 
+        "min_accuracy" : acc-93
+    }
