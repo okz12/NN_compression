@@ -1,28 +1,19 @@
-THCudaCheck FAIL file=/opt/conda/conda-bld/pytorch_1518241554738/work/torch/lib/THC/generic/THCStorage.cu line=58 error=2 : out of memory
-Job launching after 0.17 seconds in submission.
+Job launching after 0.16 seconds in submission.
 Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
 Running script.main()
-Traceback (most recent call last):
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
-    result = python_launcher(job)
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
-    result = module.main(job['id'], params)
-  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
-    acc, sp = retrain_model(alpha, beta, float(params['tau']), 0, int(params['mixtures']), 'SWSModel', 'search')
-  File "../../src/retrain_model.py", line 25, in retrain_model
-    val_data_full = Variable(search_validation_data(fetch='data')).cuda()
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/autograd/variable.py", line 298, in cuda
-    return CudaTransfer.apply(self, device, async)
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/autograd/_functions/tensor.py", line 201, in forward
-    return i.cuda(async=async)
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/_utils.py", line 69, in _cuda
-    return new_type(self.size()).copy_(self, async)
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/cuda/__init__.py", line 387, in _lazy_new
-    return super(_CudaBase, cls).__new__(cls, *args, **kwargs)
-RuntimeError: cuda runtime error (2) : out of memory at /opt/conda/conda-bld/pytorch_1518241554738/work/torch/lib/THC/generic/THCStorage.cu:58
-Problem executing the function
-Job failed in 1.97 seconds.
-{'var': array([0.01]), 'mean': array([0.001]), 'tau': array([1.e-08]), 'mixtures': array([3])}
-(<class 'RuntimeError'>, RuntimeError('cuda runtime error (2) : out of memory at /opt/conda/conda-bld/pytorch_1518241554738/work/torch/lib/THC/generic/THCStorage.cu:58',), <traceback object at 0x7f7f95588a88>)
+Got result {'min_sparsity': 10.662640475671637, 'score': 32501.407717640643, 'min_accuracy': -56.79}
+Completed successfully in 412.01 seconds. [{'min_sparsity': 10.662640475671637, 'score': 32501.407717640643, 'min_accuracy': -56.79}]
+{'mean': array([99722.45657125]), 'mixtures': array([16]), 'var': array([99.38001978]), 'tau': array([0.00027752])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 99722.45657125064 Variance: 99.38001977760929
+Epoch: 10. Test Accuracy: 98.80
+Epoch: 20. Test Accuracy: 98.36
+Epoch: 30. Test Accuracy: 39.28
+Epoch: 40. Test Accuracy: 35.04
+Epoch: 50. Test Accuracy: 35.04
+Retrain Test: 35.04, Retrain Validation: 36.44, Prune Test: 34.87, Prune Validation: 36.21, Prune Sparsity: 98.66
+Final Score: 32501.407717640643 Acc Score: 32499.861138093664 Sp Score: 1.5465795469783183
+=====================================
+

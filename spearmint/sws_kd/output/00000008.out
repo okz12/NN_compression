@@ -2,36 +2,18 @@ Job launching after 0.17 seconds in submission.
 Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
-Traceback (most recent call last):
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
-    result = python_launcher(job)
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 326, in python_launcher
-    module  = __import__(main_file)
-  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 4, in <module>
-    import retrain_model
-  File "../../src/retrain_model.py", line 12, in <module>
-    from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
-  File "../../src/utils_plot.py", line 10, in <module>
-    import seaborn as sns
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/__init__.py", line 6, in <module>
-    from .rcmod import *
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/rcmod.py", line 8, in <module>
-    from . import palettes, _orig_rc_params
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/palettes.py", line 12, in <module>
-    from .utils import desaturate, set_hls_values, get_color_cycle
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/utils.py", line 11, in <module>
-    import matplotlib.pyplot as plt
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/pyplot.py", line 39, in <module>
-    from matplotlib.backend_bases import FigureCanvasBase
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backend_bases.py", line 68, in <module>
-    import matplotlib.backend_tools as tools
-  File "<frozen importlib._bootstrap>", line 968, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 957, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 673, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 693, in exec_module
-  File "<frozen importlib._bootstrap_external>", line 797, in get_code
-  File "<frozen importlib._bootstrap_external>", line 508, in _compile_bytecode
-KeyboardInterrupt
-Problem executing the function
-Job failed in 1.08 seconds.
-(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f56481d9d08>)
+Running script.main()
+Got result {'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918, 'score': 78952.6050502349}
+Completed successfully in 304.48 seconds. [{'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918, 'score': 78952.6050502349}]
+{'tau': array([0.001]), 'var': array([100.]), 'mixtures': array([3]), 'mean': array([100000.])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 100000.0 Variance: 100.0
+Epoch: 10. Test Accuracy: 98.72
+Epoch: 20. Test Accuracy: 97.87
+Epoch: 30. Test Accuracy: 42.31
+Epoch: 40. Test Accuracy: 16.40
+Epoch: 50. Test Accuracy: 12.03
+Retrain Test: 12.03, Retrain Validation: 11.69, Prune Test: 8.99, Prune Validation: 9.02, Prune Sparsity: 99.55
+Final Score: 78952.6050502349 Acc Score: 78952.30818995474 Sp Score: 0.2968602801602402
+=====================================
+

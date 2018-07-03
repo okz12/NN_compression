@@ -1,17 +1,19 @@
-Job launching after 0.17 seconds in submission.
+Job launching after 0.16 seconds in submission.
 Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
 Running script.main()
-Traceback (most recent call last):
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
-    result = python_launcher(job)
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
-    result = module.main(job['id'], params)
-  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
-    acc, sp = retrain_model(alpha, beta, float(params['tau']), 0, int(params['mixtures']), 'SWSModel', 'search')
-TypeError: 'module' object is not callable
-Problem executing the function
-Job failed in 1.59 seconds.
-{'mixtures': array([3]), 'var': array([0.01]), 'tau': array([1.e-08]), 'mean': array([0.001])}
-(<class 'TypeError'>, TypeError("'module' object is not callable",), <traceback object at 0x7fe50b7bf108>)
+Got result {'min_sparsity': 10.692058649565723, 'score': 31868.24333022152, 'min_accuracy': -56.29}
+Completed successfully in 275.58 seconds. [{'min_sparsity': 10.692058649565723, 'score': 31868.24333022152, 'min_accuracy': -56.29}]
+{'var': array([25.0075]), 'mixtures': array([6]), 'tau': array([0.00025001]), 'mean': array([75000.00025])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 75000.00025 Variance: 25.0075
+Epoch: 10. Test Accuracy: 98.83
+Epoch: 20. Test Accuracy: 98.36
+Epoch: 30. Test Accuracy: 40.83
+Epoch: 40. Test Accuracy: 36.18
+Epoch: 50. Test Accuracy: 35.96
+Retrain Test: 35.96, Retrain Validation: 36.63, Prune Test: 35.81, Prune Validation: 36.71, Prune Sparsity: 98.69
+Final Score: 31868.24333022152 Acc Score: 31866.747499649162 Sp Score: 1.4958305723595928
+=====================================
+

@@ -1,5 +1,8 @@
 import numpy as np
 
+root_dir = "/home/okz21/NNC/NN_compression/"
+model_load_dir = root_dir + "models/"
+
 def trueAfterN(ip, N):
     return ((N-1)==ip%N)
 

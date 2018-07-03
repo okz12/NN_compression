@@ -7,11 +7,10 @@ from torch.nn.modules import Module
 from torch.autograd import Variable
 import numpy as np
 
-model_dir = "./models/"
 import model_archs
 from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty
-from utils_misc import trueAfterN, logsumexp
+from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 import copy
@@ -19,7 +18,7 @@ import pickle
 import argparse
 retraining_epochs = 50
 
-def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size):
+def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model_save_dir = ""):
     if(data_size == 'search'):
         train_dataset = search_retrain_data
         val_data_full = Variable(search_validation_data(fetch='data')).cuda()
@@ -30,14 +29,14 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size):
     test_labels_full = Variable(test_data(fetch='labels')).cuda()
         
     model_file = 'mnist_{}_{}_{}'.format(model_name, 100, data_size)
-    model = torch.load(model_dir + model_file + '.m').cuda()
+    model = torch.load(model_load_dir + model_file + '.m').cuda()
         
     if temp == 0:
         criterion = nn.CrossEntropyLoss()
         loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
     else:
         criterion = nn.MSELoss()
-        output = torch.load("{}{}/{}.out.m".format(model_dir, model_file, "fc2"))
+        output = torch.load("{}{}/{}.out.m".format(model_load_dir, model_file, "fc2"))
         output = (nn.Softmax(dim=1)(output/temp)).data
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
@@ -59,10 +58,10 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size):
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
-
-    torch.save(model, model_dir + model_file + '/mnist_retrain_{}.m'.format(exp_name))
-    with open(model_dir + model_file + '/mnist_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
-        pickle.dump(gmp, f)
+    if(model_save_dir!=""):
+        torch.save(model, model_save_dir + '/mnist_retrain_{}.m'.format(exp_name))
+        with open(model_save_dir + '/mnist_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
+            pickle.dump(gmp, f)
     
     test_accuracy_pre = float((test_accuracy(test_data_full, test_labels_full, model)[0]))
     val_accuracy_pre = 0 if (data_size != 'search') else float((test_accuracy(val_data_full, val_labels_full, model)[0]))
@@ -89,6 +88,7 @@ if __name__ == "__main__":
     parser.add_argument('--mixtures', dest = "mixtures", help="Mixtures: Number of Gaussian prior mixtures", required=True, type=(int))
     parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'Lenet_300_100'))
     parser.add_argument('--data', dest = "data", help = "Data to train on - 'full' training data (60k) or 'search' training data(50k)", required = True, choices = ('full','search'))
+    parser.add_argument('--savedir', dest = "savedir", help = "Save Directory")
     args = parser.parse_args()
     alpha = float(args.alpha)
     beta = float(args.beta)
@@ -100,4 +100,4 @@ if __name__ == "__main__":
     else:
         temp = float(args.temp)
         
-    retrain_model(alpha, beta, tau, temp, mixtures, model_name, args.data)
+    retrain_model(alpha, beta, tau, temp, mixtures, model_name, args.data, args.savedir)

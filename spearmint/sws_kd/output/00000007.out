@@ -1,40 +1,19 @@
-Job launching after 0.17 seconds in submission.
+Job launching after 0.16 seconds in submission.
 Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
-Traceback (most recent call last):
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
-    result = python_launcher(job)
-  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 326, in python_launcher
-    module  = __import__(main_file)
-  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 4, in <module>
-    import retrain_model
-  File "../../src/retrain_model.py", line 12, in <module>
-    from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
-  File "../../src/utils_plot.py", line 10, in <module>
-    import seaborn as sns
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/__init__.py", line 9, in <module>
-    from .regression import *
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/regression.py", line 15, in <module>
-    import statsmodels
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/statsmodels/__init__.py", line 8, in <module>
-    from .tools.sm_exceptions import (ConvergenceWarning, CacheWriteWarning,
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/statsmodels/tools/__init__.py", line 1, in <module>
-    from .tools import add_constant, categorical
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/statsmodels/tools/tools.py", line 11, in <module>
-    from statsmodels.datasets import webuse
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/statsmodels/datasets/__init__.py", line 5, in <module>
-    from . import (anes96, cancer, committee, ccard, copper, cpunish, elnino,
-  File "/anaconda/envs/py35/lib/python3.5/site-packages/statsmodels/datasets/statecrime/__init__.py", line 1, in <module>
-    from .data import *
-  File "<frozen importlib._bootstrap>", line 968, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 953, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 896, in _find_spec
-  File "<frozen importlib._bootstrap_external>", line 1171, in find_spec
-  File "<frozen importlib._bootstrap_external>", line 1145, in _get_spec
-  File "<frozen importlib._bootstrap_external>", line 1257, in find_spec
-  File "<frozen importlib._bootstrap_external>", line 1296, in _fill_cache
-KeyboardInterrupt
-Problem executing the function
-Job failed in 1.26 seconds.
-(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f30d8254408>)
+Running script.main()
+Got result {'min_accuracy': -83.09, 'score': 77038.71220210208, 'min_sparsity': 9.86819412881735}
+Completed successfully in 296.56 seconds. [{'min_accuracy': -83.09, 'score': 77038.71220210208, 'min_sparsity': 9.86819412881735}]
+{'tau': array([0.001]), 'mixtures': array([3]), 'var': array([0.01]), 'mean': array([0.001])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 0.001 Variance: 0.009999999999999998
+Epoch: 10. Test Accuracy: 98.74
+Epoch: 20. Test Accuracy: 97.07
+Epoch: 30. Test Accuracy: 43.79
+Epoch: 40. Test Accuracy: 43.67
+Epoch: 50. Test Accuracy: 43.75
+Retrain Test: 43.75, Retrain Validation: 45.68, Prune Test: 9.80, Prune Validation: 9.91, Prune Sparsity: 97.87
+Final Score: 77038.71220210208 Acc Score: 77035.5996152333 Sp Score: 3.1125868687758573
+=====================================
+

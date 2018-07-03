@@ -1,0 +1,19 @@
+Job launching after 0.16 seconds in submission.
+Running python job.
+Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
+Importing script.py
+Running script.main()
+Got result {'score': 78952.6050502349, 'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918}
+Completed successfully in 311.19 seconds. [{'score': 78952.6050502349, 'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918}]
+{'var': array([99.96161927]), 'mixtures': array([3]), 'mean': array([100000.]), 'tau': array([0.001])}
+0-component Mean: 2500.0 Variance: 1250.0
+Non-zero component Mean: 100000.0 Variance: 99.9616192657244
+Epoch: 10. Test Accuracy: 98.77
+Epoch: 20. Test Accuracy: 97.88
+Epoch: 30. Test Accuracy: 42.22
+Epoch: 40. Test Accuracy: 11.42
+Epoch: 50. Test Accuracy: 8.99
+Retrain Test: 8.99, Retrain Validation: 8.99, Prune Test: 8.99, Prune Validation: 9.02, Prune Sparsity: 99.55
+Final Score: 78952.6050502349 Acc Score: 78952.30818995474 Sp Score: 0.2968602801602402
+=====================================
+

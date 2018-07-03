@@ -1,3 +1,5 @@
+spearmint/**/output/*.out
+spearmint/**/models/*
 figs/
 data/
 models/**

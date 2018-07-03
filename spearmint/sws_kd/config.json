@@ -1,12 +1,12 @@
 {
     "language"        : "PYTHON",
     "main-file"       : "script.py",
-    "experiment-name" : "retrain_constrained_2",
+    "experiment-name" : "sws_kd",
 	"resources" : {
         "my-machine" : {
             "scheduler"         : "local",
             "max-concurrent"    : 2,
-            "max-finished-jobs" : 2000
+            "max-finished-jobs" : 200
         }
 	},
     "variables" : {
