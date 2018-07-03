@@ -1,0 +1,17 @@
+Job launching after 0.17 seconds in submission.
+Running python job.
+Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
+Importing script.py
+Running script.main()
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
+    result = module.main(job['id'], params)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), 0, int(params['mixtures']), 'SWSModel', 'search')
+TypeError: 'module' object is not callable
+Problem executing the function
+Job failed in 1.63 seconds.
+{'mean': array([50000.0005]), 'var': array([50.005]), 'tau': array([0.00050001]), 'mixtures': array([9])}
+(<class 'TypeError'>, TypeError("'module' object is not callable",), <traceback object at 0x7f6f4120b148>)
