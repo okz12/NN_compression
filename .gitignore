@@ -1,8 +1,8 @@
+models/*/*.m
 spearmint/**/output/*.out
 spearmint/**/models/*
 figs/
 data/
-models/**
 
 led / optimized / DLL files
 __pycache__/
