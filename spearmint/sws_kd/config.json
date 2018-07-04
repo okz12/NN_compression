@@ -33,6 +33,12 @@
             "size" : 1,
             "min"  : 3,
             "max"  : 16
+        },
+		"temp" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 2,
+            "max"  : 20
         }
     },
 	"tasks": {

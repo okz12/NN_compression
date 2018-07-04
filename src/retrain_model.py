@@ -23,8 +23,10 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         train_dataset = search_retrain_data
         val_data_full = Variable(search_validation_data(fetch='data')).cuda()
         val_labels_full = Variable(search_validation_data(fetch='labels')).cuda()
+        (x_start, x_end) = (40000, 50000)
     if(data_size == 'full'):
         train_dataset = train_data
+        (x_start, x_end) = (0, 60000)
     test_data_full = Variable(test_data(fetch='data')).cuda()
     test_labels_full = Variable(test_data(fetch='labels')).cuda()
         
@@ -36,7 +38,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
     else:
         criterion = nn.MSELoss()
-        output = torch.load("{}{}/{}.out.m".format(model_load_dir, model_file, "fc2"))
+        output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file.replace("search", "full"), "fc2"))[x_start:x_end]
         output = (nn.Softmax(dim=1)(output/temp)).data
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
@@ -48,12 +50,13 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     sws_param1 = [gmp.means]
     sws_param2 = [gmp.gammas, gmp.rhos]
 
-    opt_weight = torch.optim.Adam(model.parameters(), lr=1e-4)
-    opt_gmp = torch.optim.Adam(sws_param1, lr=1e-4)
-    opt_gmp2 = torch.optim.Adam(sws_param2, lr=3e-3)
+    opt = torch.optim.Adam([
+        {'params': model.parameters(), 'lr': 1e-4},
+        {'params': sws_param1, 'lr': 1e-4},
+        {'params': sws_param2, 'lr': 3e-3}])
 
     for epoch in range(retraining_epochs):
-        model, loss = retrain_sws_epoch(model, gmp, opt_weight, opt_gmp, opt_gmp2, criterion, loader, tau)
+        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau)
 
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)

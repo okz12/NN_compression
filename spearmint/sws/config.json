@@ -1,0 +1,53 @@
+{
+    "language"        : "PYTHON",
+    "main-file"       : "script.py",
+    "experiment-name" : "sws_kd",
+	"resources" : {
+        "my-machine" : {
+            "scheduler"         : "local",
+            "max-concurrent"    : 2,
+            "max-finished-jobs" : 200
+        }
+	},
+    "variables" : {
+        "mean" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0.001,
+            "max"  : 100000
+        },
+        "var" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 0.01,
+            "max"  : 100
+        },
+		"tau" : {
+            "type" : "FLOAT",
+            "size" : 1,
+            "min"  : 1e-8,
+            "max"  : 1e-3
+        },
+		"mixtures" : {
+            "type" : "INT",
+            "size" : 1,
+            "min"  : 3,
+            "max"  : 16
+        }
+    },
+	"tasks": {
+      "score" : {
+          "type"        : "OBJECTIVE",
+          "likelihood"  : "GAUSSIAN"
+      },
+      "min_sparsity" : {
+          "type"        : "CONSTRAINT",
+          "likelihood"  : "GAUSSIAN"
+      },
+      "min_accuracy" : {
+          "type"        : "CONSTRAINT",
+          "likelihood"  : "GAUSSIAN"
+      }
+    },
+    "polling-time" : 1
+}

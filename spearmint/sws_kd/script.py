@@ -10,7 +10,7 @@ def main(job_id, params):
     var = float(params['var'])
     beta = mean/var
     alpha = mean * beta
-    acc, sp = retrain_model(alpha, beta, float(params['tau']), 0, int(params['mixtures']), 'SWSModel', 'search', savedir)
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), float(params['temp']), int(params['mixtures']), 'SWSModel', 'search', savedir)
     acc_score = (100-acc)**2.5
     sp_score = (100-sp)**1.5
     score = acc_score + sp_score

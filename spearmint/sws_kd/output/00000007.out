@@ -3,17 +3,19 @@ Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
 Running script.main()
-Got result {'min_accuracy': -83.09, 'score': 77038.71220210208, 'min_sparsity': 9.86819412881735}
-Completed successfully in 296.56 seconds. [{'min_accuracy': -83.09, 'score': 77038.71220210208, 'min_sparsity': 9.86819412881735}]
-{'tau': array([0.001]), 'mixtures': array([3]), 'var': array([0.01]), 'mean': array([0.001])}
-0-component Mean: 2500.0 Variance: 1250.0
-Non-zero component Mean: 0.001 Variance: 0.009999999999999998
-Epoch: 10. Test Accuracy: 98.74
-Epoch: 20. Test Accuracy: 97.07
-Epoch: 30. Test Accuracy: 43.79
-Epoch: 40. Test Accuracy: 43.67
-Epoch: 50. Test Accuracy: 43.75
-Retrain Test: 43.75, Retrain Validation: 45.68, Prune Test: 9.80, Prune Validation: 9.91, Prune Sparsity: 97.87
-Final Score: 77038.71220210208 Acc Score: 77035.5996152333 Sp Score: 3.1125868687758573
-=====================================
-
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
+    result = module.main(job['id'], params)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), float(params['temp']), int(params['mixtures']), 'SWSModel', 'search', savedir)
+  File "../../src/retrain_model.py", line 39, in retrain_model
+    output = torch.load("{}{}/{}.out.m".format(model_load_dir, model_file, "fc2"))
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/serialization.py", line 265, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: '/home/okz21/NNC/NN_compression/models/mnist_SWSModel_100_search/fc2.out.m'
+Problem executing the function
+Job failed in 4.11 seconds.
+{'temp': array([2]), 'mean': array([0.001]), 'tau': array([1.e-08]), 'var': array([0.01]), 'mixtures': array([3])}
+(<class 'FileNotFoundError'>, FileNotFoundError(2, 'No such file or directory'), <traceback object at 0x7f19d3cbd748>)

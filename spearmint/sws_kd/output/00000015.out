@@ -3,17 +3,25 @@ Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
 Running script.main()
-Got result {'min_accuracy': -83.09, 'min_sparsity': 9.865548049684023, 'score': 77038.71799909313}
-Completed successfully in 301.04 seconds. [{'min_accuracy': -83.09, 'min_sparsity': 9.865548049684023, 'score': 77038.71799909313}]
-{'var': array([100.]), 'mixtures': array([3]), 'mean': array([0.001]), 'tau': array([0.00079796])}
-0-component Mean: 2500.0 Variance: 1250.0
-Non-zero component Mean: 0.001 Variance: 99.99999999999999
-Epoch: 10. Test Accuracy: 98.74
-Epoch: 20. Test Accuracy: 97.41
-Epoch: 30. Test Accuracy: 43.81
-Epoch: 40. Test Accuracy: 43.38
-Epoch: 50. Test Accuracy: 43.41
-Retrain Test: 43.41, Retrain Validation: 45.30, Prune Test: 9.80, Prune Validation: 9.91, Prune Sparsity: 97.87
-Final Score: 77038.71799909313 Acc Score: 77035.5996152333 Sp Score: 3.118383859841254
-=====================================
-
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
+    result = module.main(job['id'], params)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), float(params['temp']), int(params['mixtures']), 'SWSModel', 'search', savedir)
+  File "../../src/retrain_model.py", line 24, in retrain_model
+    val_data_full = Variable(search_validation_data(fetch='data')).cuda()
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/autograd/variable.py", line 298, in cuda
+    return CudaTransfer.apply(self, device, async)
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/autograd/_functions/tensor.py", line 201, in forward
+    return i.cuda(async=async)
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/_utils.py", line 69, in _cuda
+    return new_type(self.size()).copy_(self, async)
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/torch/cuda/__init__.py", line 387, in _lazy_new
+    return super(_CudaBase, cls).__new__(cls, *args, **kwargs)
+KeyboardInterrupt
+Problem executing the function
+Job failed in 3.93 seconds.
+{'var': array([0.01]), 'tau': array([1.e-08]), 'mixtures': array([3]), 'mean': array([0.001]), 'temp': array([2])}
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f8df4258b88>)

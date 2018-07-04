@@ -1,19 +1,24 @@
-Job launching after 0.16 seconds in submission.
-Running python job.
-Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
-Importing script.py
-Running script.main()
-Got result {'score': 78952.6050502349, 'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918}
-Completed successfully in 311.19 seconds. [{'score': 78952.6050502349, 'min_accuracy': -83.98, 'min_sparsity': 11.55499175045918}]
-{'var': array([99.96161927]), 'mixtures': array([3]), 'mean': array([100000.]), 'tau': array([0.001])}
-0-component Mean: 2500.0 Variance: 1250.0
-Non-zero component Mean: 100000.0 Variance: 99.9616192657244
-Epoch: 10. Test Accuracy: 98.77
-Epoch: 20. Test Accuracy: 97.88
-Epoch: 30. Test Accuracy: 42.22
-Epoch: 40. Test Accuracy: 11.42
-Epoch: 50. Test Accuracy: 8.99
-Retrain Test: 8.99, Retrain Validation: 8.99, Prune Test: 8.99, Prune Validation: 9.02, Prune Sparsity: 99.55
-Final Score: 78952.6050502349 Acc Score: 78952.30818995474 Sp Score: 0.2968602801602402
-=====================================
-
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 192, in <module>
+    from spearmint.utils.database.mongodb import MongoDB
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/utils/database/mongodb.py", line 187, in <module>
+    import pymongo
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/pymongo/__init__.py", line 77, in <module>
+    from pymongo.collection import ReturnDocument
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/pymongo/collection.py", line 29, in <module>
+    from pymongo import (common,
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/pymongo/common.py", line 27, in <module>
+    from pymongo.auth import MECHANISMS
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/pymongo/auth.py", line 46, in <module>
+    from pymongo.errors import ConfigurationError, OperationFailure
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/pymongo/errors.py", line 20, in <module>
+    from ssl import CertificateError
+  File "/anaconda/envs/py35/lib/python3.5/ssl.py", line 91, in <module>
+    import ipaddress
+  File "<frozen importlib._bootstrap>", line 968, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 957, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 673, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 693, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 797, in get_code
+  File "<frozen importlib._bootstrap_external>", line 508, in _compile_bytecode
+KeyboardInterrupt

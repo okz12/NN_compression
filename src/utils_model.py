@@ -91,7 +91,7 @@ class model_prune():
 		return new_state_dict   
 	
 ###
-def retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, criterion, train_loader, tau):
+def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau):#, optimizer_gmp, optimizer_gmp2
 	"""
 	train model
 	
@@ -109,8 +109,8 @@ def retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, crit
 		labels = Variable(labels)
 		# Clear gradients w.r.t. parameters
 		optimizer.zero_grad()
-		optimizer_gmp.zero_grad()
-		optimizer_gmp2.zero_grad()
+		#optimizer_gmp.zero_grad()
+		#optimizer_gmp2.zero_grad()
 		# Forward pass to get output/logits
 		outputs = model(images)
 		# Calculate Loss: softmax --> cross entropy loss
@@ -127,9 +127,28 @@ def retrain_sws_epoch(model, gmp, optimizer, optimizer_gmp, optimizer_gmp2, crit
 		gmp_loss.backward()
 		# Updating parameters
 		optimizer.step()
-		optimizer_gmp.step()
-		optimizer_gmp2.step()
+		#optimizer_gmp.step()
+		#optimizer_gmp2.step()
 	return model, loss + gmp_loss
+    
+def train_epoch(model, optimizer, criterion, train_loader):
+	for i, (images, labels) in enumerate(train_loader):
+		#if(use_cuda):
+		images=images.cuda()
+		labels=labels.cuda()
+		images = Variable(images)
+		labels = Variable(labels)
+		# Clear gradients w.r.t. parameters
+		optimizer.zero_grad()
+		# Forward pass to get output/logits
+		outputs = model(images)
+		# Calculate Loss: softmax --> cross entropy loss
+		loss = criterion(outputs, labels)
+		# Getting gradients w.r.t. parameters
+		loss.backward()
+		# Updating parameters
+		optimizer.step()
+	return model, loss
 	
 ###
 def layer_accuracy(model_retrain, gmp, model_orig, data, labels):

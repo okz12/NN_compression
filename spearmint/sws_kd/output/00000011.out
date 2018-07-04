@@ -1,19 +1,41 @@
-Job launching after 0.16 seconds in submission.
+Job launching after 0.19 seconds in submission.
 Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
-Running script.main()
-Got result {'min_sparsity': 10.662640475671637, 'score': 32501.407717640643, 'min_accuracy': -56.79}
-Completed successfully in 412.01 seconds. [{'min_sparsity': 10.662640475671637, 'score': 32501.407717640643, 'min_accuracy': -56.79}]
-{'mean': array([99722.45657125]), 'mixtures': array([16]), 'var': array([99.38001978]), 'tau': array([0.00027752])}
-0-component Mean: 2500.0 Variance: 1250.0
-Non-zero component Mean: 99722.45657125064 Variance: 99.38001977760929
-Epoch: 10. Test Accuracy: 98.80
-Epoch: 20. Test Accuracy: 98.36
-Epoch: 30. Test Accuracy: 39.28
-Epoch: 40. Test Accuracy: 35.04
-Epoch: 50. Test Accuracy: 35.04
-Retrain Test: 35.04, Retrain Validation: 36.44, Prune Test: 34.87, Prune Validation: 36.21, Prune Sparsity: 98.66
-Final Score: 32501.407717640643 Acc Score: 32499.861138093664 Sp Score: 1.5465795469783183
-=====================================
-
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 326, in python_launcher
+    module  = __import__(main_file)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 4, in <module>
+    from retrain_model import retrain_model
+  File "../../src/retrain_model.py", line 11, in <module>
+    from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
+  File "../../src/utils_plot.py", line 10, in <module>
+    import seaborn as sns
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/__init__.py", line 6, in <module>
+    from .rcmod import *
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/rcmod.py", line 8, in <module>
+    from . import palettes, _orig_rc_params
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/palettes.py", line 12, in <module>
+    from .utils import desaturate, set_hls_values, get_color_cycle
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/seaborn/utils.py", line 11, in <module>
+    import matplotlib.pyplot as plt
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/pyplot.py", line 116, in <module>
+    _backend_mod, new_figure_manager, draw_if_interactive, _show = pylab_setup()
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/__init__.py", line 60, in pylab_setup
+    [backend_name], 0)
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/backend_qt5agg.py", line 16, in <module>
+    from .backend_qt5 import (
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/backend_qt5.py", line 18, in <module>
+    import matplotlib.backends.qt_editor.figureoptions as figureoptions
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/qt_editor/figureoptions.py", line 20, in <module>
+    import matplotlib.backends.qt_editor.formlayout as formlayout
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/qt_editor/formlayout.py", line 56, in <module>
+    from matplotlib.backends.qt_compat import QtGui, QtWidgets, QtCore
+  File "/anaconda/envs/py35/lib/python3.5/site-packages/matplotlib/backends/qt_compat.py", line 137, in <module>
+    from PyQt5 import QtCore, QtGui, QtWidgets
+KeyboardInterrupt
+Problem executing the function
+Job failed in 1.14 seconds.
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f905024c988>)

@@ -3,17 +3,27 @@ Running python job.
 Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
 Importing script.py
 Running script.main()
-Got result {'score': 81.85080204168206, 'min_accuracy': 1.5400000000000063, 'min_sparsity': 6.703016530211997}
-Completed successfully in 301.68 seconds. [{'score': 81.85080204168206, 'min_accuracy': 1.5400000000000063, 'min_sparsity': 6.703016530211997}]
-{'mean': array([0.001]), 'var': array([0.01]), 'tau': array([1.e-08]), 'mixtures': array([3])}
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
+    result = module.main(job['id'], params)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), float(params['temp']), int(params['mixtures']), 'SWSModel', 'search', savedir)
+  File "../../src/retrain_model.py", line 58, in retrain_model
+    model, loss = retrain_sws_epoch(model, gmp, opt_weight, opt_gmp, opt_gmp2, criterion, loader, tau)
+  File "../../src/utils_model.py", line 122, in retrain_sws_epoch
+    gmp_loss = tau * gmp.call()
+  File "../../src/utils_sws.py", line 72, in call
+    min_rho = self.rhos.min()
+KeyboardInterrupt
+Problem executing the function
+Job failed in 298.67 seconds.
+{'tau': array([1.e-08]), 'mixtures': array([3]), 'var': array([0.01]), 'mean': array([0.001]), 'temp': array([2])}
 0-component Mean: 2500.0 Variance: 1250.0
 Non-zero component Mean: 0.001 Variance: 0.009999999999999998
-Epoch: 10. Test Accuracy: 98.82
-Epoch: 20. Test Accuracy: 98.80
-Epoch: 30. Test Accuracy: 98.71
-Epoch: 40. Test Accuracy: 98.72
-Epoch: 50. Test Accuracy: 98.63
-Retrain Test: 98.63, Retrain Validation: 98.48, Prune Test: 94.34, Prune Validation: 94.54, Prune Sparsity: 94.70
-Final Score: 81.85080204168206 Acc Score: 69.65970112121909 Sp Score: 12.191100920462972
-=====================================
-
+Epoch: 10. Test Accuracy: 98.58
+Epoch: 20. Test Accuracy: 98.56
+Epoch: 30. Test Accuracy: 98.41
+Epoch: 40. Test Accuracy: 98.47
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7fc500bcb748>)
