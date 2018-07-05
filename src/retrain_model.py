@@ -35,7 +35,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         
     if temp == 0:
         criterion = nn.CrossEntropyLoss()
-        loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
+        loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True, scaling = False)
     else:
         criterion = nn.MSELoss()
         output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file.replace("search", "full"), "fc2"))[x_start:x_end]
@@ -44,16 +44,13 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 
     exp_name = "m{}_a{}_b{}_r{}_t{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, temp, data_size)
-    gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta))
+    gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta), scaling = scaling)
     gmp.print_batch = False
-
-    sws_param1 = [gmp.means]
-    sws_param2 = [gmp.gammas, gmp.rhos]
 
     opt = torch.optim.Adam([
         {'params': model.parameters(), 'lr': 1e-4},
-        {'params': sws_param1, 'lr': 1e-4},
-        {'params': sws_param2, 'lr': 3e-3}])
+        {'params': [gmp.means], 'lr': 1e-4},
+        {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
     for epoch in range(retraining_epochs):
         model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau)
@@ -92,6 +89,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'Lenet_300_100'))
     parser.add_argument('--data', dest = "data", help = "Data to train on - 'full' training data (60k) or 'search' training data(50k)", required = True, choices = ('full','search'))
     parser.add_argument('--savedir', dest = "savedir", help = "Save Directory")
+    parser.add_argument('--scale', dest = "scale", help = "Allow different scales on each layer", action = 'store_true')
     args = parser.parse_args()
     alpha = float(args.alpha)
     beta = float(args.beta)
@@ -102,5 +100,6 @@ if __name__ == "__main__":
         temp = 0
     else:
         temp = float(args.temp)
+    scaling = True if args.scale != None else False
         
-    retrain_model(alpha, beta, tau, temp, mixtures, model_name, args.data, args.savedir)
+    retrain_model(alpha, beta, tau, temp, mixtures, model_name, args.data, args.savedir, args.scale)

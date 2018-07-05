@@ -48,7 +48,7 @@ class GaussianMixturePrior(Module):
         #self.loss = Variable(torch.cuda.FloatTensor([0.]), requires_grad=True)
         
         #scaling
-        scale = torch.ones(8)
+        scale = torch.ones(int(len(network_weights)/2))
 
         for i,x in enumerate(network_weights):
             if (len(x.size())) != 1:
@@ -56,10 +56,9 @@ class GaussianMixturePrior(Module):
             else:
                 bias = x.clone().data
                 w_std = torch.cat((weight.view(-1), bias)).std()
-                scale[i] = w_std
-                scale[i-1] = w_std
+                scale[int(i/2)] = w_std
                 
-        self.scale = scale/scale.min()
+        self.scale = Variable((scale/scale.min()).log().cuda(), requires_grad=True)
 
         
     def call(self, mask=None):
@@ -77,7 +76,7 @@ class GaussianMixturePrior(Module):
         
         for i, weights in enumerate(self.network_weights):
             if (self.scaling):
-                weight_loss = self.compute_loss(weights / self.scale[i], mixing_proportions, means, precision)
+                weight_loss = self.compute_loss(weights / self.scale[int(i/2)].exp(), mixing_proportions, means, precision)
             else:
                 weight_loss = self.compute_loss(weights, mixing_proportions, means, precision)
             if(self.print_batch):
@@ -203,10 +202,11 @@ def sws_prune(model, gmp):
     
     pruned_state_dict = copy.deepcopy(model.state_dict())
     dim_start = 0
-    for layer in model.state_dict():
-        elems = 1
-        for dim in model.state_dict()[layer].shape:
-            elems *= dim
-        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape))
+    for i, layer in enumerate(model.state_dict()):
+        layer_mult = 1
+        if (gmp.scaling):
+            layer_mult = float(gmp.scale[int(i/2)].exp())
+        elems = model.state_dict()[layer].numel()
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
         dim_start += elems
     return pruned_state_dict
