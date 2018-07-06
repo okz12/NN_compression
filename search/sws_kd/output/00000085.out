@@ -1,0 +1,17 @@
+Job launching after 0.26 seconds in submission.
+Running python job.
+Changed into dir /home/okz21/NNC/NN_compression/spearmint/sws_kd
+Importing script.py
+Running script.main()
+Traceback (most recent call last):
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 244, in launch
+    result = python_launcher(job)
+  File "/home/okz21/spearmint-install/Spearmint-d9e95208e7a242669e2f76bfc838db79d740e8ab/spearmint/launcher.py", line 328, in python_launcher
+    result = module.main(job['id'], params)
+  File "/home/okz21/NNC/NN_compression/spearmint/sws_kd/script.py", line 13, in main
+    acc, sp = retrain_model(alpha, beta, float(params['tau']), float(params['temp']), int(params['mixtures']), 'SWSModel', 'search', savedir)
+KeyError: 'temp'
+Problem executing the function
+Job failed in 1.55 seconds.
+{'tau': array([3.59147045e-08]), 'mean': array([0.001]), 'var': array([100.]), 'mixtures': array([3])}
+(<class 'KeyError'>, KeyError('temp',), <traceback object at 0x7f4121a131c8>)
