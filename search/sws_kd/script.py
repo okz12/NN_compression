@@ -4,6 +4,8 @@ import os
 from retrain_model import retrain_model
 savedir = os.getcwd() + "/models/"
 
+import pickle
+
 def main(job_id, params):
     print (params)
     mean = float(params['mean'])
@@ -16,8 +18,15 @@ def main(job_id, params):
     score = acc_score + sp_score
     print ("Final Score: {} Acc Score: {} Sp Score: {}".format(score, acc_score, sp_score))
     print ("=====================================\n")
+    if(job_id == -1):
+        return score
     return {
         "score"       : score, 
         "min_sparsity" : sp-88, 
         "min_accuracy" : acc-93
     }
+
+if __name__=="__main__":
+    with open("../sobol_search.p", "rb") as handle:
+        params = pickle.load(handle)
+    print (params)

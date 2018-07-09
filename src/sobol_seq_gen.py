@@ -31,5 +31,5 @@ params['tau'] = np.exp(param_values[:,2])
 params['temp'] = np.around(param_values[:,3])
 params['mixtures'] = np.around(param_values[:,4])
 
-with open('../search/params.p', 'wb') as handle:
-    pickle.dump("sobol_search.p", handle)
+with open('../search/sobol_search.p', 'wb') as handle:
+    pickle.dump(params, handle)
