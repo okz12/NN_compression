@@ -210,3 +210,95 @@ def sws_prune(model, gmp):
         pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
         dim_start += elems
     return pruned_state_dict
+
+class compressed_model():
+    def __init__(self, state_dict, gmp_list):
+        gmp_means = []
+        self.scale_len = 0
+        for g in gmp_list:
+            gmp_means.append(list(g.means.clone().data.cpu().numpy()))
+            
+        if (g.scaling):#if scaling , only one gmp should be present
+            weights = torch.cat([state_dict[layer].view(-1) * g.scale.data.exp()[int(i/2)] for i,layer in enumerate(state_dict)]).cpu().numpy()
+            self.scale_len = float(g.scale.size()[0])
+        else:
+            weights = torch.cat([state_dict[layer].view(-1) for layer in state_dict]).cpu().numpy()
+            
+        means = np.sort( np.append( np.array(gmp_means), np.zeros(1)) )
+        bins = means + 0.001 * abs(means)
+        binned_weights = np.digitize(pd, bins, right=True)
+
+        unique, counts = np.unique(binned_weights, return_counts=True)
+        zero_idx = np.argmax(counts)
+        binned_weights[ binned_weights==unique[zero_idx] ] = 0
+        new_means = []
+        new_means.append(0.0)
+
+        set_idx = 1
+        for idx in unique:
+            if idx != unique[zero_idx]:
+                new_means.append(means[idx])
+                binned_weights[ binned_weights==idx] = set_idx
+                set_idx += 1
+                
+        self.binned_weights = binned_weights
+        self.means = means
+
+    def encode(self, index_bits):
+        index_spacing = index_bits**2
+        index_list = []
+        weight_list = []
+        index_counter=0
+        for pos, weight in enumerate(list(self.binned_weights)):
+            index_counter+=1
+            if (weight==0):
+                if index_counter==index_spacing:
+                    index_list.append(index_spacing)
+                    weight_list.append(0)
+                    index_counter=0
+            else:
+                weight_list.append(weight)
+                index_list.append(index_counter)
+                index_counter=0
+        if(index_counter>0):
+            index_list.append(index_counter)
+            weight_list.append(0)
+        return index_list, weight_list
+    
+    def decode(self, index_list, weight_list):
+        R_recov = []
+        for index, weight in zip(index_list, weight_list):
+            for z in range(int(index-1)):
+                R_recov.append(0)
+            R_recov.append(weight)
+        return R_recov
+    
+    def recover(self):
+        unique, counts = np.unique(self.binned_weights, return_counts=True)
+        pd_recov = np.zeros(self.binned_weights.size)
+
+        for u, nm in zip(unique, self.means):
+            pd_recov[ binned_weights==u ] = nm
+            print(u, nm)
+            print(pd_recov)
+        return pd_recov
+    
+    def get_cr(self, index_bits=0):
+        full_size = self.binned_weights.size * 32
+        codebook_size = 32 * (np.ceil(np.log2(self.means.size)) + np.ceil(np.log2(self.scale_len)))
+        min_idx_bit = 0
+        min_idx_size = -1
+        if (index_bits !=0):
+            index_list, weight_list = self.encode(index_bits)
+            index_size = len(index_list) * index_bits
+            weight_size = len(weight_list) * np.ceil(np.log2(self.means.size))
+            return ((full_size / (codebook_size + weight_size + index_size)), min_idx_bit)
+        
+        for index_bits in range (6,11):
+            index_list, weight_list = self.encode(index_bits)
+            index_size = len(index_list) * index_bits
+            weight_size = len(weight_list) * np.ceil(np.log2(self.means.size))
+            if (index_size + weight_size < min_idx_size or min_idx_size ==-1):
+                min_idx_size = index_size + weight_size
+                min_idx_bit = index_bits
+        return ((full_size / (codebook_size + min_idx_size)), min_idx_bit)

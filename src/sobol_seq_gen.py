@@ -15,7 +15,7 @@ problem = {
   'num_vars': 5,
   'names': ['mean', 'var', 'tau', 'temp', 'mixtures'],
   'bounds': [[np.log(0.001), np.log(100000)],
-    [np.log(0.01), np.log(1000)],
+    [np.log(0.1), np.log(10000)],
     [np.log(1e-8), np.log(1e-3)],
     [1.5,20.49],
     [2.5,16.49]]
