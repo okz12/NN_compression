@@ -24,12 +24,13 @@ def save_targets(model_file):
     for layer in layer_targets:
         torch.save(layer_targets[layer], "{}{}_targets/{}.m".format(model_load_dir, model_file, layer))
 
-def get_targets(model_file, temp):
+def get_targets(model_file, temp, layers=[]):
     if not os.path.exists("{}{}_targets".format(model_load_dir, model_file)):
         save_targets(model_file)
     loaded_model = torch.load(model_load_dir + model_file + ".m")
     target_dict = {}
-    layers = list(set([x.replace(".bias","").replace(".weight","") for x in loaded_model.state_dict()]))
+    if layers == []:
+        layers = list(set([x.replace(".bias","").replace(".weight","") for x in loaded_model.state_dict()]))
     for layer in layers:
         output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, layer))
         if (len(output.size())<4):#no temp on conv layers

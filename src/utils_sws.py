@@ -68,9 +68,9 @@ class GaussianMixturePrior(Module):
         #mean=self.means
         precision = self.gammas.exp()
         
-        min_rho = self.rhos.min()
+        min_rho = self.rhos.min().repeat(self.rhos.size())
         mixing_proportions = (self.rhos - min_rho).exp()
-        mixing_proportions = (1 - self.pi_zero) * mixing_proportions/mixing_proportions.sum()
+        mixing_proportions = (1 - self.pi_zero) * mixing_proportions/mixing_proportions.sum().repeat(mixing_proportions.size())
         mixing_proportions = torch.pow(mixing_proportions, 2)
         mixing_proportions = torch.cat(( Variable(torch.cuda.FloatTensor([self.pi_zero])) , mixing_proportions), 0)
         
