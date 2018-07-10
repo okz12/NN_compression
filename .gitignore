@@ -1,6 +1,6 @@
 models/*/*.m
-spearmint/**/output/*.out
-spearmint/**/models/*
+search/**/output/*.out
+search/**/models/*
 figs/
 data/
 
