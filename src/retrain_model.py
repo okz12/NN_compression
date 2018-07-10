@@ -43,7 +43,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 
-    exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, temp, mixtures, data_size)
+    exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, int(mixtures), int(temp), data_size)
     gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta), scaling = scaling)
     gmp.print_batch = False
 

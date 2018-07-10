@@ -1,8 +1,11 @@
 import sys
 sys.path.insert(0,'../../src/')
 import os
+import argparse
 from retrain_model import retrain_model
 savedir = os.getcwd() + "/models/"
+
+import pickle
 
 def main(job_id, params):
     print (params)
@@ -21,3 +24,33 @@ def main(job_id, params):
         "min_sparsity" : sp-88, 
         "min_accuracy" : acc-93
     }
+
+if __name__=="__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--start', dest = "start", help="Start Search", required=True, type=(int))
+    parser.add_argument('--end', dest = "end", help="End Search", required=True, type=(int))
+    args = parser.parse_args()
+    start = int(args.start)
+    end = int(args.end)
+
+    tupled_params = [tuple(row) for row in np.vstack((params['mean'], params['var'], params['tau'], params['mixtures'])).T]
+    unique_params = list(set(tupled_params))
+
+    reduced_params = {}
+    reduced_params['mean'] = np.array([x[0] for x in unique_params])
+    reduced_params['var'] = np.array([x[1] for x in unique_params])
+    reduced_params['tau'] = np.array([x[2] for x in unique_params])
+    reduced_params['mixtures'] = np.array([int(x[3]) for x in unique_params])
+    params = reduced_params
+
+    with open("../sobol_search.p", "rb") as handle:
+        params = pickle.load(handle)
+    for i in range (start,end):
+        print ("Experiment {}".format(i))
+        print ("mean: {}, var: {}, tau: {}, temp: {}, mixtures: {}".format(params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i])))
+        mean = float(params['mean'][i])
+        var = float(params['var'][i])
+        beta = mean/var
+        alpha = mean * beta
+        acc, sp = retrain_model(alpha, beta, float(params['tau'][i]), int(0), int(params['mixtures'][i]), 'SWSModel', 'search', savedir, False)
+        

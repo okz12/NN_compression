@@ -214,19 +214,19 @@ def sws_prune(model, gmp):
 class compressed_model():
     def __init__(self, state_dict, gmp_list):
         gmp_means = []
-        self.scale_len = 0
+        self.scale_size = 0
         for g in gmp_list:
             gmp_means.append(list(g.means.clone().data.cpu().numpy()))
             
         if (g.scaling):#if scaling , only one gmp should be present
             weights = torch.cat([state_dict[layer].view(-1) * g.scale.data.exp()[int(i/2)] for i,layer in enumerate(state_dict)]).cpu().numpy()
-            self.scale_len = float(g.scale.size()[0])
+            self.scale_size = float(g.scale.size()[0])
         else:
             weights = torch.cat([state_dict[layer].view(-1) for layer in state_dict]).cpu().numpy()
             
         means = np.sort( np.append( np.array(gmp_means), np.zeros(1)) )
         bins = means + 0.001 * abs(means)
-        binned_weights = np.digitize(pd, bins, right=True)
+        binned_weights = np.digitize(weights, bins, right=True)
 
         unique, counts = np.unique(binned_weights, return_counts=True)
         zero_idx = np.argmax(counts)
@@ -285,7 +285,7 @@ class compressed_model():
     
     def get_cr(self, index_bits=0):
         full_size = self.binned_weights.size * 32
-        codebook_size = 32 * (np.ceil(np.log2(self.means.size)) + np.ceil(np.log2(self.scale_len)))
+        codebook_size = 32 * (self.means.size + self.scale_size)
         min_idx_bit = 0
         min_idx_size = -1
         if (index_bits !=0):
