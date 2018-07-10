@@ -12,10 +12,10 @@ import pickle
 
 model_dir = "./models/"
 import models
-from plot_utils import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
-from model_utils import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, retrain_layer, layer_accuracy
-from helpers import trueAfterN, logsumexp
-from sws_utils import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
+from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
+from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, retrain_layer, layer_accuracy
+from utils_misc import trueAfterN, logsumexp
+from utils_Sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
 
 import argparse
 parser = argparse.ArgumentParser()

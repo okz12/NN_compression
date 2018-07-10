@@ -35,7 +35,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         
     if temp == 0:
         criterion = nn.CrossEntropyLoss()
-        loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True, scaling = False)
+        loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
     else:
         criterion = nn.MSELoss()
         output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file.replace("search", "full"), "fc2"))[x_start:x_end]
