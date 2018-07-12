@@ -72,7 +72,7 @@ def get_layer_data(target_dir, temp, layer, data_size):
 	if (layer == 3):
 		layer_model = model_archs.SWSModelFC1().cuda()
 		input = nn.ReLU()(get_targets(target_dir, temp, ["conv2.out"])["conv2.out"][x_start:x_end])
-		output = get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end])
+		output = get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end]
 	if (layer == 4):
 		layer_model = model_archs.SWSModelFC2().cuda()
 		input = nn.ReLU()(get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end])
