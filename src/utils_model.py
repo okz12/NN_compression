@@ -174,42 +174,6 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	
 	print ("Original: {:.2f}% - Retrain: {:.2f}% - Prune: {:.2f}%".format(org_acc[0], retrain_acc[0], prune_acc[0]))
 	
-def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, model_dir):
-	
-	weight_loader = model_retrain.state_dict()
-	for layer in model_retrain.state_dict():
-		weight_loader[layer] = model_orig.state_dict()[layer]
-	model_retrain.load_state_dict(weight_loader)
-
-	gmp = GaussianMixturePrior(mixtures, [x for x in model_retrain.parameters()], 0.99, ab = (alpha, beta))
-
-	sws_param1 = [gmp.means]
-	sws_param2 = [gmp.gammas, gmp.rhos]
-
-	print ("Model Name: {}".format(model_retrain.name))
-	criterion = nn.MSELoss()
-	optimizer_kd = torch.optim.SGD(model_retrain.parameters(), lr=1e-3, weight_decay = 0)
-	optimizer_gmp1 = torch.optim.SGD(sws_param1, lr=1e-4)
-	optimizer_gmp2 = torch.optim.SGD(sws_param2, lr=3e-3)
-	
-	for epoch in range(50):
-		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, optimizer_kd, optimizer_gmp1, optimizer_gmp2, criterion, data_loader, tau)
-		#if(writeTensorboard):
-		#	for name, param in model_retrain.named_parameters():
-		#	   writer.add_histogram(graph_title + "/" + name, param.clone().cpu().data.numpy(), epoch+1, bins='doane')
-
-		if (trueAfterN(epoch, 10)):
-			#gmp.print_batch = True
-			print('Epoch: {}. Loss: {:.2f}'.format(epoch+1, float(loss.data)))
-			layer_accuracy(model_retrain, gmp, model_orig, test_data_full, test_labels_full)
-			
-	exp_name = "{}_a{}_b{}_t{}m_{}".format(model_retrain.name, alpha, beta, tau, mixtures)
-	torch.save(model_retrain, model_dir + '/mnist_layer_retrain_{}.m'.format(exp_name))
-	with open(model_dir + '/mnist_layer_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
-		pickle.dump(gmp, f)
-			
-	return model_retrain, gmp
-	
 def sws_replace(model_orig, conv1, conv2, fc1, fc2):
     new_model = copy.deepcopy(model_orig)
     new_dict = new_model.state_dict()
