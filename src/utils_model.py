@@ -168,11 +168,13 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	weight_loader = copy.deepcopy(model_orig.state_dict())
 	for layer in model_prune.state_dict():
 		weight_loader[layer] = model_prune.state_dict()[layer]
+		sp = (model_prune.state_dict()[layer].view(-1) == 0).sum() / float(model_prune.state_dict()[layer].view(-1).numel()) * 100.0
 	model_acc.load_state_dict(weight_loader)
 	prune_acc = (test_accuracy(data, labels, model_acc))
 	model_acc.load_state_dict(model_orig.state_dict())
 	
-	print ("Original: {:.2f}% - Retrain: {:.2f}% - Prune: {:.2f}%".format(org_acc[0], retrain_acc[0], prune_acc[0]))
+	print ("Original: {:.2f}% - Retrain: {:.2f}% - Prune: {:.2f}% - Sparsity: {:.2f}%".format(org_acc[0], retrain_acc[0], prune_acc[0], sp))
+	return retrain_acc[0], prune_acc[0], sp
 	
 def sws_replace(model_orig, conv1, conv2, fc1, fc2):
     new_model = copy.deepcopy(model_orig)

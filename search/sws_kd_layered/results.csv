@@ -1,0 +1,2 @@
+Exp, Mean, Var, Tau, Temp, Mixtures, conv1_val, conv1_sp, conv2_val, conv2_sp, fc1_val, fc1_sp, fc2_val, fc_2sp, Test Acc, Val Acc
+0, 0.05725487884358381, 0.3043676123956402, 3.9153756672351225e-06, 14, 6, 30.58, 20.0, 10.09, 20.0, 10.09, 100.0, 93.01, 0.0, 9.8, 9.91
