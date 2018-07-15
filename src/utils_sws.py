@@ -153,14 +153,70 @@ def merger(inputs):
         inputs = lists
     return lists
 
+def sws_prune_l2(model, gmp):
+    weights = special_flatten(model.state_dict()).clone().cpu().numpy()
+    means = np.concatenate([np.zeros(1), gmp.means.clone().data.cpu().numpy()])
+
+    pruned_state_dict = copy.deepcopy(model.state_dict())
+    dim_start = 0
+    for i, layer in enumerate(model.state_dict()):
+        layer_mult = 1
+        if (gmp.scaling):
+            layer_mult = float(gmp.scale[int(i/2)].exp())
+        elems = model.state_dict()[layer].numel()
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
+        dim_start += elems
+    return pruned_state_dict
+
+def sws_prune_l2(model, gmp):
+    if (gmp.scaling):
+        layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model.state_dict()))]
+        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() * layer_mult[i] for i, array in enumerate(model.state_dict())])
+    else:
+        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
+    weights = weights.reshape((len(weights), 1))
+    means = np.concatenate([np.zeros(1), gmp.means.clone().data.cpu().numpy()])
+    
+    sorted_means = np.sort(means)
+    bins = (sorted_means[1:] + sorted_means[:-1])/2
+    for i, b in enumerate(bins):
+        if (i==0):
+            weights[np.where(weights < b)] = sorted_means[i]
+        elif (i== len(bins)-1):
+            weights[np.where(weights > b)] = sorted_means[i]
+            weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
+        else:
+            weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
+        prev_b = b
+    out = weights
+    pruned_state_dict = copy.deepcopy(model.state_dict())
+    dim_start = 0
+    for i, layer in enumerate(model.state_dict()):
+        layer_mult = 1
+        if (gmp.scaling):
+            layer_mult = float(gmp.scale[int(i/2)].exp())
+        elems = model.state_dict()[layer].numel()
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
+        dim_start += elems
+    return pruned_state_dict
+
+
 def sws_prune(model, gmp):
     """
     model: Model retrained with Gaussian Mixture Prior
     gmp: Gaussian mixture prior object
     returns: Pruned model state_dict
     """
+    if (gmp.scaling):
+        layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model.state_dict()))]
+        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() * layer_mult[i] for i, array in enumerate(model.state_dict())])
+    else:
+        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
+    weights = weights.reshape((len(weights), 1))
+
+
     pi_zero = gmp.pi_zero
-    weights = special_flatten(model.state_dict()).clone().cpu().numpy()
+    #weights = special_flatten(model.state_dict()).clone().cpu().numpy()
     means = np.concatenate([np.zeros(1), gmp.means.clone().data.cpu().numpy()])
     logprecisions = gmp.gammas.clone().data.cpu().numpy()
     logpis = np.concatenate([np.log(pi_zero) * np.ones(1), gmp.rhos.clone().data.cpu().numpy()])
@@ -178,7 +234,7 @@ def sws_prune(model, gmp):
 
     # merge -- KL divergence not low enough
 
-    idx, idy = np.where(K <1e3)
+    idx, idy = np.where(K <1e-10)
     lists = merger(zip(idx, idy))
 
     # compute merged components
@@ -196,8 +252,8 @@ def sws_prune(model, gmp):
     new_means[np.argmin(np.abs(new_means))] = 0.0
 
     # compute responsibilities
-    #argmax_responsibilities = compute_responsibilies(weights, new_means, new_logprecisions, np.exp(new_logpis))
-    argmax_responsibilities = compute_responsibilies(weights, means, logprecisions, np.exp(logpis))
+    argmax_responsibilities = compute_responsibilies(weights, new_means, new_logprecisions, np.exp(new_logpis))
+    #argmax_responsibilities = compute_responsibilies(weights, means, logprecisions, np.exp(logpis))
     out = [means[i] for i in argmax_responsibilities]
     
     pruned_state_dict = copy.deepcopy(model.state_dict())

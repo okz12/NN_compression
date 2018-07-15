@@ -36,24 +36,26 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     if temp == 0:
         criterion = nn.CrossEntropyLoss()
         loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
+        temp_mult = 1
     else:
         criterion = nn.MSELoss()
         output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file.replace("search", "full"), "fc2"))[x_start:x_end]
         output = (nn.Softmax(dim=1)(output/temp)).data
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
+        temp_mult = temp ** 2
 
     exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, int(mixtures), int(temp), data_size)
     gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta), scaling = scaling)
     gmp.print_batch = False
 
     opt = torch.optim.Adam([
-        {'params': model.parameters(), 'lr': 1e-4},
+        {'params': model.parameters(), 'lr': 5e-4},
         {'params': [gmp.means], 'lr': 1e-4},
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
     for epoch in range(retraining_epochs):
-        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau)
+        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp_mult)
 
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
@@ -67,7 +69,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     val_accuracy_pre = 0 if (data_size != 'search') else float((test_accuracy(val_data_full, val_labels_full, model)[0]))
     
     model_prune = copy.deepcopy(model)
-    model_prune.load_state_dict(sws_prune(model_prune, gmp))
+    model_prune.load_state_dict(sws_prune_l2(model_prune, gmp))
     prune_acc = (test_accuracy(test_data_full, test_labels_full, model_prune))
     test_accuracy_prune = float((test_accuracy(test_data_full, test_labels_full, model_prune)[0]))
     val_accuracy = 0 if (data_size != 'search') else float((test_accuracy(val_data_full, val_labels_full, model_prune)[0]))

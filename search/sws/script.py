@@ -34,10 +34,10 @@ if __name__=="__main__":
     start = int(args.start)
     end = int(args.end)
 
-    with open("../sobol_search.p", "rb") as handle:
+    with open("../sobol_search_2.p", "rb") as handle:
         params = pickle.load(handle)
 
-    tupled_params = [tuple(row) for row in np.vstack((params['mean'], params['var'], params['tau'], params['mixtures'])).T]
+    tupled_params = [tuple(row) for row in np.vstack((params['mean'], params['var'], params['tau'], params['mixtures'])).T][:end]
     unique_params = list(set(tupled_params))
 
     reduced_params = {}
@@ -48,7 +48,7 @@ if __name__=="__main__":
     params = reduced_params
 
     
-    for i in range (start,end):
+    for i in range (start,len(params)):
         print ("Experiment {}".format(i))
         print ("mean: {}, var: {}, tau: {}, temp: {}, mixtures: {}".format(params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i])))
         mean = float(params['mean'][i])

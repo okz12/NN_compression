@@ -91,7 +91,7 @@ class model_prune():
 		return new_state_dict   
 	
 ###
-def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau):#, optimizer_gmp, optimizer_gmp2
+def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp_mult = 1.0):#, optimizer_gmp, optimizer_gmp2
 	"""
 	train model
 	
@@ -101,12 +101,12 @@ def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau):#, op
 	train_loader: training dataset dataloader
 	"""
 	model.train()
-	for i, (images, labels) in enumerate(train_loader):
+	for i, (images, targets) in enumerate(train_loader):
 		#if(use_cuda):
 		images=images.cuda()
-		labels=labels.cuda()
+		targets=targets.cuda()
 		images = Variable(images)
-		labels = Variable(labels)
+		targets = Variable(targets)
 		# Clear gradients w.r.t. parameters
 		optimizer.zero_grad()
 		#optimizer_gmp.zero_grad()
@@ -115,16 +115,13 @@ def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau):#, op
 		outputs = model(images)
 		# Calculate Loss: softmax --> cross entropy loss
 		#loss = criterion(outputs, labels) + 0.001 * ( (model.fc1.weight - 0.05).norm() + (model.fc2.weight - 0.05).norm() + (model.fc3.weight - 0.05).norm() + (model.fc1.weight + 0.05).norm() + (model.fc2.weight + 0.05).norm() + (model.fc3.weight + 0.05).norm())
-		loss = criterion(outputs, labels)
+		loss = criterion(outputs, targets) * temp_mult + tau * gmp.call()
 		#print (criterion(outputs, labels))
 		#print (gmp.call())
-		# Getting gradients w.r.t. parameters
-		gmp_loss = tau * gmp.call()
-		
+		# Getting gradients w.r.t. parameters		
 		#print( float(loss), float(gmp_loss) )
 		
 		loss.backward()
-		gmp_loss.backward()
 		# Updating parameters
 		optimizer.step()
 		#optimizer_gmp.step()
@@ -166,9 +163,13 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	model_prune.load_state_dict(sws_prune(model_prune, gmp))
 
 	weight_loader = copy.deepcopy(model_orig.state_dict())
+	sp_zeroes = 0
+	sp_elem = 0
 	for layer in model_prune.state_dict():
 		weight_loader[layer] = model_prune.state_dict()[layer]
-		sp = (model_prune.state_dict()[layer].view(-1) == 0).sum() / float(model_prune.state_dict()[layer].view(-1).numel()) * 100.0
+		sp_zeroes += float((model_prune.state_dict()[layer].view(-1) == 0).sum())
+		sp_elem += float(model_prune.state_dict()[layer].view(-1).numel())
+	sp = sp_zeroes/sp_elem * 100.0
 	model_acc.load_state_dict(weight_loader)
 	prune_acc = (test_accuracy(data, labels, model_acc))
 	model_acc.load_state_dict(model_orig.state_dict())
