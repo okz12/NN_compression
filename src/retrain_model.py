@@ -11,7 +11,7 @@ import model_archs
 from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty
 from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 import copy
 import pickle
@@ -60,6 +60,12 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
+
+        if (data_size == 'search' and (epoch>15) and trueAfterN(epoch, 2)):
+            val_acc = float((test_accuracy(val_data_full, val_labels_full, model)[0])) * 100.0
+            if (val_acc < 25.0):
+                print ("Terminating Search - Epoch: {} - Val Acc: {:.2f}".format(epoch, val_acc))
+                break
     if(model_save_dir!=""):
         torch.save(model, model_save_dir + '/mnist_retrain_{}.m'.format(exp_name))
         with open(model_save_dir + '/mnist_retrain_{}_gmp.p'.format(exp_name),'wb') as f:

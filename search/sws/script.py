@@ -48,7 +48,7 @@ if __name__=="__main__":
     params = reduced_params
 
     
-    for i in range (start,len(params)):
+    for i in range (start,len(unique_params)):
         print ("Experiment {}".format(i))
         print ("mean: {}, var: {}, tau: {}, temp: {}, mixtures: {}".format(params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i])))
         mean = float(params['mean'][i])

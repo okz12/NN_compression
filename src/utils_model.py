@@ -126,7 +126,7 @@ def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp_
 		optimizer.step()
 		#optimizer_gmp.step()
 		#optimizer_gmp2.step()
-	return model, loss + gmp_loss
+	return model, loss
     
 def train_epoch(model, optimizer, criterion, train_loader):
 	for i, (images, labels) in enumerate(train_loader):
