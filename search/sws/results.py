@@ -62,12 +62,12 @@ if __name__=="__main__":
             cm = compressed_model(model.state_dict(), [gmp])
             cr = cm.get_cr(6)[0]
             sp = (cm.binned_weights == 0).sum() / float(cm.binned_weights.size) * 100.0
-            if not os.path.exists("results.csv"):
-                with open("results2.csv", "w") as out_csv:
+            if not os.path.exists("sws_2.csv"):
+                with open("sws_2.csv", "w") as out_csv:
                     out_csv.write("Exp, Mean, Var, Tau, Temp, Mixtures, Test Acc, Val Acc, Sparse, CR\n")
                     out_csv.write(", ".join([str(x) for x in [i, params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i]), test_acc, val_acc, sp, cr]]) + "\n")
             else:
-                with open("results2.csv", "a") as out_csv:
+                with open("sws_2.csv", "a") as out_csv:
                     out_csv.write(", ".join([str(x) for x in [i, params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i]), test_acc, val_acc, sp, cr]]) + "\n")
         
 

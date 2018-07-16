@@ -9,7 +9,7 @@ from tensorboardX import SummaryWriter
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2
 from utils_misc import trueAfterN
 import pickle
 
@@ -160,7 +160,7 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	model_acc.load_state_dict(model_orig.state_dict())
 
 	model_prune = copy.deepcopy(model_retrain)
-	model_prune.load_state_dict(sws_prune(model_prune, gmp))
+	model_prune.load_state_dict(sws_prune_l2(model_prune, gmp))
 
 	weight_loader = copy.deepcopy(model_orig.state_dict())
 	sp_zeroes = 0

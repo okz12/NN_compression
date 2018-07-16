@@ -27,7 +27,7 @@ if __name__=="__main__":
     start = int(args.start)
     end = int(args.end)
     
-    with open("../sobol_search.p", "rb") as handle:
+    with open("../sobol_search_2.p", "rb") as handle:
         params = pickle.load(handle)
     for i in range (start,end):
         print ("exp:{} mean: {}, var: {}, tau: {}, temp: {}, mixtures: {}".format(i, params['mean'][i], params['var'][i], params['tau'][i], float(params['temp'][i]), int(params['mixtures'][i])))

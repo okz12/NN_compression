@@ -16,7 +16,7 @@ import model_archs
 from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, layer_accuracy
 from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from extract_targets import get_targets
 retraining_epochs = 50
@@ -41,7 +41,7 @@ def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_l
 
 	
 	for epoch in range(retraining_epochs):
-		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, opt, criterion, data_loader, tau)
+		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, opt, criterion, data_loader, tau, temp ** 2)
 
 		if (trueAfterN(epoch, 10)):
 			print('Epoch: {}. Loss: {:.2f}'.format(epoch+1, float(loss.data)))
