@@ -61,9 +61,9 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
 
-        if (data_size == 'search' and (epoch>15) and trueAfterN(epoch, 2)):
-            val_acc = float((test_accuracy(val_data_full, val_labels_full, model)[0])) * 100.0
-            if (val_acc < 25.0):
+        if (data_size == 'search' and (epoch>12) and trueAfterN(epoch, 2)):
+            val_acc = float((test_accuracy(val_data_full, val_labels_full, model)[0]))
+            if (val_acc < 50.0):
                 print ("Terminating Search - Epoch: {} - Val Acc: {:.2f}".format(epoch, val_acc))
                 break
     if(model_save_dir!=""):
