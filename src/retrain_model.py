@@ -39,7 +39,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         temp_mult = 1
     else:
         criterion = nn.MSELoss()
-        output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file.replace("search", "full"), "fc2"))[x_start:x_end]
+        output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, "fc2" if "SWS" in model.name else "fc3"))[x_start:x_end]
         output = (nn.Softmax(dim=1)(output/temp)).data
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     parser.add_argument('--tau', dest = "tau", help="Tau: Complexity and Error Loss trade-off parameter", required=True, type=(float))
     parser.add_argument('--temp', dest = "temp", help="Temperature: Final softmax temperature for knowledge distillation", required=False, type=(int))
     parser.add_argument('--mixtures', dest = "mixtures", help="Mixtures: Number of Gaussian prior mixtures", required=True, type=(int))
-    parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'Lenet_300_100'))
+    parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'LeNet_300_100'))
     parser.add_argument('--data', dest = "data", help = "Data to train on - 'full' training data (60k) or 'search' training data(50k)", required = True, choices = ('full','search'))
     parser.add_argument('--savedir', dest = "savedir", help = "Save Directory")
     parser.add_argument('--scale', dest = "scale", help = "Allow different scales on each layer", action = 'store_true')

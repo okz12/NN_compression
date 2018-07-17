@@ -44,4 +44,4 @@ if __name__=="__main__":
     parser.add_argument('--temp', dest = "temp", help="Temperature: Final softmax temperature for knowledge distillation", required=False, type=(int))
     args = parser.parse_args()
     model_file = args.model
-    get_targets(model_file, temp)
+    save_targets(model_file)

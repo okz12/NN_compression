@@ -33,7 +33,7 @@ def train_epoch(model, optimizer, criterion, train_loader):
 		# Clear gradients w.r.t. parameters
 		optimizer.zero_grad()
 		# Forward pass to get output/logits
-		outputs = model(images)
+		outputs = nn.Softmax(dim=1)(model(images))
 		# Calculate Loss: softmax --> cross entropy loss
 		loss = criterion(outputs, labels)
 		# Getting gradients w.r.t. parameters
@@ -91,7 +91,7 @@ class model_prune():
 		return new_state_dict   
 	
 ###
-def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp_mult = 1.0):#, optimizer_gmp, optimizer_gmp2
+def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp = 1.0):#, optimizer_gmp, optimizer_gmp2
 	"""
 	train model
 	
@@ -112,10 +112,16 @@ def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp_
 		#optimizer_gmp.zero_grad()
 		#optimizer_gmp2.zero_grad()
 		# Forward pass to get output/logits
-		outputs = model(images)
+		if (temp==0):
+			outputs = nn.Softmax(dim=1)(model(images))
+			loss = criterion(outputs, targets) + tau * gmp.call()
+		else:
+			outputs = nn.LogSoftmax(dim=1)(model(images)/temp)
+			loss_soft_target = -torch.mean(torch.sum(targets * outputs, dim=1))
+			loss = loss_soft_target * (temp) + tau * gmp.call()
 		# Calculate Loss: softmax --> cross entropy loss
 		#loss = criterion(outputs, labels) + 0.001 * ( (model.fc1.weight - 0.05).norm() + (model.fc2.weight - 0.05).norm() + (model.fc3.weight - 0.05).norm() + (model.fc1.weight + 0.05).norm() + (model.fc2.weight + 0.05).norm() + (model.fc3.weight + 0.05).norm())
-		loss = criterion(outputs, targets) * temp_mult + tau * gmp.call()
+		
 		#print (criterion(outputs, labels))
 		#print (gmp.call())
 		# Getting gradients w.r.t. parameters		
