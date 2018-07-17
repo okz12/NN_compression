@@ -96,6 +96,7 @@ def init_retrain_layer(alpha, beta, tau, mixtures, temp, data_size, layer, saved
 	layer_model, loader = get_layer_data(target_dir, temp, layer, data_size)
 
 	model, gmp = retrain_layer(layer_model, model_orig, loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, data_size, model_dir + model_file)
+	return model, gmp
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()

@@ -208,3 +208,39 @@ class LeNet_300_100(nn.Module):
 		out = self.fc3(out)
 		layer_out['fc3.out'] = out
 		return layer_out
+
+class LeNet_300_100FC1(nn.Module):
+	def __init__(self):
+		super(LeNet_300_100FC1, self).__init__()
+		
+		self.name = 'LeNet_300_100FC1'
+		self.fc1 = nn.Linear(28*28, 300)
+	
+	def forward(self, x):
+		x = x.view(-1)
+		out = self.fc1(x)
+		return out
+
+class LeNet_300_100FC2(nn.Module):
+	def __init__(self):
+		super(LeNet_300_100FC2, self).__init__()
+		
+		self.name = 'LeNet_300_100FC2'
+		self.fc2 = nn.Linear(300,100)
+	
+	def forward(self, x):
+		x = x.view(-1)
+		out = self.fc2(x)
+		return out
+
+class LeNet_300_100FC3(nn.Module):
+	def __init__(self):
+		super(LeNet_300_100FC3, self).__init__()
+		
+		self.name = 'LeNet_300_100FC3'
+		self.fc3 = nn.Linear(100,10)
+	
+	def forward(self, x):
+		x = x.view(-1)
+		out = self.fc3(x)
+		return out

@@ -36,7 +36,7 @@ if __name__=="__main__":
 
     with open("../sobol_search_2.p", "rb") as handle:
         params = pickle.load(handle)
-
+    '''
     tupled_params = [tuple(row) for row in np.vstack((params['mean'], params['var'], params['tau'], params['mixtures'])).T][:end]
     unique_params = list(set(tupled_params))
 
@@ -49,11 +49,13 @@ if __name__=="__main__":
 
     
     for i in range (start,len(unique_params)):
+    '''
+    for i in range (start,end):
         print ("Experiment {}".format(i))
         print ("mean: {}, var: {}, tau: {}, temp: {}, mixtures: {}".format(params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i])))
         mean = float(params['mean'][i])
         var = float(params['var'][i])
         beta = mean/var
         alpha = mean * beta
-        acc, sp = retrain_model(alpha, beta, float(params['tau'][i]), int(0), int(params['mixtures'][i]), 'SWSModel', 'search', savedir, False)
+        acc, sp = retrain_model(alpha, beta, float(params['tau'][i]), int(0), int(params['mixtures'][i]), 'LeNet_300_100', 'search', savedir, False)
         

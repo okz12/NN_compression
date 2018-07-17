@@ -24,11 +24,15 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--start', dest = "start", help="Start Search", required=True, type=(int))
     parser.add_argument('--end', dest = "end", help="End Search", required=True, type=(int))
+    parser.add_argument('--model', dest = "model", help = "Model to extract results from", required = True, choices = ('SWSModel', 'LeNet_300_100'))
+    parser.add_argument('--out', dest = 'out', required = True, type=(str))
     args = parser.parse_args()
+    model_name = args.model
+    outfile = args.out
     start = int(args.start)
     end = int(args.end)
-
-    with open("../sobol_search.p", "rb") as handle:
+    outfile = "sws_3.csv"
+    with open("../sobol_search_2.p", "rb") as handle:
         params = pickle.load(handle)
     '''
     tupled_params = [tuple(row) for row in np.vstack((params['mean'], params['var'], params['tau'], params['mixtures'])).T]
@@ -48,7 +52,7 @@ if __name__=="__main__":
         beta = mean/var
         alpha = mean * beta
 
-        exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format('SWSModel', alpha, beta, 50, float(params['tau'][i]), int(params['mixtures'][i]), int(0), 'search')
+        exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model_name, alpha, beta, 50, float(params['tau'][i]), int(params['mixtures'][i]), int(0), 'search')
         model_file = "./models/mnist_retrain_{}".format(exp_name)
         if not os.path.exists("{}.m".format(model_file)):
             print ("File not found: {}.m".format(model_file))
@@ -62,12 +66,12 @@ if __name__=="__main__":
             cm = compressed_model(model.state_dict(), [gmp])
             cr = cm.get_cr(6)[0]
             sp = (cm.binned_weights == 0).sum() / float(cm.binned_weights.size) * 100.0
-            if not os.path.exists("sws_2.csv"):
-                with open("sws_2.csv", "w") as out_csv:
+            if not os.path.exists(outfile):
+                with open(outfile, "w") as out_csv:
                     out_csv.write("Exp, Mean, Var, Tau, Temp, Mixtures, Test Acc, Val Acc, Sparse, CR\n")
                     out_csv.write(", ".join([str(x) for x in [i, params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i]), test_acc, val_acc, sp, cr]]) + "\n")
             else:
-                with open("sws_2.csv", "a") as out_csv:
+                with open(outfile, "a") as out_csv:
                     out_csv.write(", ".join([str(x) for x in [i, params['mean'][i], params['var'][i], params['tau'][i], int(0), int(params['mixtures'][i]), test_acc, val_acc, sp, cr]]) + "\n")
         
 

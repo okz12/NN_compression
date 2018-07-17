@@ -34,17 +34,14 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     model = torch.load(model_load_dir + model_file + '.m').cuda()
         
     if temp == 0:
-        criterion = nn.CrossEntropyLoss()
         loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
-        temp_mult = 1
     else:
-        criterion = nn.MSELoss()
-        output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, "fc2" if "SWS" in model.name else "fc3"))[x_start:x_end]
+        output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, "fc2" if "SWS" in model.name else "fc3"))[x_start:x_end]###
         output = (nn.Softmax(dim=1)(output/temp)).data
         dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
-        temp_mult = temp ** 2
-
+    criterion = nn.CrossEntropyLoss()###
+    
     exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, int(mixtures), int(temp), data_size)
     gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta), scaling = scaling)
     gmp.print_batch = False
@@ -55,12 +52,13 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
     for epoch in range(retraining_epochs):
-        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp_mult)
+        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp)
 
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
-
+            #show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)###
+            
         if (data_size == 'search' and (epoch>12) and trueAfterN(epoch, 2)):
             val_acc = float((test_accuracy(val_data_full, val_labels_full, model)[0]))
             if (val_acc < 50.0):
@@ -83,8 +81,13 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     print('Retrain Test: {:.2f}, Retrain Validation: {:.2f}, Prune Test: {:.2f}, Prune Validation: {:.2f}, Prune Sparsity: {:.2f}'
           .format(test_accuracy_pre, val_accuracy_pre, test_accuracy_prune, val_accuracy, sparsity))
     
-        
-    return val_accuracy, sparsity
+    res['sparsity'] = sparsity
+    res['prune_val'] = val_accuracy
+    res['prune_test'] = test_accuracy_prune
+    res['compress_val'] = val_accuracy_pre
+    res['compress_test'] = test_accuracy_pre
+    
+    return model, gmp, res
    
 
 if __name__ == "__main__":

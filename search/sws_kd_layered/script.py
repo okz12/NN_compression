@@ -11,6 +11,7 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--start', dest = "start", help="Start Search", required=True, type=(int))
     parser.add_argument('--end', dest = "end", help="End Search", required=True, type=(int))
+    parser.add_argument('--model', dest = "model", help = "Model to extract results from", required = True, choices = ('SWSModel', 'LeNet_300_100'))
     args = parser.parse_args()
     start = int(args.start)
     end = int(args.end)
@@ -24,6 +25,7 @@ if __name__=="__main__":
         var = float(params['var'][i])
         beta = mean/var
         alpha = mean * beta
-        for layer in range(1,5):
+        n = 5 if "SWS" in args.model else 4
+        for layer in range(1,n):
             print ("Layer: {}".format(layer))
-            init_retrain_layer(alpha, beta, float(params['tau'][i]), int(params['mixtures'][i]), float(params['temp'][i]), "search", layer, savedir)
+            init_retrain_layer(alpha, beta, float(params['tau'][i]), int(params['mixtures'][i]), float(params['temp'][i]), "search", args.model, layer, savedir)

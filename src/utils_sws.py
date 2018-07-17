@@ -154,24 +154,9 @@ def merger(inputs):
     return lists
 
 def sws_prune_l2(model, gmp):
-    weights = special_flatten(model.state_dict()).clone().cpu().numpy()
-    means = np.concatenate([np.zeros(1), gmp.means.clone().data.cpu().numpy()])
-
-    pruned_state_dict = copy.deepcopy(model.state_dict())
-    dim_start = 0
-    for i, layer in enumerate(model.state_dict()):
-        layer_mult = 1
-        if (gmp.scaling):
-            layer_mult = float(gmp.scale[int(i/2)].exp())
-        elems = model.state_dict()[layer].numel()
-        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
-        dim_start += elems
-    return pruned_state_dict
-
-def sws_prune_l2(model, gmp):
     if (gmp.scaling):
         layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model.state_dict()))]
-        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() * layer_mult[i] for i, array in enumerate(model.state_dict())])
+        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() / layer_mult[i] for i, array in enumerate(model.state_dict())])
     else:
         weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
     weights = weights.reshape((len(weights), 1))
@@ -188,6 +173,7 @@ def sws_prune_l2(model, gmp):
         else:
             weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
         prev_b = b
+    weights[np.where(np.abs(weights) < 0.025)] = 0
     out = weights
     pruned_state_dict = copy.deepcopy(model.state_dict())
     dim_start = 0
@@ -196,7 +182,7 @@ def sws_prune_l2(model, gmp):
         if (gmp.scaling):
             layer_mult = float(gmp.scale[int(i/2)].exp())
         elems = model.state_dict()[layer].numel()
-        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) * layer_mult
         dim_start += elems
     return pruned_state_dict
 

@@ -118,7 +118,7 @@ def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp 
 		else:
 			outputs = nn.LogSoftmax(dim=1)(model(images)/temp)
 			loss_soft_target = -torch.mean(torch.sum(targets * outputs, dim=1))
-			loss = loss_soft_target * (temp) + tau * gmp.call()
+			loss = loss_soft_target + tau * gmp.call()
 		# Calculate Loss: softmax --> cross entropy loss
 		#loss = criterion(outputs, labels) + 0.001 * ( (model.fc1.weight - 0.05).norm() + (model.fc2.weight - 0.05).norm() + (model.fc3.weight - 0.05).norm() + (model.fc1.weight + 0.05).norm() + (model.fc2.weight + 0.05).norm() + (model.fc3.weight + 0.05).norm())
 		
