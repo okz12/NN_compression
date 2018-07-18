@@ -81,12 +81,13 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     print('Retrain Test: {:.2f}, Retrain Validation: {:.2f}, Prune Test: {:.2f}, Prune Validation: {:.2f}, Prune Sparsity: {:.2f}'
           .format(test_accuracy_pre, val_accuracy_pre, test_accuracy_prune, val_accuracy, sparsity))
     
+    res = {}
     res['sparsity'] = sparsity
     res['prune_val'] = val_accuracy
     res['prune_test'] = test_accuracy_prune
     res['compress_val'] = val_accuracy_pre
     res['compress_test'] = test_accuracy_pre
-    
+
     return model, gmp, res
    
 
