@@ -14,7 +14,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 class GaussianMixturePrior(Module):
-    def __init__(self, nb_components, network_weights, pi_zero, init_var = 0.25, zero_ab = (5e3,2), ab = (2.5e4,1), scaling = False):
+    def __init__(self, nb_components, network_weights, pi_zero, init_var = 0.25, zero_ab = (5e3,2), ab = (2.5e4,1), means = [], scaling = False):
         super(GaussianMixturePrior, self).__init__()
         
         self.nb_components = nb_components 
@@ -28,7 +28,10 @@ class GaussianMixturePrior(Module):
         pi_zero = self.pi_zero
         
         #    ... means
-        init_means = torch.linspace(-0.6, 0.6, J - 1)
+        if means == []:
+            init_means = torch.linspace(-1, 1, J - 1)
+        else:
+            init_means = torch.Tensor(means)
         self.means = Variable(init_means.cuda(), requires_grad=True)
         
         #precision

@@ -217,7 +217,7 @@ class LeNet_300_100FC1(nn.Module):
 		self.fc1 = nn.Linear(28*28, 300)
 	
 	def forward(self, x):
-		x = x.view(-1)
+		x = x.view(-1, 28 * 28)
 		out = self.fc1(x)
 		return out
 

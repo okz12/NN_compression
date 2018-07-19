@@ -24,7 +24,7 @@ def save_targets(model_file):
     for layer in layer_targets:
         torch.save(layer_targets[layer], "{}{}_targets/{}.m".format(model_load_dir, model_file, layer))
 
-def get_targets(model_file, temp, layers=[]):
+def get_targets(model_file, temp = 0, layers=[]):
     if not os.path.exists("{}{}_targets".format(model_load_dir, model_file)):
         save_targets(model_file)
     loaded_model = torch.load(model_load_dir + model_file + ".m")
@@ -33,7 +33,7 @@ def get_targets(model_file, temp, layers=[]):
         layers = list(set([x.replace(".bias",".act").replace(".weight",".out") for x in loaded_model.state_dict()]))
     for layer in layers:
         output = torch.load("{}{}_targets/{}.m".format(model_load_dir, model_file, layer))
-        if (len(output.size())<4):#no temp on conv layers
+        if (len(output.size())<4 and temp != 0):#no temp on conv layers
             output = (nn.Softmax(dim=1)(output/temp))
         target_dict[layer] = output.clone()
     return target_dict

@@ -1,0 +1,308 @@
+===
+CE-NoMultiplier
+===
+Temp: 1 Tau: 1e-06
+Retrain Test: 95.91, Retrain Validation: 95.83, Prune Test: 92.43, Prune Validation: 92.66, Prune Sparsity: 98.94
+Retrain Test: 96.83, Retrain Validation: 96.62, Prune Test: 95.32, Prune Validation: 95.17, Prune Sparsity: 98.13
+Retrain Test: 96.88, Retrain Validation: 96.58, Prune Test: 94.63, Prune Validation: 94.20, Prune Sparsity: 98.37
+
+Temp: 1 Tau: 1e-07
+Retrain Test: 97.79, Retrain Validation: 97.68, Prune Test: 91.90, Prune Validation: 91.33, Prune Sparsity: 94.81
+Retrain Test: 97.87, Retrain Validation: 97.91, Prune Test: 95.95, Prune Validation: 96.25, Prune Sparsity: 86.55
+Retrain Test: 98.09, Retrain Validation: 98.02, Prune Test: 97.52, Prune Validation: 97.46, Prune Sparsity: 84.77
+
+Temp: 1 Tau: 1e-08
+Retrain Test: 98.14, Retrain Validation: 98.07, Prune Test: 98.06, Prune Validation: 97.92, Prune Sparsity: 62.03
+Retrain Test: 97.87, Retrain Validation: 97.95, Prune Test: 97.38, Prune Validation: 97.56, Prune Sparsity: 60.46
+Retrain Test: 97.88, Retrain Validation: 97.98, Prune Test: 97.08, Prune Validation: 97.07, Prune Sparsity: 76.71
+
+Temp: 2 Tau: 1e-06
+Retrain Test: 96.00, Retrain Validation: 96.06, Prune Test: 93.11, Prune Validation: 93.14, Prune Sparsity: 98.92
+Retrain Test: 96.42, Retrain Validation: 96.36, Prune Test: 95.02, Prune Validation: 94.94, Prune Sparsity: 98.38
+Retrain Test: 96.48, Retrain Validation: 96.24, Prune Test: 93.91, Prune Validation: 93.32, Prune Sparsity: 98.58
+
+Temp: 2 Tau: 1e-07
+Retrain Test: 97.72, Retrain Validation: 97.70, Prune Test: 93.79, Prune Validation: 93.38, Prune Sparsity: 94.40
+Retrain Test: 97.84, Retrain Validation: 97.85, Prune Test: 96.36, Prune Validation: 96.45, Prune Sparsity: 88.15
+Retrain Test: 98.01, Retrain Validation: 97.97, Prune Test: 96.93, Prune Validation: 97.06, Prune Sparsity: 87.28
+
+Temp: 2 Tau: 1e-08
+Retrain Test: 97.97, Retrain Validation: 97.96, Prune Test: 97.91, Prune Validation: 97.74, Prune Sparsity: 62.98
+Retrain Test: 98.22, Retrain Validation: 98.16, Prune Test: 98.04, Prune Validation: 98.11, Prune Sparsity: 59.87
+Retrain Test: 98.09, Retrain Validation: 98.06, Prune Test: 97.39, Prune Validation: 97.54, Prune Sparsity: 77.03
+
+Temp: 4 Tau: 1e-06
+Retrain Test: 96.01, Retrain Validation: 96.04, Prune Test: 91.94, Prune Validation: 92.26, Prune Sparsity: 98.94
+Retrain Test: 96.27, Retrain Validation: 96.15, Prune Test: 94.96, Prune Validation: 94.52, Prune Sparsity: 98.37
+Retrain Test: 96.66, Retrain Validation: 96.43, Prune Test: 95.41, Prune Validation: 95.39, Prune Sparsity: 98.35
+
+Temp: 4 Tau: 1e-07
+Retrain Test: 97.72, Retrain Validation: 97.67, Prune Test: 91.09, Prune Validation: 90.22, Prune Sparsity: 94.55
+Retrain Test: 97.92, Retrain Validation: 97.91, Prune Test: 95.00, Prune Validation: 94.96, Prune Sparsity: 93.71
+Retrain Test: 97.90, Retrain Validation: 97.80, Prune Test: 97.21, Prune Validation: 97.04, Prune Sparsity: 93.44
+
+Temp: 4 Tau: 1e-08
+Retrain Test: 98.01, Retrain Validation: 97.93, Prune Test: 97.75, Prune Validation: 97.78, Prune Sparsity: 64.03
+Retrain Test: 98.26, Retrain Validation: 98.28, Prune Test: 98.22, Prune Validation: 98.08, Prune Sparsity: 56.38
+Retrain Test: 98.25, Retrain Validation: 98.25, Prune Test: 97.80, Prune Validation: 97.81, Prune Sparsity: 72.73
+
+Temp: 10 Tau: 1e-06
+Retrain Test: 95.90, Retrain Validation: 95.62, Prune Test: 92.41, Prune Validation: 92.46, Prune Sparsity: 98.90
+Retrain Test: 96.67, Retrain Validation: 96.52, Prune Test: 94.60, Prune Validation: 94.31, Prune Sparsity: 98.72
+Retrain Test: 96.66, Retrain Validation: 96.57, Prune Test: 95.26, Prune Validation: 95.10, Prune Sparsity: 98.71
+
+Temp: 10 Tau: 1e-07
+Retrain Test: 97.72, Retrain Validation: 97.63, Prune Test: 91.16, Prune Validation: 90.38, Prune Sparsity: 94.08
+Retrain Test: 98.17, Retrain Validation: 98.11, Prune Test: 94.99, Prune Validation: 94.59, Prune Sparsity: 93.19
+Retrain Test: 98.12, Retrain Validation: 98.04, Prune Test: 96.53, Prune Validation: 96.32, Prune Sparsity: 93.25
+
+Temp: 10 Tau: 1e-08
+Retrain Test: 98.00, Retrain Validation: 98.07, Prune Test: 97.82, Prune Validation: 97.90, Prune Sparsity: 62.89
+Retrain Test: 98.27, Retrain Validation: 98.23, Prune Test: 98.26, Prune Validation: 98.05, Prune Sparsity: 55.02
+Retrain Test: 98.23, Retrain Validation: 98.19, Prune Test: 97.25, Prune Validation: 97.15, Prune Sparsity: 72.28
+
+Temp: 20 Tau: 1e-06
+Retrain Test: 95.97, Retrain Validation: 96.14, Prune Test: 93.18, Prune Validation: 93.30, Prune Sparsity: 98.88
+Retrain Test: 94.91, Retrain Validation: 95.11, Prune Test: 81.66, Prune Validation: 83.02, Prune Sparsity: 99.16
+Retrain Test: 94.98, Retrain Validation: 95.41, Prune Test: 90.76, Prune Validation: 91.57, Prune Sparsity: 99.14
+
+Temp: 20 Tau: 1e-07
+Retrain Test: 97.82, Retrain Validation: 97.66, Prune Test: 94.02, Prune Validation: 93.70, Prune Sparsity: 94.08
+Retrain Test: 97.99, Retrain Validation: 97.95, Prune Test: 92.87, Prune Validation: 92.89, Prune Sparsity: 97.64
+Retrain Test: 98.13, Retrain Validation: 97.95, Prune Test: 92.21, Prune Validation: 92.16, Prune Sparsity: 97.75
+
+Temp: 20 Tau: 1e-08
+Retrain Test: 97.90, Retrain Validation: 98.01, Prune Test: 97.66, Prune Validation: 97.82, Prune Sparsity: 68.89
+Retrain Test: 98.19, Retrain Validation: 98.19, Prune Test: 98.14, Prune Validation: 98.13, Prune Sparsity: 59.25
+Retrain Test: 98.22, Retrain Validation: 98.20, Prune Test: 96.90, Prune Validation: 96.73, Prune Sparsity: 77.17
+===
+CE-Multiplier
+===
+Temp: 1 Tau: 1e-06
+Retrain Test: 95.86, Retrain Validation: 95.78, Prune Test: 93.52, Prune Validation: 93.51, Prune Sparsity: 98.88
+Retrain Test: 96.53, Retrain Validation: 96.35, Prune Test: 95.55, Prune Validation: 95.56, Prune Sparsity: 98.16
+Retrain Test: 96.67, Retrain Validation: 96.55, Prune Test: 93.89, Prune Validation: 93.78, Prune Sparsity: 98.29
+
+Temp: 1 Tau: 1e-07
+Retrain Test: 97.40, Retrain Validation: 97.45, Prune Test: 94.42, Prune Validation: 94.31, Prune Sparsity: 93.45
+Retrain Test: 97.97, Retrain Validation: 97.86, Prune Test: 96.53, Prune Validation: 96.40, Prune Sparsity: 86.51
+Retrain Test: 98.09, Retrain Validation: 98.03, Prune Test: 97.21, Prune Validation: 97.14, Prune Sparsity: 85.83
+
+Temp: 1 Tau: 1e-08
+Retrain Test: 98.07, Retrain Validation: 98.04, Prune Test: 98.01, Prune Validation: 97.86, Prune Sparsity: 61.94
+Retrain Test: 98.02, Retrain Validation: 97.89, Prune Test: 97.90, Prune Validation: 97.76, Prune Sparsity: 61.15
+Retrain Test: 97.78, Retrain Validation: 97.94, Prune Test: 96.46, Prune Validation: 96.51, Prune Sparsity: 78.93
+
+Temp: 2 Tau: 1e-06
+Retrain Test: 96.11, Retrain Validation: 95.83, Prune Test: 92.36, Prune Validation: 92.04, Prune Sparsity: 98.92
+Retrain Test: 97.03, Retrain Validation: 97.03, Prune Test: 96.29, Prune Validation: 96.13, Prune Sparsity: 96.87
+Retrain Test: 97.50, Retrain Validation: 97.42, Prune Test: 93.86, Prune Validation: 93.63, Prune Sparsity: 96.73
+
+Temp: 2 Tau: 1e-07
+Retrain Test: 97.66, Retrain Validation: 97.63, Prune Test: 93.29, Prune Validation: 93.28, Prune Sparsity: 94.56
+Retrain Test: 98.08, Retrain Validation: 98.14, Prune Test: 97.59, Prune Validation: 97.54, Prune Sparsity: 78.69
+Retrain Test: 98.10, Retrain Validation: 98.15, Prune Test: 97.83, Prune Validation: 97.73, Prune Sparsity: 78.71
+
+Temp: 2 Tau: 1e-08
+Retrain Test: 97.86, Retrain Validation: 97.79, Prune Test: 97.81, Prune Validation: 97.61, Prune Sparsity: 63.38
+Retrain Test: 98.14, Retrain Validation: 98.16, Prune Test: 98.09, Prune Validation: 98.07, Prune Sparsity: 53.86
+Retrain Test: 98.16, Retrain Validation: 98.20, Prune Test: 97.95, Prune Validation: 97.88, Prune Sparsity: 69.66
+
+Temp: 4 Tau: 1e-06
+Retrain Test: 95.84, Retrain Validation: 95.75, Prune Test: 92.17, Prune Validation: 91.91, Prune Sparsity: 98.93
+Retrain Test: 97.93, Retrain Validation: 97.88, Prune Test: 97.69, Prune Validation: 97.67, Prune Sparsity: 82.93
+Retrain Test: 98.04, Retrain Validation: 97.99, Prune Test: 97.37, Prune Validation: 97.35, Prune Sparsity: 74.61
+
+Temp: 4 Tau: 1e-07
+Retrain Test: 97.62, Retrain Validation: 97.57, Prune Test: 93.62, Prune Validation: 92.95, Prune Sparsity: 94.82
+Retrain Test: 98.27, Retrain Validation: 98.22, Prune Test: 98.07, Prune Validation: 98.01, Prune Sparsity: 68.84
+Retrain Test: 98.30, Retrain Validation: 98.22, Prune Test: 97.68, Prune Validation: 97.72, Prune Sparsity: 56.29
+
+Temp: 4 Tau: 1e-08
+Retrain Test: 97.99, Retrain Validation: 98.02, Prune Test: 97.78, Prune Validation: 97.74, Prune Sparsity: 62.53
+Retrain Test: 98.27, Retrain Validation: 98.15, Prune Test: 98.12, Prune Validation: 97.97, Prune Sparsity: 45.67
+Retrain Test: 98.23, Retrain Validation: 98.16, Prune Test: 98.08, Prune Validation: 98.07, Prune Sparsity: 45.97
+
+Temp: 10 Tau: 1e-06
+Retrain Test: 95.87, Retrain Validation: 95.94, Prune Test: 92.26, Prune Validation: 92.38, Prune Sparsity: 98.96
+Retrain Test: 98.25, Retrain Validation: 98.18, Prune Test: 98.07, Prune Validation: 98.15, Prune Sparsity: 55.57
+Retrain Test: 98.22, Retrain Validation: 98.22, Prune Test: 97.98, Prune Validation: 98.09, Prune Sparsity: 55.58
+
+Temp: 10 Tau: 1e-07
+Retrain Test: 97.67, Retrain Validation: 97.44, Prune Test: 93.15, Prune Validation: 92.46, Prune Sparsity: 93.76
+Retrain Test: 98.20, Retrain Validation: 98.18, Prune Test: 98.01, Prune Validation: 97.98, Prune Sparsity: 61.08
+Retrain Test: 98.22, Retrain Validation: 98.18, Prune Test: 97.96, Prune Validation: 98.06, Prune Sparsity: 44.88
+
+Temp: 10 Tau: 1e-08
+Retrain Test: 97.95, Retrain Validation: 97.91, Prune Test: 97.79, Prune Validation: 97.72, Prune Sparsity: 63.01
+Retrain Test: 98.26, Retrain Validation: 98.21, Prune Test: 97.99, Prune Validation: 97.92, Prune Sparsity: 40.35
+Retrain Test: 98.25, Retrain Validation: 98.21, Prune Test: 97.84, Prune Validation: 97.90, Prune Sparsity: 39.64
+
+Temp: 20 Tau: 1e-06
+Retrain Test: 95.75, Retrain Validation: 95.64, Prune Test: 92.65, Prune Validation: 93.00, Prune Sparsity: 98.93
+Retrain Test: 98.28, Retrain Validation: 98.17, Prune Test: 98.20, Prune Validation: 98.19, Prune Sparsity: 50.30
+Retrain Test: 98.24, Retrain Validation: 98.19, Prune Test: 97.79, Prune Validation: 97.82, Prune Sparsity: 53.47
+
+Temp: 20 Tau: 1e-07
+Retrain Test: 97.71, Retrain Validation: 97.66, Prune Test: 95.31, Prune Validation: 95.29, Prune Sparsity: 91.97
+Retrain Test: 98.26, Retrain Validation: 98.18, Prune Test: 97.86, Prune Validation: 97.82, Prune Sparsity: 59.55
+Retrain Test: 98.21, Retrain Validation: 98.16, Prune Test: 97.74, Prune Validation: 97.89, Prune Sparsity: 42.35
+
+Temp: 20 Tau: 1e-08
+Retrain Test: 97.93, Retrain Validation: 97.93, Prune Test: 97.70, Prune Validation: 97.71, Prune Sparsity: 63.52
+Retrain Test: 98.27, Retrain Validation: 98.18, Prune Test: 98.01, Prune Validation: 97.87, Prune Sparsity: 40.08
+Retrain Test: 98.22, Retrain Validation: 98.17, Prune Test: 97.93, Prune Validation: 97.99, Prune Sparsity: 38.67
+===
+MSE-NoMultiplier
+===
+Temp: 1 Tau: 1e-06
+Retrain Test: 96.10, Retrain Validation: 96.06, Prune Test: 93.17, Prune Validation: 93.16, Prune Sparsity: 98.87
+Retrain Test: 90.08, Retrain Validation: 90.03, Prune Test: 42.91, Prune Validation: 43.17, Prune Sparsity: 99.77
+Retrain Test: 90.15, Retrain Validation: 90.50, Prune Test: 63.38, Prune Validation: 64.84, Prune Sparsity: 99.75
+
+Temp: 1 Tau: 1e-07
+Retrain Test: 97.61, Retrain Validation: 97.81, Prune Test: 92.84, Prune Validation: 92.68, Prune Sparsity: 94.56
+Retrain Test: 96.10, Retrain Validation: 95.88, Prune Test: 92.78, Prune Validation: 92.48, Prune Sparsity: 98.90
+Retrain Test: 96.35, Retrain Validation: 95.98, Prune Test: 92.42, Prune Validation: 92.03, Prune Sparsity: 98.78
+
+Temp: 1 Tau: 1e-08
+Retrain Test: 97.93, Retrain Validation: 98.05, Prune Test: 97.89, Prune Validation: 97.86, Prune Sparsity: 62.95
+Retrain Test: 97.73, Retrain Validation: 97.76, Prune Test: 97.13, Prune Validation: 97.49, Prune Sparsity: 78.46
+Retrain Test: 97.98, Retrain Validation: 97.76, Prune Test: 91.14, Prune Validation: 90.74, Prune Sparsity: 91.15
+
+Temp: 2 Tau: 1e-06
+Retrain Test: 95.96, Retrain Validation: 95.94, Prune Test: 92.27, Prune Validation: 92.31, Prune Sparsity: 98.94
+Retrain Test: 87.44, Retrain Validation: 87.97, Prune Test: 49.40, Prune Validation: 51.40, Prune Sparsity: 99.74
+Retrain Test: 88.89, Retrain Validation: 89.13, Prune Test: 62.81, Prune Validation: 64.40, Prune Sparsity: 99.71
+
+Temp: 2 Tau: 1e-07
+Retrain Test: 97.71, Retrain Validation: 97.57, Prune Test: 92.38, Prune Validation: 92.13, Prune Sparsity: 95.00
+Retrain Test: 95.97, Retrain Validation: 96.09, Prune Test: 91.63, Prune Validation: 91.08, Prune Sparsity: 98.89
+Retrain Test: 96.27, Retrain Validation: 96.20, Prune Test: 93.17, Prune Validation: 93.51, Prune Sparsity: 98.85
+
+Temp: 2 Tau: 1e-08
+Retrain Test: 98.10, Retrain Validation: 98.07, Prune Test: 97.94, Prune Validation: 97.70, Prune Sparsity: 63.65
+Retrain Test: 97.77, Retrain Validation: 97.73, Prune Test: 97.34, Prune Validation: 97.27, Prune Sparsity: 83.34
+Retrain Test: 97.91, Retrain Validation: 97.91, Prune Test: 90.87, Prune Validation: 91.53, Prune Sparsity: 91.45
+
+Temp: 4 Tau: 1e-06
+Retrain Test: 95.79, Retrain Validation: 95.89, Prune Test: 92.65, Prune Validation: 92.62, Prune Sparsity: 98.95
+Retrain Test: 86.84, Retrain Validation: 87.39, Prune Test: 76.07, Prune Validation: 77.33, Prune Sparsity: 99.70
+Retrain Test: 87.92, Retrain Validation: 88.52, Prune Test: 79.23, Prune Validation: 80.35, Prune Sparsity: 99.66
+
+Temp: 4 Tau: 1e-07
+Retrain Test: 97.41, Retrain Validation: 97.43, Prune Test: 93.34, Prune Validation: 93.13, Prune Sparsity: 93.72
+Retrain Test: 96.05, Retrain Validation: 95.81, Prune Test: 89.08, Prune Validation: 88.94, Prune Sparsity: 98.88
+Retrain Test: 95.62, Retrain Validation: 95.61, Prune Test: 92.81, Prune Validation: 92.33, Prune Sparsity: 98.77
+
+Temp: 4 Tau: 1e-08
+Retrain Test: 97.96, Retrain Validation: 97.84, Prune Test: 97.59, Prune Validation: 97.63, Prune Sparsity: 63.65
+Retrain Test: 97.61, Retrain Validation: 97.60, Prune Test: 96.76, Prune Validation: 97.00, Prune Sparsity: 90.20
+Retrain Test: 97.56, Retrain Validation: 97.54, Prune Test: 85.17, Prune Validation: 85.15, Prune Sparsity: 94.72
+
+Temp: 10 Tau: 1e-06
+Retrain Test: 96.04, Retrain Validation: 96.08, Prune Test: 92.60, Prune Validation: 92.74, Prune Sparsity: 98.91
+Retrain Test: 83.78, Retrain Validation: 85.46, Prune Test: 76.13, Prune Validation: 78.06, Prune Sparsity: 99.69
+Retrain Test: 85.18, Retrain Validation: 86.32, Prune Test: 80.64, Prune Validation: 81.64, Prune Sparsity: 99.65
+
+Temp: 10 Tau: 1e-07
+Retrain Test: 97.83, Retrain Validation: 97.73, Prune Test: 92.70, Prune Validation: 92.10, Prune Sparsity: 93.63
+Retrain Test: 94.84, Retrain Validation: 94.88, Prune Test: 89.81, Prune Validation: 90.04, Prune Sparsity: 99.11
+Retrain Test: 94.97, Retrain Validation: 95.22, Prune Test: 90.35, Prune Validation: 91.25, Prune Sparsity: 99.05
+
+Temp: 10 Tau: 1e-08
+Retrain Test: 97.88, Retrain Validation: 98.08, Prune Test: 97.92, Prune Validation: 97.89, Prune Sparsity: 61.84
+Retrain Test: 97.35, Retrain Validation: 97.36, Prune Test: 96.53, Prune Validation: 96.54, Prune Sparsity: 97.28
+Retrain Test: 97.64, Retrain Validation: 97.52, Prune Test: 96.59, Prune Validation: 96.15, Prune Sparsity: 97.43
+
+Temp: 20 Tau: 1e-06
+Retrain Test: 96.23, Retrain Validation: 96.12, Prune Test: 92.18, Prune Validation: 92.58, Prune Sparsity: 98.92
+Retrain Test: 70.45, Retrain Validation: 71.59, Prune Test: 36.46, Prune Validation: 38.36, Prune Sparsity: 99.81
+Retrain Test: 68.97, Retrain Validation: 70.53, Prune Test: 51.27, Prune Validation: 52.91, Prune Sparsity: 99.79
+
+Temp: 20 Tau: 1e-07
+Retrain Test: 97.77, Retrain Validation: 97.56, Prune Test: 94.64, Prune Validation: 94.50, Prune Sparsity: 93.62
+Retrain Test: 91.75, Retrain Validation: 92.17, Prune Test: 80.65, Prune Validation: 81.70, Prune Sparsity: 99.44
+Retrain Test: 92.14, Retrain Validation: 92.34, Prune Test: 82.22, Prune Validation: 82.51, Prune Sparsity: 99.40
+
+Temp: 20 Tau: 1e-08
+Retrain Test: 98.03, Retrain Validation: 98.02, Prune Test: 97.67, Prune Validation: 97.79, Prune Sparsity: 64.59
+Retrain Test: 97.15, Retrain Validation: 97.15, Prune Test: 93.99, Prune Validation: 94.43, Prune Sparsity: 98.31
+Retrain Test: 97.06, Retrain Validation: 97.10, Prune Test: 95.50, Prune Validation: 95.56, Prune Sparsity: 98.27
+===
+MSE-Multiplier
+===
+Temp: 1 Tau: 1e-06
+Retrain Test: 95.90, Retrain Validation: 95.81, Prune Test: 91.75, Prune Validation: 91.90, Prune Sparsity: 98.94
+Retrain Test: 89.52, Retrain Validation: 89.58, Prune Test: 38.02, Prune Validation: 39.63, Prune Sparsity: 99.77
+Retrain Test: 89.77, Retrain Validation: 90.49, Prune Test: 52.40, Prune Validation: 54.63, Prune Sparsity: 99.75
+
+Temp: 1 Tau: 1e-07
+Retrain Test: 97.64, Retrain Validation: 97.56, Prune Test: 91.25, Prune Validation: 90.93, Prune Sparsity: 94.26
+Retrain Test: 96.28, Retrain Validation: 95.96, Prune Test: 92.46, Prune Validation: 92.69, Prune Sparsity: 98.78
+Retrain Test: 96.24, Retrain Validation: 95.86, Prune Test: 89.43, Prune Validation: 89.19, Prune Sparsity: 98.91
+
+Temp: 1 Tau: 1e-08
+Retrain Test: 97.79, Retrain Validation: 97.89, Prune Test: 97.78, Prune Validation: 97.72, Prune Sparsity: 62.79
+Retrain Test: 97.86, Retrain Validation: 97.87, Prune Test: 97.55, Prune Validation: 97.46, Prune Sparsity: 83.54
+Retrain Test: 97.90, Retrain Validation: 97.75, Prune Test: 90.94, Prune Validation: 91.21, Prune Sparsity: 92.12
+
+Temp: 2 Tau: 1e-06
+Retrain Test: 95.81, Retrain Validation: 96.06, Prune Test: 91.06, Prune Validation: 91.35, Prune Sparsity: 98.91
+Retrain Test: 94.18, Retrain Validation: 94.42, Prune Test: 83.30, Prune Validation: 84.14, Prune Sparsity: 99.37
+Retrain Test: 94.71, Retrain Validation: 94.63, Prune Test: 86.27, Prune Validation: 87.45, Prune Sparsity: 99.33
+
+Temp: 2 Tau: 1e-07
+Retrain Test: 97.76, Retrain Validation: 97.66, Prune Test: 91.93, Prune Validation: 91.63, Prune Sparsity: 93.70
+Retrain Test: 96.87, Retrain Validation: 96.95, Prune Test: 96.32, Prune Validation: 96.18, Prune Sparsity: 97.53
+Retrain Test: 97.06, Retrain Validation: 96.98, Prune Test: 96.26, Prune Validation: 96.02, Prune Sparsity: 97.18
+
+Temp: 2 Tau: 1e-08
+Retrain Test: 97.82, Retrain Validation: 97.99, Prune Test: 97.69, Prune Validation: 97.77, Prune Sparsity: 62.07
+Retrain Test: 97.89, Retrain Validation: 97.93, Prune Test: 97.69, Prune Validation: 97.74, Prune Sparsity: 69.68
+Retrain Test: 98.05, Retrain Validation: 98.04, Prune Test: 97.00, Prune Validation: 97.18, Prune Sparsity: 81.82
+
+Temp: 4 Tau: 1e-06
+Retrain Test: 95.84, Retrain Validation: 96.01, Prune Test: 92.41, Prune Validation: 92.45, Prune Sparsity: 98.93
+Retrain Test: 96.57, Retrain Validation: 96.36, Prune Test: 95.07, Prune Validation: 94.82, Prune Sparsity: 98.36
+Retrain Test: 96.56, Retrain Validation: 96.29, Prune Test: 94.36, Prune Validation: 94.25, Prune Sparsity: 98.46
+
+Temp: 4 Tau: 1e-07
+Retrain Test: 97.45, Retrain Validation: 97.26, Prune Test: 92.86, Prune Validation: 92.36, Prune Sparsity: 94.55
+Retrain Test: 97.92, Retrain Validation: 97.80, Prune Test: 96.74, Prune Validation: 96.69, Prune Sparsity: 90.74
+Retrain Test: 97.94, Retrain Validation: 97.85, Prune Test: 97.27, Prune Validation: 97.39, Prune Sparsity: 89.66
+
+Temp: 4 Tau: 1e-08
+Retrain Test: 98.08, Retrain Validation: 98.01, Prune Test: 97.81, Prune Validation: 97.83, Prune Sparsity: 62.06
+Retrain Test: 98.24, Retrain Validation: 98.20, Prune Test: 98.03, Prune Validation: 98.00, Prune Sparsity: 59.59
+Retrain Test: 98.26, Retrain Validation: 98.25, Prune Test: 97.57, Prune Validation: 97.67, Prune Sparsity: 74.15
+
+Temp: 10 Tau: 1e-06
+Retrain Test: 95.83, Retrain Validation: 95.78, Prune Test: 91.66, Prune Validation: 92.01, Prune Sparsity: 98.91
+Retrain Test: 97.64, Retrain Validation: 97.18, Prune Test: 96.87, Prune Validation: 96.48, Prune Sparsity: 97.28
+Retrain Test: 97.50, Retrain Validation: 97.51, Prune Test: 96.37, Prune Validation: 96.10, Prune Sparsity: 97.30
+
+Temp: 10 Tau: 1e-07
+Retrain Test: 97.54, Retrain Validation: 97.53, Prune Test: 94.05, Prune Validation: 94.17, Prune Sparsity: 94.78
+Retrain Test: 98.26, Retrain Validation: 98.22, Prune Test: 97.99, Prune Validation: 98.00, Prune Sparsity: 76.79
+Retrain Test: 98.22, Retrain Validation: 98.28, Prune Test: 97.88, Prune Validation: 97.73, Prune Sparsity: 79.07
+
+Temp: 10 Tau: 1e-08
+Retrain Test: 98.00, Retrain Validation: 97.87, Prune Test: 97.54, Prune Validation: 97.57, Prune Sparsity: 63.69
+Retrain Test: 98.18, Retrain Validation: 98.12, Prune Test: 98.04, Prune Validation: 97.95, Prune Sparsity: 47.88
+Retrain Test: 98.22, Retrain Validation: 98.17, Prune Test: 97.97, Prune Validation: 98.00, Prune Sparsity: 49.16
+
+Temp: 20 Tau: 1e-06
+Retrain Test: 95.90, Retrain Validation: 95.92, Prune Test: 92.97, Prune Validation: 92.78, Prune Sparsity: 98.90
+Retrain Test: 98.08, Retrain Validation: 98.08, Prune Test: 95.73, Prune Validation: 95.79, Prune Sparsity: 94.10
+Retrain Test: 98.10, Retrain Validation: 98.07, Prune Test: 97.17, Prune Validation: 97.27, Prune Sparsity: 93.32
+
+Temp: 20 Tau: 1e-07
+Retrain Test: 97.82, Retrain Validation: 97.82, Prune Test: 93.85, Prune Validation: 93.42, Prune Sparsity: 94.12
+Retrain Test: 98.25, Retrain Validation: 98.24, Prune Test: 98.04, Prune Validation: 97.97, Prune Sparsity: 71.92
+Retrain Test: 98.26, Retrain Validation: 98.20, Prune Test: 97.21, Prune Validation: 96.95, Prune Sparsity: 75.83
+
+Temp: 20 Tau: 1e-08
+Retrain Test: 97.96, Retrain Validation: 98.05, Prune Test: 97.77, Prune Validation: 97.72, Prune Sparsity: 65.09
+Retrain Test: 98.26, Retrain Validation: 98.19, Prune Test: 98.07, Prune Validation: 97.91, Prune Sparsity: 44.51
+Retrain Test: 98.21, Retrain Validation: 98.20, Prune Test: 97.93, Prune Validation: 98.07, Prune Sparsity: 44.36
