@@ -229,7 +229,7 @@ class LeNet_300_100FC2(nn.Module):
 		self.fc2 = nn.Linear(300,100)
 	
 	def forward(self, x):
-		x = x.view(-1)
+		#x = x.view(-1, 300)
 		out = self.fc2(x)
 		return out
 

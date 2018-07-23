@@ -1,0 +1,368 @@
+SWS + Scaling
+===
+Mean: 0.10 ZMean: 0.10
+CESNT - Retrain Test: 96.28, Retrain Validation: 96.35, Prune Test: 95.21, Prune Validation: 95.05, Prune Sparsity: 98.44
+MSESNT - Retrain Test: 88.22, Retrain Validation: 88.35, Prune Test: 86.66, Prune Validation: 86.82, Prune Sparsity: 99.65
+Mean: 0.10 ZMean: 1.00
+CESNT - Retrain Test: 96.22, Retrain Validation: 96.26, Prune Test: 94.23, Prune Validation: 94.20, Prune Sparsity: 98.40
+MSESNT - Retrain Test: 87.73, Retrain Validation: 88.43, Prune Test: 81.18, Prune Validation: 82.32, Prune Sparsity: 99.65
+Mean: 0.10 ZMean: 10.00
+CESNT - Retrain Test: 96.39, Retrain Validation: 96.36, Prune Test: 94.48, Prune Validation: 94.22, Prune Sparsity: 98.49
+MSESNT - Retrain Test: 90.36, Retrain Validation: 90.56, Prune Test: 82.94, Prune Validation: 84.10, Prune Sparsity: 99.66
+Mean: 0.10 ZMean: 100.00
+CESNT - Retrain Test: 97.01, Retrain Validation: 96.70, Prune Test: 93.96, Prune Validation: 94.07, Prune Sparsity: 97.75
+MSESNT - Retrain Test: 93.80, Retrain Validation: 93.97, Prune Test: 81.15, Prune Validation: 82.19, Prune Sparsity: 99.35
+Mean: 0.10 ZMean: 1000.00
+CESNT - Retrain Test: 97.38, Retrain Validation: 97.36, Prune Test: 87.21, Prune Validation: 87.18, Prune Sparsity: 95.79
+MSESNT - Retrain Test: 95.87, Retrain Validation: 96.00, Prune Test: 71.54, Prune Validation: 73.13, Prune Sparsity: 98.00
+Mean: 0.10 ZMean: 10000.00
+CESNT - Retrain Test: 96.83, Retrain Validation: 97.05, Prune Test: 92.40, Prune Validation: 91.99, Prune Sparsity: 98.17
+MSESNT - Retrain Test: 94.63, Retrain Validation: 94.74, Prune Test: 77.99, Prune Validation: 80.00, Prune Sparsity: 99.37
+Mean: 1.00 ZMean: 0.10
+CESNT - Retrain Test: 96.08, Retrain Validation: 96.20, Prune Test: 95.29, Prune Validation: 95.07, Prune Sparsity: 98.53
+MSESNT - Retrain Test: 88.49, Retrain Validation: 88.53, Prune Test: 85.51, Prune Validation: 85.53, Prune Sparsity: 99.65
+Mean: 1.00 ZMean: 1.00
+CESNT - Retrain Test: 96.24, Retrain Validation: 96.30, Prune Test: 90.81, Prune Validation: 91.81, Prune Sparsity: 98.42
+MSESNT - Retrain Test: 88.59, Retrain Validation: 88.35, Prune Test: 84.95, Prune Validation: 84.87, Prune Sparsity: 99.64
+Mean: 1.00 ZMean: 10.00
+CESNT - Retrain Test: 96.37, Retrain Validation: 96.41, Prune Test: 94.35, Prune Validation: 94.17, Prune Sparsity: 98.52
+MSESNT - Retrain Test: 90.43, Retrain Validation: 90.38, Prune Test: 75.17, Prune Validation: 77.09, Prune Sparsity: 99.66
+Mean: 1.00 ZMean: 100.00
+CESNT - Retrain Test: 97.01, Retrain Validation: 96.95, Prune Test: 86.83, Prune Validation: 87.94, Prune Sparsity: 97.46
+MSESNT - Retrain Test: 93.97, Retrain Validation: 94.08, Prune Test: 83.31, Prune Validation: 84.52, Prune Sparsity: 99.24
+Mean: 1.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.29, Retrain Validation: 97.09, Prune Test: 94.15, Prune Validation: 93.84, Prune Sparsity: 95.05
+MSESNT - Retrain Test: 95.74, Retrain Validation: 95.80, Prune Test: 72.20, Prune Validation: 73.29, Prune Sparsity: 98.00
+Mean: 1.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.96, Retrain Validation: 97.05, Prune Test: 91.11, Prune Validation: 91.38, Prune Sparsity: 97.56
+MSESNT - Retrain Test: 94.31, Retrain Validation: 94.14, Prune Test: 83.36, Prune Validation: 84.55, Prune Sparsity: 99.10
+Mean: 10.00 ZMean: 0.10
+CESNT - Retrain Test: 96.38, Retrain Validation: 96.12, Prune Test: 91.38, Prune Validation: 91.48, Prune Sparsity: 98.47
+MSESNT - Retrain Test: 87.61, Retrain Validation: 87.37, Prune Test: 81.56, Prune Validation: 80.74, Prune Sparsity: 99.65
+Mean: 10.00 ZMean: 1.00
+CESNT - Retrain Test: 96.28, Retrain Validation: 95.94, Prune Test: 95.27, Prune Validation: 95.07, Prune Sparsity: 98.38
+MSESNT - Retrain Test: 87.57, Retrain Validation: 87.81, Prune Test: 85.12, Prune Validation: 84.92, Prune Sparsity: 99.66
+Mean: 10.00 ZMean: 10.00
+CESNT - Retrain Test: 96.34, Retrain Validation: 96.24, Prune Test: 94.91, Prune Validation: 94.70, Prune Sparsity: 98.49
+MSESNT - Retrain Test: 90.82, Retrain Validation: 90.97, Prune Test: 69.94, Prune Validation: 70.82, Prune Sparsity: 99.65
+Mean: 10.00 ZMean: 100.00
+CESNT - Retrain Test: 96.92, Retrain Validation: 96.82, Prune Test: 83.73, Prune Validation: 83.58, Prune Sparsity: 98.86
+MSESNT - Retrain Test: 93.65, Retrain Validation: 94.14, Prune Test: 84.96, Prune Validation: 85.74, Prune Sparsity: 99.26
+Mean: 10.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.11, Retrain Validation: 97.11, Prune Test: 89.60, Prune Validation: 89.76, Prune Sparsity: 93.97
+MSESNT - Retrain Test: 95.57, Retrain Validation: 95.71, Prune Test: 49.17, Prune Validation: 50.05, Prune Sparsity: 97.53
+Mean: 10.00 ZMean: 10000.00
+CESNT - Retrain Test: 97.09, Retrain Validation: 97.11, Prune Test: 89.45, Prune Validation: 89.05, Prune Sparsity: 98.57
+MSESNT - Retrain Test: 94.38, Retrain Validation: 94.53, Prune Test: 88.22, Prune Validation: 88.04, Prune Sparsity: 99.11
+Mean: 100.00 ZMean: 0.10
+CESNT - Retrain Test: 96.01, Retrain Validation: 96.09, Prune Test: 95.18, Prune Validation: 95.24, Prune Sparsity: 98.52
+MSESNT - Retrain Test: 86.72, Retrain Validation: 87.51, Prune Test: 83.73, Prune Validation: 84.21, Prune Sparsity: 99.67
+Mean: 100.00 ZMean: 1.00
+CESNT - Retrain Test: 96.10, Retrain Validation: 95.81, Prune Test: 95.59, Prune Validation: 95.15, Prune Sparsity: 98.50
+MSESNT - Retrain Test: 86.84, Retrain Validation: 87.31, Prune Test: 83.54, Prune Validation: 84.05, Prune Sparsity: 99.68
+Mean: 100.00 ZMean: 10.00
+CESNT - Retrain Test: 96.43, Retrain Validation: 96.14, Prune Test: 95.25, Prune Validation: 95.08, Prune Sparsity: 98.56
+MSESNT - Retrain Test: 89.04, Retrain Validation: 89.55, Prune Test: 71.73, Prune Validation: 71.59, Prune Sparsity: 99.71
+Mean: 100.00 ZMean: 100.00
+CESNT - Retrain Test: 97.00, Retrain Validation: 96.82, Prune Test: 88.15, Prune Validation: 88.81, Prune Sparsity: 97.88
+MSESNT - Retrain Test: 93.39, Retrain Validation: 93.76, Prune Test: 77.30, Prune Validation: 77.34, Prune Sparsity: 99.59
+Mean: 100.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.03, Retrain Validation: 97.03, Prune Test: 52.79, Prune Validation: 53.54, Prune Sparsity: 96.21
+MSESNT - Retrain Test: 95.60, Retrain Validation: 95.57, Prune Test: 40.93, Prune Validation: 43.18, Prune Sparsity: 97.82
+Mean: 100.00 ZMean: 10000.00
+CESNT - Retrain Test: 97.10, Retrain Validation: 97.06, Prune Test: 92.73, Prune Validation: 92.46, Prune Sparsity: 98.29
+MSESNT - Retrain Test: 94.30, Retrain Validation: 94.75, Prune Test: 48.99, Prune Validation: 50.82, Prune Sparsity: 99.45
+Mean: 1000.00 ZMean: 0.10
+CESNT - Retrain Test: 95.37, Retrain Validation: 95.35, Prune Test: 94.51, Prune Validation: 94.40, Prune Sparsity: 98.85
+MSESNT - Retrain Test: 82.39, Retrain Validation: 82.57, Prune Test: 75.10, Prune Validation: 76.23, Prune Sparsity: 99.74
+Mean: 1000.00 ZMean: 1.00
+CESNT - Retrain Test: 95.23, Retrain Validation: 95.01, Prune Test: 93.37, Prune Validation: 93.58, Prune Sparsity: 98.94
+MSESNT - Retrain Test: 84.70, Retrain Validation: 85.30, Prune Test: 69.62, Prune Validation: 71.30, Prune Sparsity: 99.74
+Mean: 1000.00 ZMean: 10.00
+CESNT - Retrain Test: 95.94, Retrain Validation: 95.66, Prune Test: 90.89, Prune Validation: 90.45, Prune Sparsity: 98.90
+MSESNT - Retrain Test: 90.02, Retrain Validation: 90.05, Prune Test: 58.75, Prune Validation: 59.37, Prune Sparsity: 99.74
+Mean: 1000.00 ZMean: 100.00
+CESNT - Retrain Test: 96.72, Retrain Validation: 96.68, Prune Test: 77.97, Prune Validation: 77.90, Prune Sparsity: 96.69
+MSESNT - Retrain Test: 93.99, Retrain Validation: 93.77, Prune Test: 24.70, Prune Validation: 25.52, Prune Sparsity: 99.78
+Mean: 1000.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.32, Retrain Validation: 97.12, Prune Test: 43.22, Prune Validation: 42.88, Prune Sparsity: 99.38
+MSESNT - Retrain Test: 95.57, Retrain Validation: 95.89, Prune Test: 15.38, Prune Validation: 14.55, Prune Sparsity: 99.86
+Mean: 1000.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.72, Retrain Validation: 96.77, Prune Test: 81.33, Prune Validation: 81.05, Prune Sparsity: 98.77
+MSESNT - Retrain Test: 93.83, Retrain Validation: 94.16, Prune Test: 24.07, Prune Validation: 23.49, Prune Sparsity: 99.77
+Mean: 10000.00 ZMean: 0.10
+CESNT - Retrain Test: 93.65, Retrain Validation: 93.64, Prune Test: 89.69, Prune Validation: 90.14, Prune Sparsity: 99.05
+MSESNT - Retrain Test: 74.67, Retrain Validation: 74.95, Prune Test: 54.41, Prune Validation: 54.33, Prune Sparsity: 99.76
+Mean: 10000.00 ZMean: 1.00
+CESNT - Retrain Test: 94.31, Retrain Validation: 94.39, Prune Test: 90.05, Prune Validation: 90.06, Prune Sparsity: 99.02
+MSESNT - Retrain Test: 79.33, Retrain Validation: 79.34, Prune Test: 46.99, Prune Validation: 46.88, Prune Sparsity: 99.76
+Mean: 10000.00 ZMean: 10.00
+CESNT - Retrain Test: 95.13, Retrain Validation: 95.09, Prune Test: 72.90, Prune Validation: 71.73, Prune Sparsity: 99.09
+MSESNT - Retrain Test: 86.22, Retrain Validation: 86.44, Prune Test: 53.11, Prune Validation: 53.28, Prune Sparsity: 99.77
+Mean: 10000.00 ZMean: 100.00
+CESNT - Retrain Test: 96.61, Retrain Validation: 96.53, Prune Test: 39.26, Prune Validation: 38.67, Prune Sparsity: 99.38
+MSESNT - Retrain Test: 92.94, Retrain Validation: 93.12, Prune Test: 15.38, Prune Validation: 15.56, Prune Sparsity: 99.81
+Mean: 10000.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.21, Retrain Validation: 97.09, Prune Test: 29.09, Prune Validation: 28.61, Prune Sparsity: 99.47
+MSESNT - Retrain Test: 95.53, Retrain Validation: 95.75, Prune Test: 14.89, Prune Validation: 13.82, Prune Sparsity: 99.90
+Mean: 10000.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.50, Retrain Validation: 96.68, Prune Test: 60.37, Prune Validation: 59.09, Prune Sparsity: 98.99
+MSESNT - Retrain Test: 92.90, Retrain Validation: 93.20, Prune Test: 12.31, Prune Validation: 12.04, Prune Sparsity: 99.81
+===
+SWS
+===
+Mean: 0.10 ZMean: 0.10
+CESNT - Retrain Test: 96.00, Retrain Validation: 96.03, Prune Test: 95.33, Prune Validation: 95.11, Prune Sparsity: 98.51
+MSESNT - Retrain Test: 86.93, Retrain Validation: 87.63, Prune Test: 83.35, Prune Validation: 84.23, Prune Sparsity: 99.68
+Mean: 0.10 ZMean: 1.00
+CESNT - Retrain Test: 96.26, Retrain Validation: 96.24, Prune Test: 94.74, Prune Validation: 95.26, Prune Sparsity: 98.41
+MSESNT - Retrain Test: 88.21, Retrain Validation: 88.32, Prune Test: 84.51, Prune Validation: 85.53, Prune Sparsity: 99.67
+Mean: 0.10 ZMean: 10.00
+CESNT - Retrain Test: 96.36, Retrain Validation: 96.36, Prune Test: 94.49, Prune Validation: 94.63, Prune Sparsity: 98.50
+MSESNT - Retrain Test: 90.55, Retrain Validation: 90.56, Prune Test: 79.80, Prune Validation: 80.53, Prune Sparsity: 99.68
+Mean: 0.10 ZMean: 100.00
+CESNT - Retrain Test: 96.74, Retrain Validation: 96.83, Prune Test: 94.27, Prune Validation: 94.34, Prune Sparsity: 97.99
+MSESNT - Retrain Test: 93.86, Retrain Validation: 93.99, Prune Test: 56.11, Prune Validation: 57.48, Prune Sparsity: 99.67
+Mean: 0.10 ZMean: 1000.00
+CESNT - Retrain Test: 97.18, Retrain Validation: 97.18, Prune Test: 94.49, Prune Validation: 94.57, Prune Sparsity: 94.39
+MSESNT - Retrain Test: 95.48, Retrain Validation: 95.52, Prune Test: 70.46, Prune Validation: 70.85, Prune Sparsity: 98.32
+Mean: 0.10 ZMean: 10000.00
+CESNT - Retrain Test: 97.06, Retrain Validation: 96.70, Prune Test: 92.53, Prune Validation: 92.56, Prune Sparsity: 98.12
+MSESNT - Retrain Test: 94.48, Retrain Validation: 94.39, Prune Test: 80.07, Prune Validation: 81.03, Prune Sparsity: 99.41
+Mean: 1.00 ZMean: 0.10
+CESNT - Retrain Test: 96.39, Retrain Validation: 96.17, Prune Test: 95.34, Prune Validation: 95.09, Prune Sparsity: 98.54
+MSESNT - Retrain Test: 87.30, Retrain Validation: 87.61, Prune Test: 83.57, Prune Validation: 84.62, Prune Sparsity: 99.67
+Mean: 1.00 ZMean: 1.00
+CESNT - Retrain Test: 96.19, Retrain Validation: 96.25, Prune Test: 94.66, Prune Validation: 94.47, Prune Sparsity: 98.50
+MSESNT - Retrain Test: 88.31, Retrain Validation: 88.70, Prune Test: 84.17, Prune Validation: 85.15, Prune Sparsity: 99.68
+Mean: 1.00 ZMean: 10.00
+CESNT - Retrain Test: 96.79, Retrain Validation: 96.41, Prune Test: 94.73, Prune Validation: 94.39, Prune Sparsity: 98.53
+MSESNT - Retrain Test: 90.55, Retrain Validation: 90.02, Prune Test: 76.32, Prune Validation: 77.31, Prune Sparsity: 99.68
+Mean: 1.00 ZMean: 100.00
+CESNT - Retrain Test: 96.68, Retrain Validation: 96.70, Prune Test: 91.73, Prune Validation: 92.11, Prune Sparsity: 98.23
+MSESNT - Retrain Test: 93.94, Retrain Validation: 94.33, Prune Test: 75.76, Prune Validation: 77.60, Prune Sparsity: 99.44
+Mean: 1.00 ZMean: 1000.00
+CESNT - Retrain Test: 96.83, Retrain Validation: 97.17, Prune Test: 95.14, Prune Validation: 95.18, Prune Sparsity: 94.48
+MSESNT - Retrain Test: 95.50, Retrain Validation: 95.50, Prune Test: 55.89, Prune Validation: 57.36, Prune Sparsity: 97.94
+Mean: 1.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.85, Retrain Validation: 96.62, Prune Test: 92.84, Prune Validation: 92.33, Prune Sparsity: 97.90
+MSESNT - Retrain Test: 94.56, Retrain Validation: 94.50, Prune Test: 81.55, Prune Validation: 82.50, Prune Sparsity: 99.29
+Mean: 10.00 ZMean: 0.10
+CESNT - Retrain Test: 96.24, Retrain Validation: 96.25, Prune Test: 93.73, Prune Validation: 93.81, Prune Sparsity: 98.48
+MSESNT - Retrain Test: 86.69, Retrain Validation: 87.30, Prune Test: 83.64, Prune Validation: 84.49, Prune Sparsity: 99.68
+Mean: 10.00 ZMean: 1.00
+CESNT - Retrain Test: 96.35, Retrain Validation: 96.18, Prune Test: 94.66, Prune Validation: 94.77, Prune Sparsity: 98.55
+MSESNT - Retrain Test: 87.83, Retrain Validation: 87.76, Prune Test: 83.15, Prune Validation: 83.63, Prune Sparsity: 99.68
+Mean: 10.00 ZMean: 10.00
+CESNT - Retrain Test: 96.38, Retrain Validation: 96.39, Prune Test: 93.65, Prune Validation: 93.77, Prune Sparsity: 98.51
+MSESNT - Retrain Test: 90.26, Retrain Validation: 90.50, Prune Test: 79.37, Prune Validation: 80.51, Prune Sparsity: 99.70
+Mean: 10.00 ZMean: 100.00
+CESNT - Retrain Test: 96.78, Retrain Validation: 96.79, Prune Test: 93.56, Prune Validation: 93.88, Prune Sparsity: 97.99
+MSESNT - Retrain Test: 93.86, Retrain Validation: 94.22, Prune Test: 48.86, Prune Validation: 49.79, Prune Sparsity: 99.72
+Mean: 10.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.31, Retrain Validation: 97.18, Prune Test: 93.11, Prune Validation: 92.78, Prune Sparsity: 96.01
+MSESNT - Retrain Test: 95.84, Retrain Validation: 95.83, Prune Test: 63.76, Prune Validation: 65.56, Prune Sparsity: 98.06
+Mean: 10.00 ZMean: 10000.00
+CESNT - Retrain Test: 97.01, Retrain Validation: 96.89, Prune Test: 89.72, Prune Validation: 90.53, Prune Sparsity: 98.34
+MSESNT - Retrain Test: 94.03, Retrain Validation: 94.07, Prune Test: 80.25, Prune Validation: 81.26, Prune Sparsity: 99.44
+Mean: 100.00 ZMean: 0.10
+CESNT - Retrain Test: 95.81, Retrain Validation: 95.69, Prune Test: 94.73, Prune Validation: 94.87, Prune Sparsity: 98.81
+MSESNT - Retrain Test: 84.41, Retrain Validation: 85.19, Prune Test: 77.10, Prune Validation: 78.25, Prune Sparsity: 99.75
+Mean: 100.00 ZMean: 1.00
+CESNT - Retrain Test: 95.99, Retrain Validation: 96.01, Prune Test: 94.37, Prune Validation: 94.48, Prune Sparsity: 98.79
+MSESNT - Retrain Test: 84.41, Retrain Validation: 85.02, Prune Test: 74.66, Prune Validation: 75.85, Prune Sparsity: 99.76
+Mean: 100.00 ZMean: 10.00
+CESNT - Retrain Test: 95.96, Retrain Validation: 95.98, Prune Test: 93.53, Prune Validation: 93.35, Prune Sparsity: 98.76
+MSESNT - Retrain Test: 89.08, Retrain Validation: 89.40, Prune Test: 74.44, Prune Validation: 76.31, Prune Sparsity: 99.74
+Mean: 100.00 ZMean: 100.00
+CESNT - Retrain Test: 96.61, Retrain Validation: 96.79, Prune Test: 95.30, Prune Validation: 95.56, Prune Sparsity: 95.97
+MSESNT - Retrain Test: 93.77, Retrain Validation: 93.83, Prune Test: 55.67, Prune Validation: 55.51, Prune Sparsity: 99.61
+Mean: 100.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.09, Retrain Validation: 97.19, Prune Test: 94.43, Prune Validation: 94.34, Prune Sparsity: 90.32
+MSESNT - Retrain Test: 95.33, Retrain Validation: 95.56, Prune Test: 55.40, Prune Validation: 56.15, Prune Sparsity: 99.49
+Mean: 100.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.68, Retrain Validation: 96.76, Prune Test: 95.16, Prune Validation: 95.38, Prune Sparsity: 96.74
+MSESNT - Retrain Test: 93.25, Retrain Validation: 93.69, Prune Test: 46.96, Prune Validation: 47.22, Prune Sparsity: 99.80
+Mean: 1000.00 ZMean: 0.10
+CESNT - Retrain Test: 94.68, Retrain Validation: 95.04, Prune Test: 93.75, Prune Validation: 93.43, Prune Sparsity: 99.02
+MSESNT - Retrain Test: 82.18, Retrain Validation: 82.82, Prune Test: 76.19, Prune Validation: 77.04, Prune Sparsity: 99.75
+Mean: 1000.00 ZMean: 1.00
+CESNT - Retrain Test: 95.57, Retrain Validation: 95.28, Prune Test: 93.54, Prune Validation: 93.37, Prune Sparsity: 98.98
+MSESNT - Retrain Test: 84.20, Retrain Validation: 84.38, Prune Test: 79.29, Prune Validation: 80.28, Prune Sparsity: 99.76
+Mean: 1000.00 ZMean: 10.00
+CESNT - Retrain Test: 95.35, Retrain Validation: 95.41, Prune Test: 91.66, Prune Validation: 91.53, Prune Sparsity: 99.07
+MSESNT - Retrain Test: 88.65, Retrain Validation: 89.14, Prune Test: 55.65, Prune Validation: 56.30, Prune Sparsity: 99.77
+Mean: 1000.00 ZMean: 100.00
+CESNT - Retrain Test: 96.63, Retrain Validation: 96.61, Prune Test: 85.51, Prune Validation: 86.27, Prune Sparsity: 98.52
+MSESNT - Retrain Test: 94.02, Retrain Validation: 93.98, Prune Test: 20.83, Prune Validation: 21.95, Prune Sparsity: 99.80
+Mean: 1000.00 ZMean: 1000.00
+CESNT - Retrain Test: 97.00, Retrain Validation: 97.04, Prune Test: 49.05, Prune Validation: 48.96, Prune Sparsity: 99.42
+MSESNT - Retrain Test: 95.17, Retrain Validation: 95.36, Prune Test: 17.80, Prune Validation: 16.71, Prune Sparsity: 99.85
+Mean: 1000.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.77, Retrain Validation: 96.86, Prune Test: 80.34, Prune Validation: 80.39, Prune Sparsity: 98.79
+MSESNT - Retrain Test: 93.36, Retrain Validation: 93.63, Prune Test: 18.88, Prune Validation: 18.63, Prune Sparsity: 99.81
+Mean: 10000.00 ZMean: 0.10
+CESNT - Retrain Test: 92.98, Retrain Validation: 93.14, Prune Test: 87.75, Prune Validation: 87.85, Prune Sparsity: 99.13
+MSESNT - Retrain Test: 69.66, Retrain Validation: 69.90, Prune Test: 46.93, Prune Validation: 46.78, Prune Sparsity: 99.79
+Mean: 10000.00 ZMean: 1.00
+CESNT - Retrain Test: 93.39, Retrain Validation: 93.58, Prune Test: 83.22, Prune Validation: 83.45, Prune Sparsity: 99.19
+MSESNT - Retrain Test: 73.41, Retrain Validation: 74.73, Prune Test: 36.02, Prune Validation: 36.25, Prune Sparsity: 99.79
+Mean: 10000.00 ZMean: 10.00
+CESNT - Retrain Test: 94.85, Retrain Validation: 94.75, Prune Test: 75.70, Prune Validation: 76.31, Prune Sparsity: 99.14
+MSESNT - Retrain Test: 85.36, Retrain Validation: 85.45, Prune Test: 35.36, Prune Validation: 35.45, Prune Sparsity: 99.79
+Mean: 10000.00 ZMean: 100.00
+CESNT - Retrain Test: 96.64, Retrain Validation: 96.71, Prune Test: 33.80, Prune Validation: 33.59, Prune Sparsity: 99.43
+MSESNT - Retrain Test: 92.24, Retrain Validation: 92.53, Prune Test: 23.91, Prune Validation: 23.92, Prune Sparsity: 99.82
+Mean: 10000.00 ZMean: 1000.00
+CESNT - Retrain Test: 96.78, Retrain Validation: 96.74, Prune Test: 31.54, Prune Validation: 31.83, Prune Sparsity: 99.50
+MSESNT - Retrain Test: 94.85, Retrain Validation: 95.18, Prune Test: 15.85, Prune Validation: 14.90, Prune Sparsity: 99.86
+Mean: 10000.00 ZMean: 10000.00
+CESNT - Retrain Test: 96.38, Retrain Validation: 96.65, Prune Test: 64.24, Prune Validation: 63.88, Prune Sparsity: 98.95
+MSESNT - Retrain Test: 91.92, Retrain Validation: 91.90, Prune Test: 18.85, Prune Validation: 18.84, Prune Sparsity: 99.84
+===
+SWS + KD
+===
+Mean: 0.10 ZMean: 0.10
+CEST - Retrain Test: 97.64, Retrain Validation: 97.46, Prune Test: 95.91, Prune Validation: 95.74, Prune Sparsity: 95.75
+MSEST - Retrain Test: 94.45, Retrain Validation: 94.68, Prune Test: 92.76, Prune Validation: 93.01, Prune Sparsity: 99.08
+MSEL - Retrain Test: 48.03, Retrain Validation: 48.74, Prune Test: 32.19, Prune Validation: 31.78, Prune Sparsity: 45.19
+Mean: 0.10 ZMean: 1.00
+CEST - Retrain Test: 97.65, Retrain Validation: 97.46, Prune Test: 95.62, Prune Validation: 95.50, Prune Sparsity: 96.64
+MSEST - Retrain Test: 94.63, Retrain Validation: 94.75, Prune Test: 93.24, Prune Validation: 93.37, Prune Sparsity: 99.07
+MSEL - Retrain Test: 81.61, Retrain Validation: 82.78, Prune Test: 43.68, Prune Validation: 45.05, Prune Sparsity: 46.82
+Mean: 0.10 ZMean: 10.00
+CEST - Retrain Test: 97.55, Retrain Validation: 97.60, Prune Test: 94.93, Prune Validation: 94.69, Prune Sparsity: 96.55
+MSEST - Retrain Test: 94.79, Retrain Validation: 94.71, Prune Test: 92.54, Prune Validation: 92.70, Prune Sparsity: 99.09
+MSEL - Retrain Test: 73.96, Retrain Validation: 74.55, Prune Test: 47.23, Prune Validation: 48.74, Prune Sparsity: 47.02
+Mean: 0.10 ZMean: 100.00
+CEST - Retrain Test: 97.73, Retrain Validation: 97.77, Prune Test: 84.94, Prune Validation: 83.59, Prune Sparsity: 98.28
+MSEST - Retrain Test: 95.99, Retrain Validation: 96.06, Prune Test: 92.87, Prune Validation: 93.33, Prune Sparsity: 98.46
+MSEL - Retrain Test: 39.71, Retrain Validation: 40.98, Prune Test: 31.08, Prune Validation: 31.47, Prune Sparsity: 44.64
+Mean: 0.10 ZMean: 1000.00
+CEST - Retrain Test: 97.96, Retrain Validation: 97.83, Prune Test: 88.83, Prune Validation: 89.01, Prune Sparsity: 98.19
+MSEST - Retrain Test: 96.81, Retrain Validation: 96.73, Prune Test: 94.75, Prune Validation: 94.69, Prune Sparsity: 96.14
+MSEL - Retrain Test: 45.06, Retrain Validation: 45.73, Prune Test: 47.06, Prune Validation: 50.50, Prune Sparsity: 65.80
+Mean: 0.10 ZMean: 10000.00
+CEST - Retrain Test: 97.84, Retrain Validation: 97.75, Prune Test: 97.45, Prune Validation: 97.28, Prune Sparsity: 95.45
+MSEST - Retrain Test: 96.04, Retrain Validation: 96.00, Prune Test: 93.58, Prune Validation: 93.29, Prune Sparsity: 98.41
+MSEL - Retrain Test: 81.58, Retrain Validation: 82.26, Prune Test: 44.73, Prune Validation: 46.05, Prune Sparsity: 66.33
+Mean: 1.00 ZMean: 0.10
+CEST - Retrain Test: 97.71, Retrain Validation: 97.52, Prune Test: 96.37, Prune Validation: 96.39, Prune Sparsity: 95.12
+MSEST - Retrain Test: 94.50, Retrain Validation: 94.66, Prune Test: 92.76, Prune Validation: 93.17, Prune Sparsity: 99.07
+MSEL - Retrain Test: 25.51, Retrain Validation: 27.39, Prune Test: 29.27, Prune Validation: 31.20, Prune Sparsity: 45.49
+Mean: 1.00 ZMean: 1.00
+CEST - Retrain Test: 97.62, Retrain Validation: 97.57, Prune Test: 94.28, Prune Validation: 93.97, Prune Sparsity: 96.36
+MSEST - Retrain Test: 94.72, Retrain Validation: 94.70, Prune Test: 92.62, Prune Validation: 93.01, Prune Sparsity: 99.08
+MSEL - Retrain Test: 24.59, Retrain Validation: 26.20, Prune Test: 25.84, Prune Validation: 26.75, Prune Sparsity: 45.44
+Mean: 1.00 ZMean: 10.00
+CEST - Retrain Test: 97.79, Retrain Validation: 97.54, Prune Test: 95.14, Prune Validation: 95.49, Prune Sparsity: 93.24
+MSEST - Retrain Test: 94.89, Retrain Validation: 95.05, Prune Test: 91.93, Prune Validation: 92.73, Prune Sparsity: 99.07
+MSEL - Retrain Test: 24.52, Retrain Validation: 26.29, Prune Test: 33.27, Prune Validation: 34.48, Prune Sparsity: 45.95
+Mean: 1.00 ZMean: 100.00
+CEST - Retrain Test: 97.67, Retrain Validation: 97.71, Prune Test: 83.32, Prune Validation: 82.60, Prune Sparsity: 98.14
+MSEST - Retrain Test: 96.20, Retrain Validation: 95.90, Prune Test: 92.99, Prune Validation: 92.76, Prune Sparsity: 98.55
+MSEL - Retrain Test: 23.68, Retrain Validation: 25.40, Prune Test: 24.35, Prune Validation: 25.46, Prune Sparsity: 45.44
+Mean: 1.00 ZMean: 1000.00
+CEST - Retrain Test: 97.97, Retrain Validation: 97.79, Prune Test: 97.39, Prune Validation: 97.52, Prune Sparsity: 91.22
+MSEST - Retrain Test: 96.69, Retrain Validation: 96.88, Prune Test: 93.95, Prune Validation: 94.09, Prune Sparsity: 96.01
+MSEL - Retrain Test: 28.03, Retrain Validation: 29.66, Prune Test: 37.62, Prune Validation: 39.05, Prune Sparsity: 68.50
+Mean: 1.00 ZMean: 10000.00
+CEST - Retrain Test: 97.89, Retrain Validation: 97.61, Prune Test: 97.30, Prune Validation: 96.98, Prune Sparsity: 95.42
+MSEST - Retrain Test: 96.07, Retrain Validation: 95.93, Prune Test: 93.26, Prune Validation: 93.45, Prune Sparsity: 98.18
+MSEL - Retrain Test: 68.72, Retrain Validation: 70.48, Prune Test: 35.15, Prune Validation: 35.61, Prune Sparsity: 66.49
+Mean: 10.00 ZMean: 0.10
+CEST - Retrain Test: 97.66, Retrain Validation: 97.64, Prune Test: 96.70, Prune Validation: 96.89, Prune Sparsity: 93.85
+MSEST - Retrain Test: 94.24, Retrain Validation: 94.60, Prune Test: 93.57, Prune Validation: 93.74, Prune Sparsity: 99.08
+MSEL - Retrain Test: 29.55, Retrain Validation: 30.76, Prune Test: 33.56, Prune Validation: 35.70, Prune Sparsity: 47.56
+Mean: 10.00 ZMean: 1.00
+CEST - Retrain Test: 97.60, Retrain Validation: 97.40, Prune Test: 96.93, Prune Validation: 96.54, Prune Sparsity: 93.48
+MSEST - Retrain Test: 94.61, Retrain Validation: 94.65, Prune Test: 92.52, Prune Validation: 92.80, Prune Sparsity: 99.08
+MSEL - Retrain Test: 22.19, Retrain Validation: 24.08, Prune Test: 27.20, Prune Validation: 28.45, Prune Sparsity: 47.25
+Mean: 10.00 ZMean: 10.00
+CEST - Retrain Test: 97.63, Retrain Validation: 97.56, Prune Test: 96.72, Prune Validation: 96.61, Prune Sparsity: 92.68
+MSEST - Retrain Test: 94.55, Retrain Validation: 94.78, Prune Test: 92.24, Prune Validation: 92.13, Prune Sparsity: 99.09
+MSEL - Retrain Test: 29.46, Retrain Validation: 30.40, Prune Test: 24.31, Prune Validation: 26.77, Prune Sparsity: 47.34
+Mean: 10.00 ZMean: 100.00
+CEST - Retrain Test: 97.81, Retrain Validation: 97.71, Prune Test: 92.83, Prune Validation: 92.96, Prune Sparsity: 91.41
+MSEST - Retrain Test: 96.02, Retrain Validation: 95.97, Prune Test: 90.03, Prune Validation: 90.70, Prune Sparsity: 98.80
+MSEL - Retrain Test: 28.93, Retrain Validation: 30.54, Prune Test: 29.72, Prune Validation: 31.87, Prune Sparsity: 47.45
+Mean: 10.00 ZMean: 1000.00
+CEST - Retrain Test: 97.85, Retrain Validation: 97.79, Prune Test: 92.75, Prune Validation: 93.22, Prune Sparsity: 92.28
+MSEST - Retrain Test: 96.70, Retrain Validation: 96.86, Prune Test: 92.44, Prune Validation: 92.35, Prune Sparsity: 96.89
+MSEL - Retrain Test: 27.96, Retrain Validation: 29.57, Prune Test: 38.06, Prune Validation: 39.01, Prune Sparsity: 47.33
+Mean: 10.00 ZMean: 10000.00
+CEST - Retrain Test: 97.81, Retrain Validation: 97.65, Prune Test: 97.36, Prune Validation: 97.09, Prune Sparsity: 95.80
+MSEST - Retrain Test: 96.16, Retrain Validation: 96.11, Prune Test: 92.52, Prune Validation: 92.68, Prune Sparsity: 98.67
+MSEL - Retrain Test: 32.76, Retrain Validation: 34.00, Prune Test: 39.15, Prune Validation: 39.67, Prune Sparsity: 46.94
+Mean: 100.00 ZMean: 0.10
+CEST - Retrain Test: 97.74, Retrain Validation: 97.63, Prune Test: 97.09, Prune Validation: 97.10, Prune Sparsity: 88.75
+MSEST - Retrain Test: 93.62, Retrain Validation: 93.58, Prune Test: 91.43, Prune Validation: 91.68, Prune Sparsity: 99.27
+MSEL - Retrain Test: 40.57, Retrain Validation: 41.07, Prune Test: 34.98, Prune Validation: 35.46, Prune Sparsity: 37.60
+Mean: 100.00 ZMean: 1.00
+CEST - Retrain Test: 97.77, Retrain Validation: 97.55, Prune Test: 97.48, Prune Validation: 97.35, Prune Sparsity: 88.16
+MSEST - Retrain Test: 93.74, Retrain Validation: 93.49, Prune Test: 92.23, Prune Validation: 92.37, Prune Sparsity: 99.28
+MSEL - Retrain Test: 41.61, Retrain Validation: 42.76, Prune Test: 36.18, Prune Validation: 36.72, Prune Sparsity: 37.86
+Mean: 100.00 ZMean: 10.00
+CEST - Retrain Test: 97.75, Retrain Validation: 97.60, Prune Test: 97.16, Prune Validation: 97.35, Prune Sparsity: 89.52
+MSEST - Retrain Test: 93.89, Retrain Validation: 94.05, Prune Test: 91.33, Prune Validation: 91.59, Prune Sparsity: 99.29
+MSEL - Retrain Test: 41.95, Retrain Validation: 42.96, Prune Test: 39.35, Prune Validation: 41.03, Prune Sparsity: 38.00
+Mean: 100.00 ZMean: 100.00
+CEST - Retrain Test: 97.88, Retrain Validation: 97.78, Prune Test: 97.03, Prune Validation: 96.93, Prune Sparsity: 84.72
+MSEST - Retrain Test: 95.58, Retrain Validation: 95.44, Prune Test: 82.21, Prune Validation: 84.05, Prune Sparsity: 98.73
+MSEL - Retrain Test: 46.64, Retrain Validation: 47.77, Prune Test: 37.43, Prune Validation: 37.81, Prune Sparsity: 37.70
+Mean: 100.00 ZMean: 1000.00
+CEST - Retrain Test: 97.95, Retrain Validation: 97.73, Prune Test: 97.54, Prune Validation: 97.47, Prune Sparsity: 86.52
+MSEST - Retrain Test: 96.56, Retrain Validation: 96.67, Prune Test: 34.06, Prune Validation: 35.55, Prune Sparsity: 99.52
+MSEL - Retrain Test: 76.79, Retrain Validation: 77.24, Prune Test: 41.23, Prune Validation: 42.32, Prune Sparsity: 41.82
+Mean: 100.00 ZMean: 10000.00
+CEST - Retrain Test: 97.86, Retrain Validation: 97.60, Prune Test: 97.25, Prune Validation: 97.10, Prune Sparsity: 96.09
+MSEST - Retrain Test: 95.61, Retrain Validation: 95.62, Prune Test: 77.40, Prune Validation: 78.84, Prune Sparsity: 99.34
+MSEL - Retrain Test: 75.38, Retrain Validation: 76.29, Prune Test: 51.58, Prune Validation: 53.03, Prune Sparsity: 61.44
+Mean: 1000.00 ZMean: 0.10
+CEST - Retrain Test: 97.73, Retrain Validation: 97.53, Prune Test: 96.71, Prune Validation: 96.41, Prune Sparsity: 86.68
+MSEST - Retrain Test: 91.93, Retrain Validation: 92.01, Prune Test: 90.65, Prune Validation: 90.78, Prune Sparsity: 99.33
+MSEL - Retrain Test: 44.36, Retrain Validation: 44.92, Prune Test: 37.83, Prune Validation: 38.47, Prune Sparsity: 37.69
+Mean: 1000.00 ZMean: 1.00
+CEST - Retrain Test: 97.82, Retrain Validation: 97.48, Prune Test: 95.33, Prune Validation: 95.12, Prune Sparsity: 89.11
+MSEST - Retrain Test: 91.74, Retrain Validation: 92.16, Prune Test: 89.59, Prune Validation: 89.78, Prune Sparsity: 99.34
+MSEL - Retrain Test: 46.08, Retrain Validation: 47.84, Prune Test: 37.44, Prune Validation: 37.85, Prune Sparsity: 37.38
+Mean: 1000.00 ZMean: 10.00
+CEST - Retrain Test: 97.97, Retrain Validation: 97.60, Prune Test: 97.43, Prune Validation: 97.15, Prune Sparsity: 82.98
+MSEST - Retrain Test: 93.44, Retrain Validation: 93.80, Prune Test: 88.27, Prune Validation: 88.14, Prune Sparsity: 99.33
+MSEL - Retrain Test: 45.01, Retrain Validation: 46.04, Prune Test: 36.83, Prune Validation: 36.57, Prune Sparsity: 37.71
+Mean: 1000.00 ZMean: 100.00
+CEST - Retrain Test: 97.78, Retrain Validation: 97.54, Prune Test: 96.50, Prune Validation: 96.29, Prune Sparsity: 80.14
+MSEST - Retrain Test: 95.51, Retrain Validation: 95.58, Prune Test: 57.60, Prune Validation: 57.69, Prune Sparsity: 99.41
+MSEL - Retrain Test: 45.35, Retrain Validation: 46.08, Prune Test: 35.03, Prune Validation: 34.17, Prune Sparsity: 37.36
+Mean: 1000.00 ZMean: 1000.00
+CEST - Retrain Test: 97.84, Retrain Validation: 97.62, Prune Test: 97.13, Prune Validation: 96.95, Prune Sparsity: 83.44
+MSEST - Retrain Test: 96.74, Retrain Validation: 96.68, Prune Test: 31.61, Prune Validation: 32.14, Prune Sparsity: 99.53
+MSEL - Retrain Test: 79.02, Retrain Validation: 80.13, Prune Test: 44.82, Prune Validation: 45.60, Prune Sparsity: 40.73
+Mean: 1000.00 ZMean: 10000.00
+CEST - Retrain Test: 97.81, Retrain Validation: 97.65, Prune Test: 97.18, Prune Validation: 97.07, Prune Sparsity: 95.94
+MSEST - Retrain Test: 95.82, Retrain Validation: 95.76, Prune Test: 52.08, Prune Validation: 51.69, Prune Sparsity: 99.35
+MSEL - Retrain Test: 76.57, Retrain Validation: 78.12, Prune Test: 16.30, Prune Validation: 16.94, Prune Sparsity: 65.86
+Mean: 10000.00 ZMean: 0.10
+CEST - Retrain Test: 97.76, Retrain Validation: 97.58, Prune Test: 96.00, Prune Validation: 95.70, Prune Sparsity: 76.62
+MSEST - Retrain Test: 88.74, Retrain Validation: 88.96, Prune Test: 82.94, Prune Validation: 83.30, Prune Sparsity: 99.38
+MSEL - Retrain Test: 33.38, Retrain Validation: 34.71, Prune Test: 33.94, Prune Validation: 34.01, Prune Sparsity: 37.55
+Mean: 10000.00 ZMean: 1.00
+CEST - Retrain Test: 97.85, Retrain Validation: 97.51, Prune Test: 96.25, Prune Validation: 95.89, Prune Sparsity: 78.02
+MSEST - Retrain Test: 89.40, Retrain Validation: 89.61, Prune Test: 81.51, Prune Validation: 81.86, Prune Sparsity: 99.37
+MSEL - Retrain Test: 36.42, Retrain Validation: 38.05, Prune Test: 36.68, Prune Validation: 37.53, Prune Sparsity: 37.63
+Mean: 10000.00 ZMean: 10.00
+CEST - Retrain Test: 97.91, Retrain Validation: 97.61, Prune Test: 95.85, Prune Validation: 95.58, Prune Sparsity: 77.54
+MSEST - Retrain Test: 91.99, Retrain Validation: 91.92, Prune Test: 74.61, Prune Validation: 74.10, Prune Sparsity: 99.37
+MSEL - Retrain Test: 43.95, Retrain Validation: 44.67, Prune Test: 26.70, Prune Validation: 26.60, Prune Sparsity: 37.63
+Mean: 10000.00 ZMean: 100.00
+CEST - Retrain Test: 97.84, Retrain Validation: 97.65, Prune Test: 95.68, Prune Validation: 95.77, Prune Sparsity: 76.84
+MSEST - Retrain Test: 95.05, Retrain Validation: 95.31, Prune Test: 53.69, Prune Validation: 54.28, Prune Sparsity: 99.43
+MSEL - Retrain Test: 44.60, Retrain Validation: 44.78, Prune Test: 30.23, Prune Validation: 30.41, Prune Sparsity: 37.64
+Mean: 10000.00 ZMean: 1000.00
+CEST - Retrain Test: 97.78, Retrain Validation: 97.63, Prune Test: 96.48, Prune Validation: 96.62, Prune Sparsity: 80.77
+MSEST - Retrain Test: 96.50, Retrain Validation: 96.33, Prune Test: 25.86, Prune Validation: 25.69, Prune Sparsity: 99.58
+MSEL - Retrain Test: 46.70, Retrain Validation: 47.07, Prune Test: 41.16, Prune Validation: 42.19, Prune Sparsity: 38.46
+Mean: 10000.00 ZMean: 10000.00
+CEST - Retrain Test: 97.54, Retrain Validation: 97.42, Prune Test: 93.34, Prune Validation: 93.42, Prune Sparsity: 96.63
+MSEST - Retrain Test: 95.35, Retrain Validation: 95.15, Prune Test: 37.45, Prune Validation: 38.44, Prune Sparsity: 99.39
+MSEL - Retrain Test: 67.14, Retrain Validation: 68.03, Prune Test: 40.94, Prune Validation: 43.58, Prune Sparsity: 64.95

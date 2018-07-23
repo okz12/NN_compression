@@ -18,7 +18,7 @@ import pickle
 import argparse
 retraining_epochs = 50
 
-def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model_save_dir = "", scaling = False):
+def retrain_model(ab, zab, tau, temp, mixtures, model_name, data_size, loss_type = 'MSESNT', model_save_dir = "", scaling = False):
     if(data_size == 'search'):
         train_dataset = search_retrain_data
         val_data_full = Variable(search_validation_data(fetch='data')).cuda()
@@ -34,7 +34,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
     model = torch.load(model_load_dir + model_file + '.m').cuda()
         
     if temp == 0:
-        loader = torch.utils.data.DataLoader(dataset=train_dataset(), batch_size=batch_size, shuffle=True)
+        loader = torch.utils.data.DataLoader(dataset=train_dataset(onehot = (loss_type == 'MSESNT')), batch_size=batch_size, shuffle=True)
     else:
         output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, "fc2" if "SWS" in model.name else "fc3"))[x_start:x_end]###
         output = (nn.Softmax(dim=1)(output/temp)).data
@@ -42,8 +42,8 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
     criterion = nn.CrossEntropyLoss()###
     
-    exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, alpha, beta, retraining_epochs, tau, int(mixtures), int(temp), data_size)
-    gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, ab = (alpha, beta), scaling = scaling)
+    exp_name = "{}_a{}_za{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, ab[0], zab[0], retraining_epochs, tau, int(mixtures), int(temp), data_size)
+    gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, zero_ab = zab, ab = ab, scaling = scaling)
     gmp.print_batch = False
 
     opt = torch.optim.Adam([
@@ -52,7 +52,7 @@ def retrain_model(alpha, beta, tau, temp, mixtures, model_name, data_size, model
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
     for epoch in range(retraining_epochs):
-        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp)
+        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp, loss_type)
 
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)

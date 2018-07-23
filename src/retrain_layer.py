@@ -21,7 +21,7 @@ from mnist_loader import search_train_data, search_retrain_data, search_validati
 from extract_targets import get_targets
 retraining_epochs = 50
 
-def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, data_size, savedir):
+def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, loss_type, data_size, savedir):
 	
 	weight_loader = model_retrain.state_dict()
 	for layer in model_retrain.state_dict():
@@ -41,7 +41,7 @@ def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_l
 
 	
 	for epoch in range(retraining_epochs):
-		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, opt, criterion, data_loader, tau, temp ** 2)
+		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, opt, criterion, data_loader, tau, temp, loss_type)
 
 		if (trueAfterN(epoch, 10)):
 			print('Epoch: {}. Loss: {:.2f}'.format(epoch+1, float(loss.data)))
@@ -60,7 +60,7 @@ def get_layer_data(target_dir, temp, layer, data_size):
 	if (data_size == "search"):
 		x_start = 40000
 		x_end = 50000
-	if (model_name = "SWSModel"):
+	if (model_name == "SWSModel"):
 		if (layer == 1):
 			layer_model = model_archs.SWSModelConv1().cuda()
 			input = Variable(train_data(fetch = "data")[x_start:x_end]).cuda()
@@ -78,7 +78,7 @@ def get_layer_data(target_dir, temp, layer, data_size):
 			input = nn.ReLU()(get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end])
 			output = get_targets(target_dir, temp, ["fc2.out"])["fc2.out"][x_start:x_end]
 
-	if (model_name = "LeNet_300_100"):
+	if (model_name == "LeNet_300_100"):
 		if (layer == 1):
 			layer_model = LeNet_300_100FC1().cuda()
 			input = Variable(train_data(fetch = "data")[x_start:x_end]).cuda()
@@ -97,7 +97,7 @@ def get_layer_data(target_dir, temp, layer, data_size):
 	loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 	return layer_model, loader
 
-def init_retrain_layer(alpha, beta, tau, temp, mixtures, model_name, data_size, layer, savedir = ""):
+def init_retrain_layer(alpha, beta, tau, temp, mixtures, model_name, data_size, layer, savedir = "", loss_type = 'MSEHNA'):
 	test_data_full =  Variable(test_data(fetch = "data")).cuda()
 	test_labels_full =  Variable(test_data(fetch = "labels")).cuda()
 	val_data_full =  Variable(search_validation_data(fetch = "data")).cuda()
@@ -109,7 +109,7 @@ def init_retrain_layer(alpha, beta, tau, temp, mixtures, model_name, data_size, 
 
 	layer_model, loader = get_layer_data(target_dir, temp, layer, data_size)
 
-	model, gmp = retrain_layer(layer_model, model_orig, loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, data_size, model_dir + model_file)
+	model, gmp = retrain_layer(layer_model, model_orig, loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, loss_type, data_size, model_dir + model_file)
 	return model, gmp
 
 if __name__ == "__main__":

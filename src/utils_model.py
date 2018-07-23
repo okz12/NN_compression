@@ -9,7 +9,7 @@ from tensorboardX import SummaryWriter
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_0
 from utils_misc import trueAfterN
 import pickle
 
@@ -91,54 +91,67 @@ class model_prune():
 		return new_state_dict   
 	
 ###
-def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp = 1.0):#, optimizer_gmp, optimizer_gmp2
+def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp = 1.0, loss_type='MSESNT'):#, optimizer_gmp, optimizer_gmp2
 	"""
 	train model
-	
 	model: neural network model
 	optimizer: optimization algorithm/configuration
 	criterion: loss function
 	train_loader: training dataset dataloader
+	temp: KD temperature - 0 for logits
+	Loss: CE, 
 	"""
-	model.train()
 	for i, (images, targets) in enumerate(train_loader):
 		#if(use_cuda):
 		images=images.cuda()
 		targets=targets.cuda()
 		images = Variable(images)
 		targets = Variable(targets)
-		# Clear gradients w.r.t. parameters
 		optimizer.zero_grad()
-		#optimizer_gmp.zero_grad()
-		#optimizer_gmp2.zero_grad()
 		# Forward pass to get output/logits
-		if (temp==0):
-			outputs = nn.Softmax(dim=1)(model(images))
-			loss = criterion(outputs, targets) + tau * gmp.call()
-		else:
-			forward = model(images)
-			#print(forward.shape)
+		forward = model(images)
+		if (loss_type == 'CEST'):
 			outputs = nn.LogSoftmax(dim=1)(forward/temp)
-			loss_soft_target = -torch.mean(torch.sum(targets * outputs, dim=1))
-			loss = loss_soft_target + tau * gmp.call()
-			'''
-			#MSE Loss
-			outputs = nn.Softmax(dim=1)(model(images)/temp)
-			loss = nn.MSELoss()(outputs, targets) * (temp**2) + tau * gmp.call()
-			'''
-		# Calculate Loss: softmax --> cross entropy loss
-		#loss = criterion(outputs, labels) + 0.001 * ( (model.fc1.weight - 0.05).norm() + (model.fc2.weight - 0.05).norm() + (model.fc3.weight - 0.05).norm() + (model.fc1.weight + 0.05).norm() + (model.fc2.weight + 0.05).norm() + (model.fc3.weight + 0.05).norm())
-		
-		#print (criterion(outputs, labels))
-		#print (gmp.call())
-		# Getting gradients w.r.t. parameters		
-		#print( float(loss), float(gmp_loss) )
-		
+			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp
+
+		if (loss_type == 'CESNT'):
+			outputs = nn.Softmax(dim=1)(forward)
+			loss_acc = nn.CrossEntropyLoss()(outputs, targets)
+
+		if (loss_type == 'CESH'):
+			outputs = nn.LogSoftmax(dim=1)((nn.ReLU()(forward))/temp)
+			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp
+
+		if (loss_type == 'MSEST'):
+			outputs = nn.Softmax(dim=1)(forward/temp)
+			loss_acc = nn.MSELoss()(outputs, targets) * temp
+
+		if (loss_type == 'MSESNT'):
+			outputs = nn.Softmax(dim=1)(forward)
+			loss_acc = nn.MSELoss()(outputs, targets.float())
+
+		if (loss_type == 'MSEHA'):
+			outputs = nn.ReLU()(forward)
+			loss_acc = nn.MSELoss()(outputs, targets)
+			
+		if (loss_type == 'MSEHNA' or loss_type == 'MSEL'):
+			outputs = forward
+			loss_acc = nn.MSELoss()(outputs, targets)
+			
+		#Loss = CE | MSE , OP type = S | H | L, Temp = T | NT
+		#CE - MSE
+		#Logits - Temp - Hidden
+		#CE Temp - div by temp - softmax - CE loss - mult by temp
+		#CE No-Temp - softmax - CE loss
+		#CE Hidden (exp) - div by temp - ReLU + softmax - CE Loss mult by temp (experimental)
+		#MSE Temp - div by temp - softmax - MSE Loss - mult by temp
+		#MSE No-Temp - no temp - softmax - MSE Loss - mult by temp
+		#MSE Hidden Activation - no temp - ReLU - MSE Loss - no mult by temp
+		#MSE Logit / Hidden No Act - no temp - MSE Loss - no mult by temp
+		loss = loss_acc + tau * gmp.call()
 		loss.backward()
 		# Updating parameters
 		optimizer.step()
-		#optimizer_gmp.step()
-		#optimizer_gmp2.step()
 	return model, loss
     
 def train_epoch(model, optimizer, criterion, train_loader):
@@ -176,19 +189,34 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	model_prune.load_state_dict(sws_prune_l2(model_prune, gmp))
 
 	weight_loader = copy.deepcopy(model_orig.state_dict())
-	sp_zeroes = 0
-	sp_elem = 0
 	for layer in model_prune.state_dict():
 		weight_loader[layer] = model_prune.state_dict()[layer]
-		sp_zeroes += float((model_prune.state_dict()[layer].view(-1) == 0).sum())
-		sp_elem += float(model_prune.state_dict()[layer].view(-1).numel())
-	sp = sp_zeroes/sp_elem * 100.0
 	model_acc.load_state_dict(weight_loader)
 	prune_acc = (test_accuracy(data, labels, model_acc))
 	model_acc.load_state_dict(model_orig.state_dict())
+
+	model_prune = copy.deepcopy(model_retrain)
+	model_prune.load_state_dict(sws_prune_0(model_prune, gmp))
+
+	sp_zeroes = 0
+	sp_elem = 0
+	for layer in model_prune.state_dict():
+		sp_zeroes += float((model_prune.state_dict()[layer].view(-1) == 0).sum())
+		sp_elem += float(model_prune.state_dict()[layer].view(-1).numel())
+	sp = sp_zeroes/sp_elem * 100.0
+
+	weight_loader = copy.deepcopy(model_orig.state_dict())
+	for layer in model_prune.state_dict():
+		weight_loader[layer] = model_prune.state_dict()[layer]
+	sp = sp_zeroes/sp_elem * 100.0
+	model_acc.load_state_dict(weight_loader)
+	prune_0_acc = (test_accuracy(data, labels, model_acc))
+	model_acc.load_state_dict(model_orig.state_dict())
+
+
 	
-	print ("Original: {:.2f}% - Retrain: {:.2f}% - Prune: {:.2f}% - Sparsity: {:.2f}%".format(org_acc[0], retrain_acc[0], prune_acc[0], sp))
-	return retrain_acc[0], prune_acc[0], sp
+	print ("Original: {:.2f}% - Retrain: {:.2f}% - Prune: {:.2f}% - Quantize: {:.2f}% - Sparsity: {:.2f}%".format(org_acc[0], retrain_acc[0], prune_0_acc[0], prune_acc[0], sp))
+	return retrain_acc[0], prune_0_acc[0], prune_acc[0], sp
 	
 def sws_replace(model_orig, conv1, conv2, fc1, fc2):
     new_model = copy.deepcopy(model_orig)
