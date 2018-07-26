@@ -15,15 +15,19 @@ import pickle
 
 
 ###Training and testing NN
-def test_accuracy(data, labels, model):
+def test_accuracy(data, labels, model, loss_type='CE'):
 	outputs = model(data)
-	loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
+	if loss_type == 'CE':
+		loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
+	else:
+		loss = nn.MSELoss(outputs, labels).data[0]
 	_, predicted = torch.max(outputs.data, 1)
 	correct = (predicted == labels.data).sum()
 	accuracy = 100.0 * correct/len(labels)
 	return accuracy, loss
 	
 def train_epoch(model, optimizer, criterion, train_loader):
+	loss_total = 0
 	for i, (images, labels) in enumerate(train_loader):
 		#if(use_cuda):
 		images=images.cuda()
@@ -36,11 +40,38 @@ def train_epoch(model, optimizer, criterion, train_loader):
 		outputs = nn.Softmax(dim=1)(model(images))
 		# Calculate Loss: softmax --> cross entropy loss
 		loss = criterion(outputs, labels)
+		loss_total += float(loss[0])
 		# Getting gradients w.r.t. parameters
 		loss.backward()
 		# Updating parameters
 		optimizer.step()
-	return model, loss
+	return model, loss_total
+
+def train_epoch_l2(model, optimizer, criterion, train_loader, w = 0.0001):
+	loss_total = 0
+	complexity_loss = Variable(torch.Tensor([0])).cuda()
+	for i, (images, labels) in enumerate(train_loader):
+		#if(use_cuda):
+		images=images.cuda()
+		labels=labels.cuda()
+		images = Variable(images)
+		labels = Variable(labels)
+		# Clear gradients w.r.t. parameters
+		optimizer.zero_grad()
+		for layer in model.state_dict():
+			complexity_loss += torch.pow(model.state_dict()[layer], 2).sum()
+		# Forward pass to get output/logits
+		outputs = nn.Softmax(dim=1)(model(images))
+		# Calculate Loss: softmax --> cross entropy loss
+		loss_acc = criterion(outputs, labels)
+		#loss_total += float(loss_acc[0])
+		
+		loss = loss_acc + w * complexity_loss
+		# Getting gradients w.r.t. parameters
+		loss.backward()
+		# Updating parameters
+		optimizer.step()
+	return model, loss_total
 
 ###
 

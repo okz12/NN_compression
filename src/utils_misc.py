@@ -23,3 +23,18 @@ def nplogsumexp(ns):
     ds = ns - max_val
     sumOfExp = np.exp(ds).sum()
     return max_val + np.log(sumOfExp)
+
+
+def get_sparsity(model_prune):
+    sp_zeroes = 0
+    sp_elem = 0
+    for layer in model_prune.state_dict():
+        sp_zeroes += float((model_prune.state_dict()[layer].view(-1) == 0).sum())
+        sp_elem += float(model_prune.state_dict()[layer].view(-1).numel())
+    sp = sp_zeroes/sp_elem * 100.0
+    return sp
+    
+def get_ab(mean, var):
+    beta = mean/var
+    alpha = mean * beta
+    return (alpha, beta)

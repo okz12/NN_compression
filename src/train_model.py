@@ -28,7 +28,7 @@ def train_model(model_name, data_size, training_epochs):
     else:
         model = model_archs.LeNet_300_100().cuda()
 
-    print ("Model Name: {} Epochs: {} Data: {}".format(model.name, training_epochs, args.data))
+    print ("Model Name: {} Epochs: {} Data: {}".format(model.name, training_epochs, data_size))
     print_dims(model)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay = 0.000)
