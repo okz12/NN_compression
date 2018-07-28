@@ -292,6 +292,12 @@ def sws_prune(model, gmp):
         dim_start += elems
     return pruned_state_dict
 
+def sws_prune_copy(model, gmp):
+    new_model = copy.deepcopy(model)
+    state_dict = sws_prune(model, gmp)
+    new_model.load_state_dict(state_dict)
+    return new_model
+
 class compressed_model():
     def __init__(self, state_dict, gmp_list):
         gmp_means = []

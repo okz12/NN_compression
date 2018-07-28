@@ -241,6 +241,6 @@ class LeNet_300_100FC3(nn.Module):
 		self.fc3 = nn.Linear(100,10)
 	
 	def forward(self, x):
-		x = x.view(-1)
+		#x = x.view(-1, 10)
 		out = self.fc3(x)
 		return out
