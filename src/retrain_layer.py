@@ -13,48 +13,69 @@ import argparse
 
 model_dir = "./models/"
 import model_archs
-from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot
+from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot, plot_data
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, layer_accuracy
-from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2
+from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from extract_targets import get_targets
 retraining_epochs = 50
 
-def retrain_layer(model_retrain, model_orig, data_loader, test_data_full, test_labels_full, alpha, beta, tau, mixtures, temp, loss_type, data_size, savedir):
+def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_size = 'search', model_name = 'LeNet_300_100', loss_type = 'MSEHA', savedir = ""):
+	ab = get_ab(mean, var)
+	zab = get_ab(zmean, zvar)
+
+	model_file = 'mnist_{}_{}_{}'.format(model_name, 100, data_size)
+	full_model = torch.load(model_load_dir + model_file + ".m")
+	layer_model, loader = get_layer_data(model_name, model_file, 0, layer, data_size)
 	
-	weight_loader = model_retrain.state_dict()
-	for layer in model_retrain.state_dict():
-		weight_loader[layer] = model_orig.state_dict()[layer]
-	model_retrain.load_state_dict(weight_loader)
+	state_dict = copy.deepcopy(layer_model.state_dict())
+	for layer in state_dict:
+		state_dict[layer] = full_model.state_dict()[layer]
+	layer_model.load_state_dict(state_dict)
 
-	exp_name = "{}_a{}_b{}_r{}_t{}_m{}_kdT{}_{}".format(model_retrain.name, alpha, beta, retraining_epochs, tau, int(mixtures), int(temp), data_size)
-	gmp = GaussianMixturePrior(mixtures, [x for x in model_retrain.parameters()], 0.99, ab = (alpha, beta), scaling = False)
+	exp_name = "{}_m{}_zm{}_r{}_t{}_m{}_kdT{}_{}".format(layer_model.name, mean, zmean, retraining_epochs, tau, int(mixtures), int(temp), data_size)
+	gmp = GaussianMixturePrior(mixtures, [x for x in layer_model.parameters()], 0.99, zero_ab = zab, ab = ab, scaling = False)
 	gmp.print_batch = False
-
-	print ("Model Name: {}".format(model_retrain.name))
 	criterion = nn.MSELoss()
 	opt = torch.optim.Adam([
-        {'params': model_retrain.parameters(), 'lr': 1e-4},
-        {'params': [gmp.means], 'lr': 1e-4},
-        {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
+		{'params': layer_model.parameters(), 'lr': 1e-4},
+		{'params': [gmp.means], 'lr': 3e-4},
+		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
-	
-	for epoch in range(retraining_epochs):
-		model_retrain, loss = retrain_sws_epoch(model_retrain, gmp, opt, criterion, data_loader, tau, temp, loss_type)
+	res_stats = plot_data(layer_model, gmp, 'layer_retrain', full_model, data_size, "CE", (mean, var), (zmean, zvar), tau, temp, mixtures)
+	for epoch in range(50):
 
-		if (trueAfterN(epoch, 10)):
+		layer_model, loss = retrain_sws_epoch(layer_model, gmp, opt, loader, tau, temp, loss_type)
+		res_stats.data_epoch(epoch+1, layer_model, gmp)
+
+		if (trueAfterN(epoch, 25)):
 			print('Epoch: {}. Loss: {:.2f}'.format(epoch+1, float(loss.data)))
-			layer_accuracy(model_retrain, gmp, model_orig, test_data_full, test_labels_full)
-			
-	if(savedir!=""):
-		torch.save(model_retrain, savedir + 'mnist_retrain_{}.m'.format(exp_name))
-		with open(savedir + 'mnist_retrain_{}_gmp.p'.format(exp_name),'wb') as f:
+			#show_sws_weights(model = layer_model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()))
+			#res = layer_accuracy(layer_model, gmp, full_model, test_data_full, test_labels_full)
+	prune_model = sws_prune_copy(layer_model, gmp)
+	res_stats.data_prune(layer_model)
+	
+	res_test = layer_accuracy(layer_model, gmp, res_stats.full_model, res_stats.test_data_full, res_stats.test_labels_full)
+	res = res_stats.gen_dict()
+	res['compress_test'] = res_test[0]
+	res['prune_test'] = res_test[2]
+	res['sparsity'] = res_test[3]
+	if (data_size == "search"):
+		res_val = layer_accuracy(layer_model, gmp, res_stats.full_model, res_stats.val_data_full, res_stats.val_labels_full)
+		res['prune_val'] = res_val[2]
+		res['compress_val'] = res_val[0]
+	
+	
+	if (savedir != ""):
+		torch.save(model, savedir + '/mnist_retrain_layer_model_{}.m'.format(exp_name))
+		with open(savedir + '/mnist_retrain_layer_gmp_{}.p'.format(exp_name),'wb') as f:
 			pickle.dump(gmp, f)
-			
-	return model_retrain, gmp
+		with open(savedir + '/mnist_retrain_layer_res_{}.p'.format(exp_name),'wb') as f:
+			pickle.dump(res, f)
+	return layer_model, gmp, res
 
-def get_layer_data(target_dir, temp, layer, data_size):
+def get_layer_data(model_name, target_dir, temp, layer, data_size):
 	x_start = 0
 	x_end = 60000
 	if (data_size == "search"):
@@ -80,16 +101,16 @@ def get_layer_data(target_dir, temp, layer, data_size):
 
 	if (model_name == "LeNet_300_100"):
 		if (layer == 1):
-			layer_model = LeNet_300_100FC1().cuda()
+			layer_model = model_archs.LeNet_300_100FC1().cuda()
 			input = Variable(train_data(fetch = "data")[x_start:x_end]).cuda()
 			output = get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end]
 		if (layer == 2):
 			layer_model = model_archs.LeNet_300_100FC2().cuda()
-			input = nn.ReLU()(get_targets(target_dir, temp, ["fc2.out"])["fc2.out"][x_start:x_end])
+			input = nn.ReLU()(get_targets(target_dir, temp, ["fc1.out"])["fc1.out"][x_start:x_end])
 			output = (get_targets(target_dir, temp, ["fc2.out"])["fc2.out"][x_start:x_end])
 		if (layer == 3):
 			layer_model = model_archs.LeNet_300_100FC3().cuda()
-			input = nn.ReLU()(get_targets(target_dir, temp, ["fc3.out"])["fc3.out"][x_start:x_end])
+			input = nn.ReLU()(get_targets(target_dir, temp, ["fc2.out"])["fc2.out"][x_start:x_end])
 			output = get_targets(target_dir, temp, ["fc3.out"])["fc3.out"][x_start:x_end]
 
 

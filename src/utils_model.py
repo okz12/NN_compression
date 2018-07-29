@@ -122,7 +122,7 @@ class model_prune():
 		return new_state_dict   
 	
 ###
-def retrain_sws_epoch(model, gmp, optimizer, criterion, train_loader, tau, temp = 1.0, loss_type='MSESNT'):#, optimizer_gmp, optimizer_gmp2
+def retrain_sws_epoch(model, gmp, optimizer, train_loader, tau, temp = 1.0, loss_type='MSESNT'):#, optimizer_gmp, optimizer_gmp2
 	"""
 	train model
 	model: neural network model

@@ -52,7 +52,7 @@ def retrain_model(ab, zab, tau, temp, mixtures, model_name, data_size, loss_type
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
     for epoch in range(retraining_epochs):
-        model, loss = retrain_sws_epoch(model, gmp, opt, criterion, loader, tau, temp, loss_type)
+        model, loss = retrain_sws_epoch(model, gmp, opt, loader, tau, temp, loss_type)
 
         if (trueAfterN(epoch, 10)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
@@ -80,6 +80,16 @@ def retrain_model(ab, zab, tau, temp, mixtures, model_name, data_size, loss_type
     sparsity = (special_flatten(model_prune.state_dict())==0).sum()/(special_flatten(model_prune.state_dict())>0).numel() * 100
     print('Retrain Test: {:.2f}, Retrain Validation: {:.2f}, Prune Test: {:.2f}, Prune Validation: {:.2f}, Prune Sparsity: {:.2f}'
           .format(test_accuracy_pre, val_accuracy_pre, test_accuracy_prune, val_accuracy, sparsity))
+
+    res_test = layer_accuracy(layer_model, gmp, res_stats.full_model, res_stats.test_data_full, res_stats.test_labels_full)
+	res = res_stats.gen_dict()
+	res['compress_test'] = res_test[0]
+	res['prune_test'] = res_test[2]
+	res['sparsity'] = res_test[3]
+	if (data_size == "search"):
+		res_val = layer_accuracy(layer_model, gmp, res_stats.full_model, res_stats.val_data_full, res_stats.val_labels_full)
+		res['prune_val'] = res_val[2]
+		res['compress_val'] = res_val[0]
     
     res = {}
     res['sparsity'] = sparsity

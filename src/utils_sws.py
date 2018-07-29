@@ -226,17 +226,17 @@ def sws_prune_0(model, gmp):
     return pruned_state_dict
 
 
-def sws_prune(model, gmp):
+def sws_prune(model_dict, gmp):
     """
     model: Model retrained with Gaussian Mixture Prior
     gmp: Gaussian mixture prior object
     returns: Pruned model state_dict
     """
     if (gmp.scaling):
-        layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model.state_dict()))]
-        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() * layer_mult[i] for i, array in enumerate(model.state_dict())])
+        layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model_dict))]
+        weights = np.concatenate([model_dict[array].clone().cpu().numpy().flatten() * layer_mult[i] for i, array in enumerate(model_dict)])
     else:
-        weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
+        weights = np.concatenate([model_dict[array].clone().cpu().numpy().flatten() for i, array in enumerate(model_dict)])
     weights = weights.reshape((len(weights), 1))
 
 
@@ -281,20 +281,20 @@ def sws_prune(model, gmp):
     argmax_responsibilities = compute_responsibilies(weights, means, logprecisions, np.exp(logpis))
     out = [means[i] for i in argmax_responsibilities]
     
-    pruned_state_dict = copy.deepcopy(model.state_dict())
+    pruned_state_dict = copy.deepcopy(model_dict)
     dim_start = 0
-    for i, layer in enumerate(model.state_dict()):
+    for i, layer in enumerate(model_dict):
         layer_mult = 1
         if (gmp.scaling):
             layer_mult = float(gmp.scale[int(i/2)].exp())
-        elems = model.state_dict()[layer].numel()
-        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) / layer_mult
+        elems = model_dict[layer].numel()
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model_dict[layer].shape)) / layer_mult
         dim_start += elems
     return pruned_state_dict
 
 def sws_prune_copy(model, gmp):
     new_model = copy.deepcopy(model)
-    state_dict = sws_prune(model, gmp)
+    state_dict = sws_prune(model.state_dict(), gmp)
     new_model.load_state_dict(state_dict)
     return new_model
 
@@ -389,3 +389,66 @@ class compressed_model():
                 min_idx_size = index_size + weight_size
                 min_idx_bit = index_bits
         return ((full_size / (codebook_size + min_idx_size)), min_idx_bit)
+
+def clamp_weights(model, means):
+    weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
+    sorted_means = np.sort(means)
+    bins = (sorted_means[1:] + sorted_means[:-1])/2
+    new_means = []
+    for i, b in enumerate(bins):
+        if (i==0):
+            if (np.where(weights < b)[0].size > 0):
+                new_mean = (weights[np.where(weights < b)].sum()) / (np.where(weights < b)[0].size)
+                weights[np.where(weights < b)] = new_mean
+                new_means.append(new_mean)
+                
+            else:
+                new_means.append(sorted_means[i])
+        elif (i== len(bins)-1):
+            if (np.where(weights > b)[0].size > 0):
+                new_mean = (weights[np.where(weights > b)].sum()) / (np.where(weights > b)[0].size)
+                weights[np.where(weights > b)] = new_mean
+                new_means.append(new_mean)
+            else:
+                new_means.append(sorted_means[i])
+            
+            if (np.where(np.logical_and(weights < b, weights > prev_b))[0].size > 0):
+                new_mean = (weights[np.where(np.logical_and(weights < b, weights > prev_b))].sum()) / (np.where(np.logical_and(weights < b, weights > prev_b))[0].size)
+                new_means.append(new_mean)
+                weights[np.where(np.logical_and(weights < b, weights > prev_b))] = new_mean
+                #weights[np.where(weights > b)] = new_mean
+                #weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
+            else:
+                new_means.append(sorted_means[i])
+            
+        else:
+            if (np.where(np.logical_and(weights < b, weights > prev_b))[0].size > 0):
+                if (0 < b and 0 > prev_b):
+                    new_mean = 0
+                else:
+                    new_mean = weights[np.where(np.logical_and(weights < b, weights > prev_b))].sum() / np.where(np.logical_and(weights < b, weights > prev_b))[0].size
+                weights[np.where(np.logical_and(weights < b, weights > prev_b))] = new_mean
+                new_means.append(new_mean)
+            else:
+                new_means.append(sorted_means[i])
+        #print (new_means)
+        prev_b = b
+    out = weights
+    pruned_state_dict = copy.deepcopy(model.state_dict())
+    dim_start = 0
+    for i, layer in enumerate(model.state_dict()):
+        elems = model.state_dict()[layer].numel()
+        pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape))
+        dim_start += elems
+
+    model.load_state_dict(pruned_state_dict)
+    return (model, np.array(new_means))
+
+def sws_replace(model_orig, layer_models):
+    new_model = copy.deepcopy(model_orig)
+    new_dict = new_model.state_dict()
+    for model_dict in layer_models:
+        for layer in model_dict:
+            new_dict[layer] = model_dict[layer]
+    new_model.load_state_dict(new_dict)
+    return new_model
