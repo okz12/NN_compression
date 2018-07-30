@@ -8,6 +8,7 @@ import copy
 from tensorboardX import SummaryWriter
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from utils_model import test_accuracy
+from utils_misc import get_sparsity
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -263,151 +264,156 @@ def joint_plot(model, model_orig, gmp, epoch, retraining_epochs, acc, savefile =
 
 
 class plot_data():
-    def __init__(self, init_model, gmp="", mode="retrain", full_model = "", data_size = 'search', loss_type='CE', mv = (0,0), zmv = (0,0), tau = 1, temp = 0, mixtures = 1):
-        self.layers =  [x.replace(".weight", "") for x in init_model.state_dict().keys() if "weight" in x]
-        self.layer_init_weights = {}
-        for l in self.layers:
-            self.layer_init_weights[l] = np.concatenate([ init_model.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , init_model.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
-        self.layer_weights = {}
-            
-        self.mode = mode
-        self.loss_type = loss_type
-            
-        #accuracy and lost tracking flags
-        self.data_size = data_size
-        
-        #accuracy and loss history
-        self.epochs = []
-        self.train_accuracy = []
-        self.test_accuracy = []
-        self.val_accuracy = []
-        self.train_loss = []
-        self.test_loss = []
-        self.val_loss = []
-        self.complexity_loss = []
-        
-        if (mode == 'layer_retrain'):
-            self.full_model = full_model
-            
-        self.prune_layer_weight = {}
-        self.prune_acc = {}
-        
-        self.mean = mv[0]
-        self.var = mv[1]
-        self.zmean = zmv[0]
-        self.zvar = zmv[1]
-        self.tau = tau
-        self.temp = temp
-        self.mixtures = mixtures
-        
-        #gmp tracking
-        if (mode == 'retrain' or mode == 'layer_retrain' and gmp != ""):
-            self.gmp_stddev = np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy())
-            self.gmp_means = gmp.means.data.clone().cpu().numpy()
-            self.gmp_mixprop = gmp.rhos.exp().data.clone().cpu().numpy()
-            self.scale = gmp.scale.exp().data.clone().cpu().numpy()
-            
-        self.test_data_full = Variable(test_data(fetch='data')).cuda()
-        self.test_labels_full = Variable(test_data(fetch='labels')).cuda()
-            
-        if (data_size =='search'):
-            self.val_data_full = Variable(train_data(fetch='data')[50000:60000]).cuda()
-            self.val_labels_full = Variable(train_data(fetch='labels')[50000:60000]).cuda()
-            self.train_data_full = Variable(train_data(fetch='data')[40000:50000]).cuda()
-            self.train_labels_full = Variable(train_data(fetch='labels')[40000:50000]).cuda()
-            
-        else:
-            self.train_data_full = Variable(train_data(fetch='data')).cuda()
-            self.train_labels_full = Variable(train_data(fetch='labels')).cuda()
-        
-    def data_epoch(self, epoch, model_in, gmp=""):
-        self.epochs.append(epoch)
-        
-        #Updated Model Weights
-        for l in self.layers:
-            self.layer_weights[l] = np.concatenate([ model_in.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , model_in.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
-        
-        if (self.mode == "layer_retrain"):
-            model = copy.deepcopy(self.full_model)
-            for layer in model_in.state_dict():
-                model.state_dict()[layer] = model_in.state_dict()[layer]
-        else:
-            model = model_in
-        
+	def __init__(self, init_model, gmp="", mode="retrain", full_model = "", data_size = 'search', loss_type='CE', mv = (0,0), zmv = (0,0), tau = 1, temp = 0, mixtures = 1):
+		self.layers =  [x.replace(".weight", "") for x in init_model.state_dict().keys() if "weight" in x]
+		self.layer_init_weights = {}
+		for l in self.layers:
+			self.layer_init_weights[l] = np.concatenate([ init_model.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , init_model.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
+		self.layer_weights = {}
+			
+		self.mode = mode
+		self.loss_type = loss_type
+			
+		#accuracy and lost tracking flags
+		self.data_size = data_size
+		
+		#accuracy and loss history
+		self.epochs = []
+		self.train_accuracy = []
+		self.test_accuracy = []
+		self.val_accuracy = []
+		self.train_loss = []
+		self.test_loss = []
+		self.val_loss = []
+		self.complexity_loss = []
+		
+		if (mode == 'layer_retrain'):
+			self.full_model = full_model
+			
+		self.prune_layer_weight = {}
+		self.prune_acc = {}
+		self.sparsity=0
+		
+		self.mean = mv[0]
+		self.var = mv[1]
+		self.zmean = zmv[0]
+		self.zvar = zmv[1]
+		self.tau = tau
+		self.temp = temp
+		self.mixtures = mixtures
+		
+		#gmp tracking
+		self.use_gmp =  ((mode == 'retrain' or mode == 'layer_retrain' ) and gmp != "")
+		if (self.use_gmp):
+			self.gmp_stddev = np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy())
+			self.gmp_means = gmp.means.data.clone().cpu().numpy()
+			self.gmp_mixprop = gmp.rhos.exp().data.clone().cpu().numpy()
+			self.scale = gmp.scale.exp().data.clone().cpu().numpy()
+			
+		self.test_data_full = Variable(test_data(fetch='data')).cuda()
+		self.test_labels_full = Variable(test_data(fetch='labels')).cuda()
+			
+		if (data_size =='search'):
+			self.val_data_full = Variable(train_data(fetch='data')[50000:60000]).cuda()
+			self.val_labels_full = Variable(train_data(fetch='labels')[50000:60000]).cuda()
+			self.train_data_full = Variable(train_data(fetch='data')[40000:50000]).cuda()
+			self.train_labels_full = Variable(train_data(fetch='labels')[40000:50000]).cuda()
+			
+		else:
+			self.train_data_full = Variable(train_data(fetch='data')).cuda()
+			self.train_labels_full = Variable(train_data(fetch='labels')).cuda()
+		
+	def data_epoch(self, epoch, model_in, gmp=""):
+		self.epochs.append(epoch)
+		
+		#Updated Model Weights
+		for l in self.layers:
+			self.layer_weights[l] = np.concatenate([ model_in.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , model_in.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
+		
+		if (self.mode == "layer_retrain"):
+			model = copy.deepcopy(self.full_model)
+			for layer in model_in.state_dict():
+				model.state_dict()[layer] = model_in.state_dict()[layer]
+		else:
+			model = model_in
+		
 
-        test_acc = test_accuracy(self.test_data_full, self.test_labels_full, model, loss_type = self.loss_type)
-        self.test_accuracy.append(test_acc[0])
-        self.test_loss.append(test_acc[1])
-        train_acc = test_accuracy(self.train_data_full, self.train_labels_full, model, loss_type = self.loss_type)
-        self.train_accuracy.append(train_acc[0])
-        self.train_loss.append(train_acc[1])
-        if (self.data_size == 'search'):
-            val_acc = test_accuracy(self.val_data_full, self.val_labels_full, model, loss_type = self.loss_type)
-            self.val_accuracy.append(val_acc[0])
-            self.val_loss.append(val_acc[1])
-            
-        if (self.mode == 'retrain' or self.mode == 'layer_retrain' and gmp != ""):
-            self.complexity_loss.append(float(gmp.call()[0]))
-            self.gmp_stddev = np.vstack((self.gmp_stddev,  np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy()) ))
-            self.gmp_means = np.vstack((self.gmp_means, gmp.means.data.clone().cpu().numpy() ))
-            self.gmp_mixprop = np.vstack((self.gmp_mixprop, gmp.rhos.exp().data.clone().cpu().numpy() ))
-            
-    def get_weights(self, source='in'):
-        if 'in':
-            return np.concatenate([self.layer_weights[x] for x in self.layer_weights])
-        else:
-            np.concatenate([self.layer_weights[x] for x in self.layer_weights])
-            
-    def data_prune(self, model_in):
-        if (self.mode == "layer_retrain"):
-            model = copy.deepcopy(self.full_model)
-            for layer in model_in.state_dict():
-                model.state_dict()[layer] = model_in.state_dict()[layer]
-        else:
-            model = model_in
-            
-        for l in self.layers:
-            self.prune_layer_weight[l] = np.concatenate([ model.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , model.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
-            
-        test_acc = test_accuracy(self.test_data_full, self.test_labels_full, model, loss_type = self.loss_type)
-        self.prune_acc['test'] = test_acc[0]
-        train_acc = test_accuracy(self.train_data_full, self.train_labels_full, model, loss_type = self.loss_type)
-        self.prune_acc['train'] = train_acc[0]
-        self.train_loss.append(train_acc[1])
-        if (self.data_size == 'search'):
-            val_acc = test_accuracy(self.val_data_full, self.val_labels_full, model, loss_type = self.loss_type)
-            self.prune_acc['val'] = val_acc[0]
-        
-    def gen_dict(self):
-        res = {}
-        res['init_weights'] = self.layer_init_weights
-        res['final_weights'] = self.layer_weights
-        res['data_size'] = self.data_size
-        res['epochs'] = self.epochs
-        res['train_acc'] = self.train_accuracy
-        res['test_acc'] = self.test_accuracy
-        res['val_acc'] = self.val_accuracy
-        res['train_loss'] = self.train_loss
-        res['test_loss'] = self.test_loss
-        res['val_loss'] = self.val_loss
-        res['complexity_loss'] = self.complexity_loss
-        res['scale'] = self.scale
+		test_acc = test_accuracy(self.test_data_full, self.test_labels_full, model, loss_type = self.loss_type)
+		self.test_accuracy.append(test_acc[0])
+		self.test_loss.append(test_acc[1])
+		train_acc = test_accuracy(self.train_data_full, self.train_labels_full, model, loss_type = self.loss_type)
+		self.train_accuracy.append(train_acc[0])
+		self.train_loss.append(train_acc[1])
+		if (self.data_size == 'search'):
+			val_acc = test_accuracy(self.val_data_full, self.val_labels_full, model, loss_type = self.loss_type)
+			self.val_accuracy.append(val_acc[0])
+			self.val_loss.append(val_acc[1])
+			
+		if (self.use_gmp):
+			self.complexity_loss.append(float(gmp.call()[0]))
+			self.gmp_stddev = np.vstack((self.gmp_stddev,  np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy()) ))
+			self.gmp_means = np.vstack((self.gmp_means, gmp.means.data.clone().cpu().numpy() ))
+			self.gmp_mixprop = np.vstack((self.gmp_mixprop, gmp.rhos.exp().data.clone().cpu().numpy() ))
+			
+	def get_weights(self, source='in'):
+		if 'in':
+			return np.concatenate([self.layer_weights[x] for x in self.layer_weights])
+		else:
+			np.concatenate([self.layer_weights[x] for x in self.layer_weights])
+			
+	def data_prune(self, model_in):
+		if (self.mode == "layer_retrain"):
+			model = copy.deepcopy(self.full_model)
+			for layer in model_in.state_dict():
+				model.state_dict()[layer] = model_in.state_dict()[layer]
+		else:
+			model = model_in
+			
+		for l in self.layers:
+			self.prune_layer_weight[l] = np.concatenate([ model.state_dict()[l + ".weight"].clone().view(-1).cpu().numpy() , model.state_dict()[l + ".bias"].clone().view(-1).cpu().numpy() ])
+			
+		test_acc = test_accuracy(self.test_data_full, self.test_labels_full, model, loss_type = self.loss_type)
+		self.prune_acc['test'] = test_acc[0]
+		train_acc = test_accuracy(self.train_data_full, self.train_labels_full, model, loss_type = self.loss_type)
+		self.prune_acc['train'] = train_acc[0]
+		self.train_loss.append(train_acc[1])
+		if (self.data_size == 'search'):
+			val_acc = test_accuracy(self.val_data_full, self.val_labels_full, model, loss_type = self.loss_type)
+			self.prune_acc['val'] = val_acc[0]
 
-        
-        #gmp tracking
-        if (self.mode == 'retrain' or self.mode == 'layer_retrain'):
-            res['gmp_stddev'] = self.gmp_stddev
-            res['gmp_means'] = self.gmp_means
-            res['gmp_mixprop'] = self.gmp_mixprop
-            
-            res['mean'] = self.mean
-            res['var'] = self.var
-            res['zmean'] = self.zmean
-            res['zvar'] = self.zvar
-            res['tau'] = self.tau
-            res['temp'] = self.temp
-            res['mixtures'] = self.mixtures
-            
-            res['prune_acc'] = self.prune_acc
-            res['prune_weights'] = self.prune_layer_weight
-        return res
+		self.sparsity = get_sparsity(model_in)
+		
+	def gen_dict(self):
+		res = {}
+		res['init_weights'] = self.layer_init_weights
+		res['final_weights'] = self.layer_weights
+		res['data_size'] = self.data_size
+		res['epochs'] = self.epochs
+		res['train_acc'] = self.train_accuracy
+		res['test_acc'] = self.test_accuracy
+		res['val_acc'] = self.val_accuracy
+		res['train_loss'] = self.train_loss
+		res['test_loss'] = self.test_loss
+		res['val_loss'] = self.val_loss
+		res['complexity_loss'] = self.complexity_loss
+
+		
+		#gmp tracking
+		if (self.use_gmp):
+			res['gmp_stddev'] = self.gmp_stddev
+			res['gmp_means'] = self.gmp_means
+			res['gmp_mixprop'] = self.gmp_mixprop
+			res['scale'] = self.scale
+			
+			res['mean'] = self.mean
+			res['var'] = self.var
+			res['zmean'] = self.zmean
+			res['zvar'] = self.zvar
+			res['tau'] = self.tau
+			res['temp'] = self.temp
+			res['mixtures'] = self.mixtures
+			
+			res['prune_acc'] = self.prune_acc
+			res['prune_weights'] = self.prune_layer_weight
+			res['sparsity'] = self.sparsity
+		return res

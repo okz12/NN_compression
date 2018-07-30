@@ -184,7 +184,7 @@ def retrain_sws_epoch(model, gmp, optimizer, train_loader, tau, temp = 1.0, loss
 		# Updating parameters
 		optimizer.step()
 	return model, loss
-    
+	
 def train_epoch(model, optimizer, criterion, train_loader):
 	for i, (images, labels) in enumerate(train_loader):
 		#if(use_cuda):
@@ -250,15 +250,15 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	return retrain_acc[0], prune_0_acc[0], prune_acc[0], sp
 	
 def sws_replace(model_orig, conv1, conv2, fc1, fc2):
-    new_model = copy.deepcopy(model_orig)
-    new_dict = new_model.state_dict()
-    for layer in conv1:
-        new_dict[layer] = conv1[layer]
-    for layer in conv2:
-        new_dict[layer] = conv2[layer]
-    for layer in fc1:
-        new_dict[layer] = fc1[layer]
-    for layer in fc2:
-        new_dict[layer] = fc2[layer]
-    new_model.load_state_dict(new_dict)
-    return new_model
+	new_model = copy.deepcopy(model_orig)
+	new_dict = new_model.state_dict()
+	for layer in conv1:
+		new_dict[layer] = conv1[layer]
+	for layer in conv2:
+		new_dict[layer] = conv2[layer]
+	for layer in fc1:
+		new_dict[layer] = fc1[layer]
+	for layer in fc2:
+		new_dict[layer] = fc2[layer]
+	new_model.load_state_dict(new_dict)
+	return new_model

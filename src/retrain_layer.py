@@ -19,7 +19,7 @@ from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from extract_targets import get_targets
-retraining_epochs = 50
+retraining_epochs = 10
 
 def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_size = 'search', model_name = 'LeNet_300_100', loss_type = 'MSEHA', savedir = ""):
 	ab = get_ab(mean, var)
@@ -44,7 +44,7 @@ def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_s
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
 	res_stats = plot_data(layer_model, gmp, 'layer_retrain', full_model, data_size, "CE", (mean, var), (zmean, zvar), tau, temp, mixtures)
-	for epoch in range(50):
+	for epoch in range(retraining_epochs):
 
 		layer_model, loss = retrain_sws_epoch(layer_model, gmp, opt, loader, tau, temp, loss_type)
 		res_stats.data_epoch(epoch+1, layer_model, gmp)
