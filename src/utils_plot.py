@@ -308,7 +308,7 @@ class plot_data():
 			self.gmp_stddev = np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy())
 			self.gmp_means = gmp.means.data.clone().cpu().numpy()
 			self.gmp_mixprop = gmp.rhos.exp().data.clone().cpu().numpy()
-			self.scale = gmp.scale.exp().data.clone().cpu().numpy()
+			self.gmp_scale = gmp.scale.exp().data.clone().cpu().numpy()
 			
 		self.test_data_full = Variable(test_data(fetch='data')).cuda()
 		self.test_labels_full = Variable(test_data(fetch='labels')).cuda()
@@ -354,6 +354,7 @@ class plot_data():
 			self.gmp_stddev = np.vstack((self.gmp_stddev,  np.sqrt(1. / gmp.gammas.exp().data.clone().cpu().numpy()) ))
 			self.gmp_means = np.vstack((self.gmp_means, gmp.means.data.clone().cpu().numpy() ))
 			self.gmp_mixprop = np.vstack((self.gmp_mixprop, gmp.rhos.exp().data.clone().cpu().numpy() ))
+			self.gmp_scale = np.vstack((self.gmp_scale, gmp.scale.exp().data.clone().cpu().numpy() ))
 			
 	def get_weights(self, source='in'):
 		if 'in':
@@ -403,7 +404,7 @@ class plot_data():
 			res['gmp_stddev'] = self.gmp_stddev
 			res['gmp_means'] = self.gmp_means
 			res['gmp_mixprop'] = self.gmp_mixprop
-			res['scale'] = self.scale
+			res['scale'] = self.gmp_scale
 			
 			res['mean'] = self.mean
 			res['var'] = self.var

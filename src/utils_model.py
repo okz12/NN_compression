@@ -143,7 +143,7 @@ def retrain_sws_epoch(model, gmp, optimizer, train_loader, tau, temp = 1.0, loss
 		forward = model(images)
 		if (loss_type == 'CEST'):
 			outputs = nn.LogSoftmax(dim=1)(forward/temp)
-			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp
+			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp ** 2
 
 		if (loss_type == 'CESNT'):
 			outputs = nn.Softmax(dim=1)(forward)
@@ -151,11 +151,11 @@ def retrain_sws_epoch(model, gmp, optimizer, train_loader, tau, temp = 1.0, loss
 
 		if (loss_type == 'CESH'):
 			outputs = nn.LogSoftmax(dim=1)((nn.ReLU()(forward))/temp)
-			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp
+			loss_acc = -torch.mean(torch.sum(targets * outputs, dim=1)) * temp ** 2
 
 		if (loss_type == 'MSEST'):
 			outputs = nn.Softmax(dim=1)(forward/temp)
-			loss_acc = nn.MSELoss()(outputs, targets) * temp
+			loss_acc = nn.MSELoss()(outputs, targets) * temp ** 2
 
 		if (loss_type == 'MSESNT'):
 			outputs = nn.Softmax(dim=1)(forward)
@@ -217,7 +217,7 @@ def layer_accuracy(model_retrain, gmp, model_orig, data, labels):
 	model_acc.load_state_dict(model_orig.state_dict())
 
 	model_prune = copy.deepcopy(model_retrain)
-	model_prune.load_state_dict(sws_prune_l2(model_prune, gmp))
+	model_prune.load_state_dict(sws_prune_l2(model_prune.state_dict(), gmp))
 
 	weight_loader = copy.deepcopy(model_orig.state_dict())
 	for layer in model_prune.state_dict():

@@ -11,16 +11,16 @@ import model_archs
 from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot, plot_data
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty
 from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab, get_sparsity
-from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy, compressed_model
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 import copy
 import pickle
 import argparse
-retraining_epochs = 10
+retraining_epochs = 50
 
-def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_size, loss_type = 'MSESNT', model_save_dir = "", scaling = False):
+def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_size, loss_type = 'MSESNT', scaling = False, model_save_dir = "",  fn=""):
 	ab = get_ab(mean, var)
-	zmv = get_ab(zmean, zvar)
+	zab = get_ab(zmean, zvar)
 
 	if(data_size == 'search'):
 		train_dataset = search_retrain_data
@@ -39,20 +39,24 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	if temp == 0:
 		loader = torch.utils.data.DataLoader(dataset=train_dataset(onehot = (loss_type == 'MSESNT')), batch_size=batch_size, shuffle=True)
 	else:
-		output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, "fc2" if "SWS" in model.name else "fc3"))[x_start:x_end]###
+		output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, "fc3" if "300_100" in model.name else "fc2"))[x_start:x_end]###
 		output = (nn.Softmax(dim=1)(output/temp)).data
 		dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
 		loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 	criterion = nn.CrossEntropyLoss()###
-	
-	exp_name = "{}_m{}_zm{}_r{}_t{}_m{}_kdT{}_{}".format(model.name, mean, zmean, retraining_epochs, tau, int(mixtures), int(temp), data_size)
-	gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, zero_ab = (zmean, zvar), ab = (mean, var), scaling = scaling)
+	s = "s" if scaling else "f" 
+	exp_name = "{}_m{}_zm{}_r{}_t{}_m{}_kdT{}_{}_{}".format(model.name, mean, zmean, retraining_epochs, tau, int(mixtures), int(temp), s, data_size) + fn
+	gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, zero_ab = zab, ab = ab, scaling = scaling)
 	gmp.print_batch = False
 
-	opt = torch.optim.Adam([
-		{'params': model.parameters(), 'lr': 5e-4},
+	optimizable_params = [
+		{'params': model.parameters(), 'lr': 1e-4},
 		{'params': [gmp.means], 'lr': 1e-4},
-		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
+		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
+	if (scaling):
+		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-4}]
+
+	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
 	res_stats = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (mean, var), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures)
 
@@ -74,22 +78,18 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	res = res_stats.gen_dict()
 	
 	model_prune = sws_prune_copy(model, gmp)
-	test_accuracy_prune = float((test_accuracy(res_stats.test_data_full, res_stats.test_labels_full, model_prune)[0]))
-	val_accuracy = 0 if (data_size != 'search') else float((test_accuracy(res_stats.val_data_full, res_stats.val_labels_full, model_prune)[0]))
 
-	res_test = test_accuracy(res_stats.test_data_full, res_stats.test_labels_full, model_prune)
+	res_stats.data_prune(model_prune)
 	res = res_stats.gen_dict()
-	res['prune_test'] = res_test[0]
-	res['sparsity'] = get_sparsity(model_prune)
-	if (data_size == "search"):
-		res_val = test_accuracy(res_stats.val_data_full, res_stats.val_labels_full, model_prune)
-		res['prune_val'] = res_val[0]
+
+	cm = compressed_model(model_prune.state_dict(), [gmp])
+	res['cm'] = cm.get_cr_list()
 
 	if (data_size == "search"):
 		print('Retrain Test: {:.2f}, Retrain Validation: {:.2f}, Prune Test: {:.2f}, Prune Validation: {:.2f}, Prune Sparsity: {:.2f}'
-			.format(res['test_acc'][-1], res['val_acc'][-1], res['prune_test'], res['prune_val'], res['sparsity']))
+		.format(res['test_acc'][-1], res['val_acc'][-1], res['prune_acc']['test'], res['prune_acc']['val'], res['sparsity']))
 	else:
-		print('Retrain Test: {:.2f}, Prune Test: {:.2f}, Prune Sparsity: {:.2f}'.format(res['test_acc'][-1], res['prune_test'],res['sparsity']))
+		print('Retrain Test: {:.2f}, Prune Test: {:.2f}, Prune Sparsity: {:.2f}'.format(res['test_acc'][-1], res['prune_acc']['test'],res['sparsity']))
 
 	if(model_save_dir!=""):
 		torch.save(model, model_save_dir + '/mnist_retrain_model_{}.m'.format(exp_name))

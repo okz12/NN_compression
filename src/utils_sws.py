@@ -60,14 +60,18 @@ class GaussianMixturePrior(Module):
 				bias = x.clone().data
 				w_std = torch.cat((weight.view(-1), bias)).std()
 				scale[int(i/2)] = w_std
-				
-		self.scale = Variable((scale/scale.min()).log().cuda(), requires_grad=True)
+		
+		if(scaling):
+			self.scale = Variable( (scale[1:]/scale[0]).log().cuda(), requires_grad=True)
+		else:
+			self.scale = Variable(torch.Tensor([0]).cuda())
 
 		
 	def call(self, mask=None):
 		J=self.nb_components
 		loss = Variable(torch.cuda.FloatTensor([0.]), requires_grad=True)
 		means = torch.cat(( Variable(torch.cuda.FloatTensor([0.]), requires_grad=True) , self.means), 0)
+		scale = torch.cat(( Variable(torch.cuda.FloatTensor([0.]), requires_grad=True) , self.scale), 0)
 		#mean=self.means
 		precision = self.gammas.exp()
 		
@@ -79,7 +83,7 @@ class GaussianMixturePrior(Module):
 		
 		for i, weights in enumerate(self.network_weights):
 			if (self.scaling):
-				weight_loss = self.compute_loss(weights / self.scale[int(i/2)].exp(), mixing_proportions, means, precision)
+				weight_loss = self.compute_loss(weights / scale[int(i/2)].exp(), mixing_proportions, means, precision)
 			else:
 				weight_loss = self.compute_loss(weights, mixing_proportions, means, precision)
 			if(self.print_batch):
@@ -156,12 +160,14 @@ def merger(inputs):
 		inputs = lists
 	return lists
 
-def sws_prune_l2(model, gmp):
+def sws_prune_l2(model_dict, gmp):
 	if (gmp.scaling):
-		layer_mult = [float(gmp.scale[int(i/2)].exp()) for i in range(len(model.state_dict()))]
-		weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() / layer_mult[i] for i, array in enumerate(model.state_dict())])
+		scale = [1] + list(gmp.scale.exp().data.clone().cpu().numpy())
+		layer_mult = [float(scale[int(i/2)]) for i in range(len(model_dict))]
+		weights = np.concatenate([model_dict[array].clone().cpu().numpy().flatten() / layer_mult[i] for i, array in enumerate(model_dict)])
+		mult_list = layer_mult
 	else:
-		weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
+		weights = np.concatenate([model_dict[array].clone().cpu().numpy().flatten() for i, array in enumerate(model_dict)])
 	weights = weights.reshape((len(weights), 1))
 	means = np.concatenate([np.zeros(1), gmp.means.clone().data.cpu().numpy()])
 	
@@ -176,16 +182,18 @@ def sws_prune_l2(model, gmp):
 		else:
 			weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
 		prev_b = b
-	weights[np.where(np.abs(weights) < 0.025)] = 0
+	#weights[np.where(np.abs(weights) < 0.025)] = 0
 	out = weights
-	pruned_state_dict = copy.deepcopy(model.state_dict())
+	pruned_state_dict = copy.deepcopy(model_dict)
 	dim_start = 0
-	for i, layer in enumerate(model.state_dict()):
+
+	
+	for i, layer in enumerate(model_dict):
 		layer_mult = 1
 		if (gmp.scaling):
-			layer_mult = float(gmp.scale[int(i/2)].exp())
-		elems = model.state_dict()[layer].numel()
-		pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model.state_dict()[layer].shape)) * layer_mult
+			layer_mult = mult_list[int(i/2)]
+		elems = model_dict[layer].numel()
+		pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model_dict[layer].shape)) * layer_mult
 		dim_start += elems
 	return pruned_state_dict
 
@@ -246,6 +254,7 @@ def sws_prune(model_dict, gmp):
 	logprecisions = gmp.gammas.clone().data.cpu().numpy()
 	logpis = np.concatenate([np.log(pi_zero) * np.ones(1), gmp.rhos.clone().data.cpu().numpy()])
 
+	'''
 	# classes K
 	J = len(logprecisions)
 	# compute KL-divergence
@@ -258,7 +267,7 @@ def sws_prune(model_dict, gmp):
 			L[i, j] = np.exp(pi1) * (pi1 - pi2 + K[i, j])
 
 	# merge -- KL divergence not low enough
-	'''
+	
 	idx, idy = np.where(K <1e-10)
 	lists = merger(zip(idx, idy))
 
@@ -279,7 +288,11 @@ def sws_prune(model_dict, gmp):
 	# compute responsibilities
 	#argmax_responsibilities = compute_responsibilies(weights, new_means, new_logprecisions, np.exp(new_logpis))
 	argmax_responsibilities = compute_responsibilies(weights, means, logprecisions, np.exp(logpis))
-	out = [means[i] for i in argmax_responsibilities]
+	out1 = [means[i] for i in argmax_responsibilities]
+	print(means)
+	print (argmax_responsibilities)
+	out = [out1[i] if out1[i] == 0 else float(weights[i]) for i in range(len(out1))]
+	#print (out)
 	
 	pruned_state_dict = copy.deepcopy(model_dict)
 	dim_start = 0
@@ -292,9 +305,15 @@ def sws_prune(model_dict, gmp):
 		dim_start += elems
 	return pruned_state_dict
 
-def sws_prune_copy(model, gmp):
+def sws_prune_copy(model, gmp, mode='l2'):
 	new_model = copy.deepcopy(model)
-	state_dict = sws_prune(model.state_dict(), gmp)
+	if(mode==''):
+		state_dict = sws_prune(model.state_dict(), gmp)
+		state_dict = sws_prune_l2(state_dict, gmp)
+	if(mode=='l2'):
+		state_dict = sws_prune_l2(model.state_dict(), gmp)
+	if(mode=='p'):
+		state_dict = sws_prune(model.state_dict(), gmp)
 	new_model.load_state_dict(state_dict)
 	return new_model
 
@@ -321,6 +340,7 @@ class compressed_model():
 		new_means = []
 		new_means.append(0.0)
 
+		means = np.append(means, means[-1])
 		set_idx = 1
 		for idx in unique:
 			if idx != unique[zero_idx]:
@@ -389,6 +409,12 @@ class compressed_model():
 				min_idx_size = index_size + weight_size
 				min_idx_bit = index_bits
 		return ((full_size / (codebook_size + min_idx_size)), min_idx_bit)
+
+	def get_cr_list(self):
+		cm_size = {}
+		for index_bits in range(6,11):
+			cm_size[index_bits] = self.get_cr(index_bits)[0]
+		return cm_size
 
 def clamp_weights(model, means):
 	weights = np.concatenate([model.state_dict()[array].clone().cpu().numpy().flatten() for i, array in enumerate(model.state_dict())])
