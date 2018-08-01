@@ -19,7 +19,7 @@ from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy, compressed_model
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from extract_targets import get_targets
-retraining_epochs = 10
+retraining_epochs = 50
 
 def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_size = 'search', model_name = 'LeNet_300_100', loss_type = 'MSEHA', savedir = ""):
 	ab = get_ab(mean, var)
@@ -39,7 +39,7 @@ def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_s
 	gmp.print_batch = False
 	criterion = nn.MSELoss()
 	opt = torch.optim.Adam([
-		{'params': layer_model.parameters(), 'lr': 1e-4},
+		{'params': layer_model.parameters(), 'lr': 2e-4},
 		{'params': [gmp.means], 'lr': 3e-4},
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])#log precisions and mixing proportions
 
@@ -54,7 +54,7 @@ def retrain_layer(mean, var, zmean, zvar, mixtures, temp, tau, layer = 1, data_s
 			#show_sws_weights(model = layer_model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()))
 			#res = layer_accuracy(layer_model, gmp, full_model, test_data_full, test_labels_full)
 	prune_model = sws_prune_copy(layer_model, gmp)
-	res_stats.data_prune(layer_model)
+	res_stats.data_prune(prune_model)
 	
 	res_test = layer_accuracy(layer_model, gmp, res_stats.full_model, res_stats.test_data_full, res_stats.test_labels_full)
 	res = res_stats.gen_dict()

@@ -301,6 +301,7 @@ class plot_data():
 		self.tau = tau
 		self.temp = temp
 		self.mixtures = mixtures
+		self.use_prune = False
 		
 		#gmp tracking
 		self.use_gmp =  ((mode == 'retrain' or mode == 'layer_retrain' ) and gmp != "")
@@ -383,6 +384,7 @@ class plot_data():
 			self.prune_acc['val'] = val_acc[0]
 
 		self.sparsity = get_sparsity(model_in)
+		self.use_prune = True
 		
 	def gen_dict(self):
 		res = {}
@@ -414,6 +416,7 @@ class plot_data():
 			res['temp'] = self.temp
 			res['mixtures'] = self.mixtures
 			
+		if(self.use_prune):
 			res['prune_acc'] = self.prune_acc
 			res['prune_weights'] = self.prune_layer_weight
 			res['sparsity'] = self.sparsity

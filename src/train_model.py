@@ -13,18 +13,20 @@ from utils_plot import print_dims
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 import argparse
 
-def train_model(model_name, data_size, training_epochs):
+def train_model(model_name, data_size, training_epochs, dset):
 	if(data_size == 'search'):
-		train_dataset = search_train_data()
+		train_dataset = search_train_data(dset = dset)
 	if(data_size == 'full'):
-		train_dataset = train_data()
+		train_dataset = train_data(dset = dset)
 	
 	train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-	test_data_full = Variable(test_data(fetch='data')).cuda()
-	test_labels_full = Variable(test_data(fetch='labels')).cuda()
+	test_data_full = Variable(test_data(fetch='data', dset = dset)).cuda()
+	test_labels_full = Variable(test_data(fetch='labels', dset = dset)).cuda()
 
 	if model_name == "SWSModel":
 		model = model_archs.SWSModel().cuda()
+	elif model_name == "LeNet5":
+		model = model_archs.LeNet5().cuda()
 	else:
 		model = model_archs.LeNet_300_100().cuda()
 
@@ -40,14 +42,15 @@ def train_model(model_name, data_size, training_epochs):
 			test_acc = test_accuracy(test_data_full, test_labels_full, model)
 			print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
 
-	torch.save(model, model_load_dir + 'mnist_{}_{}_{}.m'.format(model.name, training_epochs, data_size))
+	torch.save(model, model_load_dir + '{}_{}_{}_{}.m'.format(dset, model.name, training_epochs, data_size))
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'LeNet_300_100'))
+	parser.add_argument('--dset', dest = "dset", help = "MNIST or FashionMNIST", required = True, choices = ('mnist', 'fashionmnist'))
+	parser.add_argument('--model', dest = "model", help = "Model to train", required = True, choices = ('SWSModel', 'LeNet_300_100', 'LeNet5'))
 	parser.add_argument('--epochs', dest = "epochs", help = "Number of training epochs", required = True, type=int)
 	parser.add_argument('--data', dest = "data", help = "Data to train on - 'full' training data (60k) or 'search' training data(50k)", required = True, choices = ('full','search'))
 	args = parser.parse_args()
 	model_name = args.model
 	training_epochs = int(args.epochs)
-	train_model(model_name, args.data, training_epochs)
+	train_model(model_name, args.data, training_epochs, args.dset)
