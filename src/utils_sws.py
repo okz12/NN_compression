@@ -183,7 +183,7 @@ def sws_prune_l2(model_dict, gmp):
 		else:
 			weights[np.where(np.logical_and(weights < b, weights > prev_b))] = sorted_means[i]
 		prev_b = b
-	weights[np.where(np.abs(weights) < 0.1)] = 0
+	#weights[np.where(np.abs(weights) < 0.1)] = 0
 	out = weights
 	pruned_state_dict = copy.deepcopy(model_dict)
 	dim_start = 0

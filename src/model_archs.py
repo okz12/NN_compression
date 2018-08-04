@@ -193,6 +193,15 @@ class LeNet_300_100(nn.Module):
 		out = self.relu2(out)
 		out = self.fc3(out)
 		return out
+
+	def layer_forward(self, x):
+		x = x.view(-1, 28 * 28)
+		out1 = self.fc1(x)
+		out2 = self.relu1(out1)
+		out2 = self.fc2(out2)
+		out3 = self.relu2(out2)
+		out3 = self.fc3(out3)
+		return torch.cat((out1, out2, out3), 1)
 		
 	def kd_layer_targets(self, x, T=1.0):		
 		x = x.view(-1, 28 * 28)

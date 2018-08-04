@@ -18,7 +18,7 @@ import pickle
 import argparse
 retraining_epochs = 50
 
-def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_size, loss_type = 'MSESNT', scaling = False, model_save_dir = "",  fn=""):
+def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_size, loss_type = 'MSESNT', scaling = False, model_save_dir = "",  fn="", dset="mnist"):
 	ab = get_ab(mean, var)
 	zab = get_ab(zmean, zvar)
 

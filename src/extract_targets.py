@@ -30,7 +30,7 @@ def get_targets(model_file, temp = 0, layers=[]):
 	loaded_model = torch.load(model_load_dir + model_file + ".m")
 	target_dict = {}
 	if layers == []:
-		layers = list(set([x.replace(".bias",".act").replace(".weight",".out") for x in loaded_model.state_dict()]))
+		layers = list(set([x.replace(".bias",".out").replace(".weight",".out") for x in loaded_model.state_dict()]))
 	for layer in layers:
 		output = torch.load("{}{}_targets/{}.m".format(model_load_dir, model_file, layer))
 		if (len(output.size())<4 and temp != 0):#no temp on conv layers
