@@ -192,7 +192,7 @@ def sws_prune_l2(model_dict, gmp):
 	for i, layer in enumerate(model_dict):
 		layer_mult = 1
 		if (gmp.scaling):
-			layer_mult = mult_list[int(i/2)]
+			layer_mult = mult_list[int(i)]
 		elems = model_dict[layer].numel()
 		pruned_state_dict[layer] = torch.from_numpy(np.array(out[dim_start:dim_start + elems]).reshape(model_dict[layer].shape)) * layer_mult
 		dim_start += elems

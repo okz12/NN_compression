@@ -177,6 +177,40 @@ def show_sws_weights(model, means=0, precisions=0, epoch=-1, accuracy=-1, savefi
 		plt.close()
 	else:
 		plt.show()
+
+def show_sws_weights_log(model, means=0, precisions=0, epoch=-1, accuracy=-1, savefile = ""):
+	"""
+	show model weight histogram with mean and precisions
+	"""
+	weights = np.array([], dtype=np.float32)
+	for layer in model.state_dict():
+		weights = np.hstack( (weights, model.state_dict()[layer].view(-1).cpu().numpy()) )
+		
+	plt.clf()
+	plt.figure(figsize=(20, 3))
+
+	#2-Logplot
+	sns.distplot(weights, kde=False, color="g",bins=200,norm_hist=True, hist_kws={'log':True})
+	#plot mean and precision
+	if not (means==0 or precisions==0):
+		plt.axvline(0, linewidth = 1)
+		std_dev0 = np.sqrt(1/np.exp(precisions[0]))
+		plt.axvspan(xmin=-std_dev0, xmax=std_dev0, alpha=0.3)
+
+		for mean, precision in zip(means, precisions[1:]):
+			plt.axvline(mean, linewidth = 1)
+			std_dev = np.sqrt(1/np.exp(precision))
+			plt.axvspan(xmin=mean - std_dev, xmax=mean + std_dev, alpha=0.1)
+	plt.xlabel("Weight Value")
+	plt.ylabel("Density")
+	plt.xlim([-1.5, 1.5])
+	plt.ylim([1e-3, 1e2])
+	
+	if savefile!="":
+		plt.savefig("./figs/{}_{}.png".format(savefile, epoch+1), bbox_inches='tight')
+		plt.close()
+	else:
+		plt.show()
 		
 		
 ###

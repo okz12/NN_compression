@@ -50,11 +50,11 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	gmp.print_batch = False
 
 	optimizable_params = [
-		{'params': model.parameters(), 'lr': 1e-4},
-		{'params': [gmp.means], 'lr': 1e-4},
+		{'params': model.parameters(), 'lr': 2e-4},
+		{'params': [gmp.means], 'lr': 0.5e-4},
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
 	if (scaling):
-		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-4}]
+		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-6}]
 
 	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
@@ -66,7 +66,11 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 
 		if (trueAfterN(epoch, 10)):
 			#test_acc = test_accuracy(test_data_full, test_labels_full, model)
-			print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, res_stats.test_accuracy[-1]))
+			nm = sws_prune_copy(model, gmp)
+			s = get_sparsity(nm)
+			a = test_accuracy(test_data_full, test_labels_full, nm)[0]
+
+			print('Epoch: {}. Test Accuracy: {:.2f}, Prune Accuracy: {:.2f}, Sparsity: {:.2f}'.format(epoch+1, res_stats.test_accuracy[-1], a, s))
 			#show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)###
 			
 		if (data_size == 'search' and (epoch>12) and trueAfterN(epoch, 2)):
