@@ -33,7 +33,7 @@ def train_model(model_name, data_size, training_epochs, dset):
 	print ("Model Name: {} Epochs: {} Data: {}".format(model.name, training_epochs, data_size))
 	print_dims(model)
 	criterion = nn.CrossEntropyLoss()
-	optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay = 0.000)
+	optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay = 0.0001)
 
 	for epoch in range(training_epochs):
 		model, loss = train_epoch(model, optimizer, criterion, train_loader)
@@ -42,7 +42,7 @@ def train_model(model_name, data_size, training_epochs, dset):
 			test_acc = test_accuracy(test_data_full, test_labels_full, model)
 			print('Epoch: {}. Test Accuracy: {:.2f}'.format(epoch+1, test_acc[0]))
 
-	torch.save(model, model_load_dir + '{}_{}_{}_{}.m'.format(dset, model.name, training_epochs, data_size))
+	#torch.save(model, model_load_dir + '{}_{}_{}_{}.m'.format(dset, model.name, training_epochs, data_size))
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
