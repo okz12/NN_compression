@@ -75,3 +75,23 @@ if (mode == 42):
     for mean in mlist:
         for zmean in zmlist:
             model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+            
+if (mode == 51):
+    temp_list = [1, 2, 4]
+    tau_list = [5e-6, 2e-6, 1e-6, 5e-7, 2e-7, 1e-7]
+    for temp in temp_list:
+        for tau in tau_list:
+            if (temp == 5 and tau == 1e-6): #skip
+                print ("skip")
+            else:
+                model, gmp, res = retrain_model(250, 10, 2500, 1250, tau, temp, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+
+if (mode == 52):
+    temp_list = [5, 6, 8]
+    tau_list = [5e-6, 2e-6, 1e-6, 5e-7, 2e-7, 1e-7]
+    for temp in temp_list:
+        for tau in tau_list:
+            if (temp == 5 and tau == 1e-6): #skip
+                print ("skip")
+            else:
+                model, gmp, res = retrain_model(250, 10, 2500, 1250, tau, temp, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
