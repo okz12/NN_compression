@@ -32,7 +32,7 @@ args = parser.parse_args()
 mode = args.mode
 
 if (mode == 1):
-    model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 15, "LeNet_300_100", "full", 'MSEST', False, "./files")
 
 if (mode == 21):
     vlist = [0.1, 1, 10]
