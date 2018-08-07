@@ -1,6 +1,11 @@
 import numpy as np
 
-root_dir = "/home/okz21/NNC/NN_compression/"
+import os
+cwd = os.getcwd()
+if "okz" in cwd:
+	root_dir = "/home/okz21/NNC/NN_compression/"
+else:
+	root_dir = "/root/NN_compression/"
 model_load_dir = root_dir + "models/"
 
 def trueAfterN(ip, N):
