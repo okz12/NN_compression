@@ -24,6 +24,7 @@ from retrain_model import retrain_model
 
 import numpy as np
 import pickle
+import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
