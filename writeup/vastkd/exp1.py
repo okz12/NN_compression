@@ -34,10 +34,16 @@ mode = args.mode
 if (mode == 1):
     model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
 
-if (mode == 2):
-    vlist = [0.1, 1, 10, 100, 1000]
+if (mode == 21):
+    vlist = [0.1, 1, 10]
     zvar = 1250
     for var in vlist:
         fn_text = "_var_{}_zvar_{}".format(var,zvar)
-        model, gmp, res = retrain_model(250, var, 2500, zvar, 1e-6, 5, 15, "LeNet_300_100", "full", 'MSEST', False, "./files", fn = fn_text)
-        show_sws_weights_log(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()))
+        model, gmp, res = retrain_model(250, var, 2500, zvar, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files", fn = fn_text)
+
+if (mode == 22):
+    vlist = [100, 1000]
+    zvar = 1250
+    for var in vlist:
+        fn_text = "_var_{}_zvar_{}".format(var,zvar)
+        model, gmp, res = retrain_model(250, var, 2500, zvar, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files", fn = fn_text)
