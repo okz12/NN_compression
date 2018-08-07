@@ -29,8 +29,8 @@ def test_accuracy(data, labels, model, loss_type='CE'):
 		loss = loss.item()
 
 	_, predicted = torch.max(outputs.data, 1)
-	correct = (predicted == labels.data).sum()
-	accuracy = 100.0 * correct/len(labels)
+	correct = float((predicted == labels.data).sum())
+	accuracy = 100.0 * correct/float(len(labels))
 	return accuracy, loss
 	
 def train_epoch(model, optimizer, criterion, train_loader):
