@@ -61,3 +61,17 @@ if (mode == 32):
     for zvar in zvlist:
         fn_text = "_var_{}_zvar_{}".format(var,zvar)
         model, gmp, res = retrain_model(250, var, 2500, zvar, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files", fn = fn_text)
+
+if (mode == 41):
+    mlist = [0.1, 1, 10, 100, 1000]
+    zmlist = [0.1, 1, 10]
+    for mean in mlist:
+        for zmean in zmlist:
+            model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+
+if (mode == 42):
+    mlist = [0.1, 1, 10, 100, 1000]
+    zmlist = [100, 1000, 10000]
+    for mean in mlist:
+        for zmean in zmlist:
+            model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
