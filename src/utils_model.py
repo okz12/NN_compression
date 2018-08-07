@@ -10,7 +10,7 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 import matplotlib.pyplot as plt
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_0
-from utils_misc import trueAfterN
+from utils_misc import trueAfterN, model_load_dir
 import pickle
 
 
@@ -18,9 +18,16 @@ import pickle
 def test_accuracy(data, labels, model, loss_type='CE'):
 	outputs = model(data)
 	if loss_type == 'CE':
-		loss = nn.CrossEntropyLoss()(outputs, labels).data[0]
+		loss = nn.CrossEntropyLoss()(outputs, labels).data
 	else:
-		loss = nn.MSELoss(outputs, labels).data[0]
+		loss = nn.MSELoss(outputs, labels).data
+
+	#running on vast or azure
+	if "okz" in model_load_dir:
+		loss = loss[0]
+	else:
+		loss = loss.item()
+
 	_, predicted = torch.max(outputs.data, 1)
 	correct = (predicted == labels.data).sum()
 	accuracy = 100.0 * correct/len(labels)
