@@ -326,7 +326,8 @@ class compressed_model():
 			gmp_means.append(list(g.means.clone().data.cpu().numpy()))
 			
 		if (g.scaling):#if scaling , only one gmp should be present
-			weights = torch.cat([state_dict[layer].view(-1) * g.scale.data.exp()[int(i/2)] for i,layer in enumerate(state_dict)]).cpu().numpy()
+			mult_scale = [1] + list(g.scale.data.exp().clone().cpu().numpy())
+			weights = torch.cat([state_dict[layer].view(-1) * float(mult_scale[int(i/2)]) for i,layer in enumerate(state_dict)]).cpu().numpy()
 			self.scale_size = float(g.scale.size()[0])
 		else:
 			weights = torch.cat([state_dict[layer].view(-1) for layer in state_dict]).cpu().numpy()

@@ -32,7 +32,7 @@ args = parser.parse_args()
 mode = args.mode
 
 if (mode == 11):
-    temp_list = [4, 5]
+    temp_list = [4]
     tau_list = [5e-5, 2e-5, 1e-5, 5e-6, 2e-6, 1e-6]
     start_processing = False
     for temp in temp_list:
@@ -43,7 +43,29 @@ if (mode == 11):
                 model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, tau, temp, 16, "LeNet_300_100", "full", 'CEST', False, "./files")
 
 if (mode == 12):
-    temp_list = [6, 8]
+    temp_list = [5]
+    tau_list = [5e-5, 2e-5, 1e-5, 5e-6, 2e-6, 1e-6]
+    start_processing = False
+    for temp in temp_list:
+        for tau in tau_list:
+            if (temp == 5 and tau == 1e-5): #skip
+                print ("skip")
+            else:
+                model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, tau, temp, 16, "LeNet_300_100", "full", 'CEST', False, "./files")
+
+if (mode == 13):
+    temp_list = [6]
+    tau_list = [5e-5, 2e-5, 1e-5, 5e-6, 2e-6, 1e-6]
+    start_processing = False
+    for temp in temp_list:
+        for tau in tau_list:
+            if (temp == 5 and tau == 1e-5): #skip
+                print ("skip")
+            else:
+                model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, tau, temp, 16, "LeNet_300_100", "full", 'CEST', False, "./files")
+
+if (mode == 14):
+    temp_list = [8]
     tau_list = [5e-5, 2e-5, 1e-5, 5e-6, 2e-6, 1e-6]
     start_processing = False
     for temp in temp_list:
