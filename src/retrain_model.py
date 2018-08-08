@@ -49,20 +49,26 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	gmp = GaussianMixturePrior(mixtures, [x for x in model.parameters()], 0.99, zero_ab = zab, ab = ab, scaling = scaling)
 	gmp.print_batch = False
 
+	mlr = 0.5e-4 if scaling else 0.5e-4
+
 	optimizable_params = [
 		{'params': model.parameters(), 'lr': 2e-4},
-		{'params': [gmp.means], 'lr': 0.5e-4},
+		{'params': [gmp.means], 'lr': mlr},
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
 	if (scaling):
-		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-6}]
-
+		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-5}]
+	
 	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
 	res_stats = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (mean, var), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures)
-
+	s_hist = []
+	a_hist = []
 	for epoch in range(retraining_epochs):
+		if(scaling and epoch == 40):
+			opt.param_groups[3]['lr'] = 0
 		model, loss = retrain_sws_epoch(model, gmp, opt, loader, tau, temp, loss_type)
 		res_stats.data_epoch(epoch + 1, model, gmp)
+		
 
 		if (trueAfterN(epoch, 10)):
 			#test_acc = test_accuracy(test_data_full, test_labels_full, model)
@@ -72,7 +78,12 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 
 			print('Epoch: {}. Test Accuracy: {:.2f}, Prune Accuracy: {:.2f}, Sparsity: {:.2f}'.format(epoch+1, res_stats.test_accuracy[-1], a, s))
 			#show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)###
-			
+		nm = sws_prune_copy(model, gmp)
+		s = get_sparsity(nm)
+		a = test_accuracy(test_data_full, test_labels_full, nm)[0]
+		s_hist.append(s)
+		a_hist.append(a)
+
 		if (data_size == 'search' and (epoch>12) and trueAfterN(epoch, 2)):
 			val_acc =  res_stats.test_accuracy[-1]
 			if (val_acc < 50.0):
@@ -85,7 +96,8 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 
 	res_stats.data_prune(model_prune)
 	res = res_stats.gen_dict()
-
+	res['test_prune_acc'] = a_hist
+	res['test_prune_sp'] = s_hist
 	cm = compressed_model(model_prune.state_dict(), [gmp])
 	res['cm'] = cm.get_cr_list()
 

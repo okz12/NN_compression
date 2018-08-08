@@ -164,6 +164,7 @@ def sws_prune_l2(model_dict, gmp):
 	if (gmp.scaling):
 		scale = [1] + list(gmp.scale.exp().data.clone().cpu().numpy())
 		layer_mult = [float(scale[int(i/2)]) for i in range(len(model_dict))]
+		#layer_mult = [1, 1, 1.1566674, 1.1566674,1.4920919, 1.4920919]
 		weights = np.concatenate([model_dict[array].clone().cpu().numpy().flatten() / layer_mult[i] for i, array in enumerate(model_dict)])
 		mult_list = layer_mult
 	else:

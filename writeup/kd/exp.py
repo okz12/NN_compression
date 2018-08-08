@@ -74,3 +74,8 @@ if (mode == 14):
                 print ("skip")
             else:
                 model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, tau, temp, 16, "LeNet_300_100", "full", 'CEST', False, "./files")
+
+if (mode == 2):
+    mixlist = [3, 6, 9, 12]
+    for mixture in mixlist:
+        model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, 2e-5, 5, mixture, "LeNet_300_100", "full", 'CEST', False, "./files")
