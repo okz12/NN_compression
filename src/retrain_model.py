@@ -56,7 +56,7 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 		{'params': [gmp.means], 'lr': mlr},
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
 	if (scaling):
-		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-5}]
+		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-6}]
 	
 	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
@@ -64,8 +64,10 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	s_hist = []
 	a_hist = []
 	for epoch in range(retraining_epochs):
-		if(scaling and epoch == 40):
+		### [ACT DISABLE LR]
+		if(scaling and epoch == 0):
 			opt.param_groups[3]['lr'] = 0
+			print ("Scaling Disabled - Epoch {}".format(epoch))
 		model, loss = retrain_sws_epoch(model, gmp, opt, loader, tau, temp, loss_type)
 		res_stats.data_epoch(epoch + 1, model, gmp)
 		
