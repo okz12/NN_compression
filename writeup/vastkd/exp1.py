@@ -99,4 +99,4 @@ if (mode == 52):
 if (mode == 6):
     mixlist = [3, 6, 9, 12]
     for mixture in mixlist:
-        model, gmp, res = retrain_model(250, 10, 2500, 1250, tau, temp, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+        model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, mixture, "LeNet_300_100", "full", 'MSEST', False, "./files")
