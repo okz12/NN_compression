@@ -76,6 +76,6 @@ if (mode == 14):
                 model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, tau, temp, 16, "LeNet_300_100", "full", 'CEST', False, "./files")
 
 if (mode == 2):
-    mixlist = [3, 6, 9, 12]
+    mixlist = [4, 5, 7, 8, 10, 11, 14, 15]#[3, 6, 9, 12]
     for mixture in mixlist:
         model, gmp, res = retrain_model(1000, 0.1, 5000, 1000, 2e-5, 5, mixture, "LeNet_300_100", "full", 'CEST', False, "./files")
