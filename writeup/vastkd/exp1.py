@@ -77,7 +77,7 @@ if (mode == 42):
             model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
             
 if (mode == 43):
-    flist [(10, 1000), (10,5000)]
+    flist = [(10, 1000), (10,5000)]
     for f in flist:
         mean=f[0]
         zmean=f[1]
