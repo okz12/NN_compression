@@ -76,6 +76,13 @@ if (mode == 42):
         for zmean in zmlist:
             model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
             
+if (mode == 43):
+    flist [(10, 1000), (10,5000)]
+    for f in flist:
+        mean=f[0]
+        zmean=f[1]
+        model, gmp, res = retrain_model(mean, 10, zmean, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+            
 if (mode == 51):
     temp_list = [1, 2, 4]
     tau_list = [5e-6, 2e-6, 1e-6, 5e-7, 2e-7, 1e-7]
@@ -95,6 +102,13 @@ if (mode == 52):
                 print ("skip")
             else:
                 model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
+                
+if (mode == 53):
+    flist = [(1e-6, 4.0), (5e-7, 4.0)]
+    for f in flist:
+        tau = f[0]
+        temp = f[1]
+        model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files")
 
 if (mode == 6):
     mixlist = [4, 5, 7, 8, 10, 11, 14, 15]#[3, 6, 9, 12]
