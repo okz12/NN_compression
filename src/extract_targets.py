@@ -12,7 +12,7 @@ import model_archs
 import argparse
 
 
-def save_targets(model_file):
+def save_targets(model_file, dset = "mnist"):
 	train_data_full = Variable(train_data(fetch='data')).cuda()
 
 	loaded_model = torch.load(model_load_dir + model_file + ".m")
@@ -24,9 +24,9 @@ def save_targets(model_file):
 	for layer in layer_targets:
 		torch.save(layer_targets[layer], "{}{}_targets/{}.m".format(model_load_dir, model_file, layer))
 
-def get_targets(model_file, temp = 0, layers=[]):
+def get_targets(model_file, temp = 0, layers=[], dset = "mnist"):
 	if not os.path.exists("{}{}_targets".format(model_load_dir, model_file)):
-		save_targets(model_file)
+		save_targets(model_file, dset)
 	loaded_model = torch.load(model_load_dir + model_file + ".m")
 	target_dict = {}
 	if layers == []:
@@ -38,7 +38,7 @@ def get_targets(model_file, temp = 0, layers=[]):
 		target_dict[layer] = output.clone()
 	return target_dict
 
-def get_layer_data(target_dir, temp, layer, model_name, data_size, loss_type = 'MSEHNA'):
+def get_layer_data(target_dir, temp, layer, model_name, data_size, loss_type = 'MSEHNA', dset = "mnist"):
 	x_start = 0
 	x_end = 60000
 	if (data_size == "search"):

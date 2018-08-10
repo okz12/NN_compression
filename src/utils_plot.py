@@ -298,7 +298,7 @@ def joint_plot(model, model_orig, gmp, epoch, retraining_epochs, acc, savefile =
 
 
 class plot_data():
-	def __init__(self, init_model, gmp="", mode="retrain", full_model = "", data_size = 'search', loss_type='CE', mv = (0,0), zmv = (0,0), tau = 1, temp = 0, mixtures = 1):
+	def __init__(self, init_model, gmp="", mode="retrain", full_model = "", data_size = 'search', loss_type='CE', mv = (0,0), zmv = (0,0), tau = 1, temp = 0, mixtures = 1, dset="mnist"):
 		self.layers =  [x.replace(".weight", "") for x in init_model.state_dict().keys() if "weight" in x]
 		self.layer_init_weights = {}
 		for l in self.layers:
@@ -345,18 +345,18 @@ class plot_data():
 			self.gmp_mixprop = gmp.rhos.exp().data.clone().cpu().numpy()
 			self.gmp_scale = gmp.scale.exp().data.clone().cpu().numpy()
 			
-		self.test_data_full = Variable(test_data(fetch='data')).cuda()
-		self.test_labels_full = Variable(test_data(fetch='labels')).cuda()
+		self.test_data_full = Variable(test_data(fetch='data', dset=dset)).cuda()
+		self.test_labels_full = Variable(test_data(fetch='labels', dset=dset)).cuda()
 			
 		if (data_size =='search'):
-			self.val_data_full = Variable(train_data(fetch='data')[50000:60000]).cuda()
-			self.val_labels_full = Variable(train_data(fetch='labels')[50000:60000]).cuda()
-			self.train_data_full = Variable(train_data(fetch='data')[40000:50000]).cuda()
-			self.train_labels_full = Variable(train_data(fetch='labels')[40000:50000]).cuda()
+			self.val_data_full = Variable(train_data(fetch='data', dset=dset)[50000:60000]).cuda()
+			self.val_labels_full = Variable(train_data(fetch='labels', dset=dset)[50000:60000]).cuda()
+			self.train_data_full = Variable(train_data(fetch='data', dset=dset)[40000:50000]).cuda()
+			self.train_labels_full = Variable(train_data(fetch='labels', dset=dset)[40000:50000]).cuda()
 			
 		else:
-			self.train_data_full = Variable(train_data(fetch='data')).cuda()
-			self.train_labels_full = Variable(train_data(fetch='labels')).cuda()
+			self.train_data_full = Variable(train_data(fetch='data', dset=dset)).cuda()
+			self.train_labels_full = Variable(train_data(fetch='labels', dset=dset)).cuda()
 		
 	def data_epoch(self, epoch, model_in, gmp=""):
 		self.epochs.append(epoch)

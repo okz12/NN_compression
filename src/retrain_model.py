@@ -24,24 +24,24 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 
 	if(data_size == 'search'):
 		train_dataset = search_retrain_data
-		val_data_full = Variable(search_validation_data(fetch='data')).cuda()
-		val_labels_full = Variable(search_validation_data(fetch='labels')).cuda()
+		val_data_full = Variable(search_validation_data(fetch='data', dset=dset)).cuda()
+		val_labels_full = Variable(search_validation_data(fetch='labels', dset=dset)).cuda()
 		(x_start, x_end) = (40000, 50000)
 	if(data_size == 'full'):
 		train_dataset = train_data
 		(x_start, x_end) = (0, 60000)
-	test_data_full = Variable(test_data(fetch='data')).cuda()
-	test_labels_full = Variable(test_data(fetch='labels')).cuda()
+	test_data_full = Variable(test_data(fetch='data', dset=dset)).cuda()
+	test_labels_full = Variable(test_data(fetch='labels', dset=dset)).cuda()
 		
-	model_file = 'mnist_{}_{}_{}'.format(model_name, 100, data_size)
+	model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
 	model = torch.load(model_load_dir + model_file + '.m').cuda()
 		
 	if temp == 0:
-		loader = torch.utils.data.DataLoader(dataset=train_dataset(onehot = (loss_type == 'MSESNT')), batch_size=batch_size, shuffle=True)
+		loader = torch.utils.data.DataLoader(dataset=train_dataset(onehot = (loss_type == 'MSESNT'), dset=dset), batch_size=batch_size, shuffle=True)
 	else:
 		output = torch.load("{}{}_targets/{}.out.m".format(model_load_dir, model_file, "fc3" if "300_100" in model.name else "fc2"))[x_start:x_end]###
 		output = (nn.Softmax(dim=1)(output/temp)).data
-		dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data'), output)
+		dataset = torch.utils.data.TensorDataset(train_dataset(fetch='data', dset=dset), output)
 		loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True)
 	criterion = nn.CrossEntropyLoss()###
 	s = "s" if scaling else "f" 
@@ -60,14 +60,14 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 	
 	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
-	res_stats = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (mean, var), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures)
+	res_stats = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (mean, var), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures, dset = dset)
 	s_hist = []
 	a_hist = []
 	for epoch in range(retraining_epochs):
 		### [ACT DISABLE LR]
-		if(scaling and epoch == 0):
-			opt.param_groups[3]['lr'] = 0
-			print ("Scaling Disabled - Epoch {}".format(epoch))
+		#if(scaling and epoch == 0):
+		#	opt.param_groups[3]['lr'] = 0
+		#	print ("Scaling Disabled - Epoch {}".format(epoch))
 		model, loss = retrain_sws_epoch(model, gmp, opt, loader, tau, temp, loss_type)
 		res_stats.data_epoch(epoch + 1, model, gmp)
 		
@@ -110,10 +110,10 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 		print('Retrain Test: {:.2f}, Prune Test: {:.2f}, Prune Sparsity: {:.2f}'.format(res['test_acc'][-1], res['prune_acc']['test'],res['sparsity']))
 
 	if(model_save_dir!=""):
-		torch.save(model, model_save_dir + '/mnist_retrain_model_{}.m'.format(exp_name))
-		with open(model_save_dir + '/mnist_retrain_gmp_{}.p'.format(exp_name),'wb') as f:
+		torch.save(model, model_save_dir + '/{}_retrain_model_{}.m'.format(dset, exp_name))
+		with open(model_save_dir + '/{}_retrain_gmp_{}.p'.format(dset, exp_name),'wb') as f:
 			pickle.dump(gmp, f)
-		with open(model_save_dir + '/mnist_retrain_res_{}.p'.format(exp_name),'wb') as f:
+		with open(model_save_dir + '/{}_retrain_res_{}.p'.format(dset, exp_name),'wb') as f:
 			pickle.dump(res, f)
 
 	return model, gmp, res
