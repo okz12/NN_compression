@@ -3,6 +3,7 @@ search/**/output/*.out
 search/**/models/*
 figs/
 data/
+*.eps
 
 led / optimized / DLL files
 __pycache__/

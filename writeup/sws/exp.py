@@ -37,6 +37,6 @@ if (mode == 1):
         model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 1e-6, int(0), mixtures, "LeNet_300_100", "full", 'CESNT', False, "./files")
         
 if (mode == 2):
-    taulist = [1e-5, 2e-5, 5e-6, 2e-6, 5e-7, 2e-7, 1e-7, 5e-8]#1e-6,
+    taulist = [5e-8, 2e-8, 1e-8, 8e-7, 8e-6, 5e-5]
     for tau in taulist:
         model, gmp, res = retrain_model(1, 0.1, 1000, 1000, tau, int(0), 16, "LeNet_300_100", "full", 'CESNT', False, "./files")
