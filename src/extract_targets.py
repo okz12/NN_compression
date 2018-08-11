@@ -88,7 +88,8 @@ def get_layer_data(target_dir, temp, layer, model_name, data_size, loss_type = '
 if __name__=="__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--model_file', dest = "model", help = "Path to model to extract from", required = True)
+    parser.add_argument('--dset', dest = "dset", help = "Path to model to extract from", required = True)
 	parser.add_argument('--temp', dest = "temp", help="Temperature: Final softmax temperature for knowledge distillation", required=False, type=(int))
 	args = parser.parse_args()
 	model_file = args.model
-	save_targets(model_file)
+	save_targets(model_file, args.dset)
