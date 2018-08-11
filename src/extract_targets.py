@@ -13,7 +13,7 @@ import argparse
 
 
 def save_targets(model_file, dset = "mnist"):
-	train_data_full = Variable(train_data(fetch='data')).cuda()
+	train_data_full = Variable(train_data(fetch='data', dset = dset)).cuda()
 
 	loaded_model = torch.load(model_load_dir + model_file + ".m")
 	layer_targets = loaded_model.kd_layer_targets(train_data_full)
