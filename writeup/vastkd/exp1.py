@@ -116,6 +116,6 @@ if (mode == 6):
         model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, mixture, "LeNet_300_100", "full", 'MSEST', False, "./files")
         
 if (mode == 7):  
-    model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "SWSModel", "full", 'MSEST', False, "./files")
-    model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files", dset="fashionmnist")
-    model, gmp, res = retrain_model(250, 10, 2500, 1250, 1e-6, 5, 16, "SWSModel", "full", 'MSEST', False, "./files", dset="fashionmnist")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 5e-7, 5, 16, "SWSModel", "full", 'MSEST', False, "./files")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 5e-7, 5, 16, "LeNet_300_100", "full", 'MSEST', False, "./files", dset="fashionmnist")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 5e-7, 5, 16, "SWSModel", "full", 'MSEST', False, "./files", dset="fashionmnist")
