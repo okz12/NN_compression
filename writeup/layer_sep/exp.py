@@ -101,5 +101,5 @@ for tau in tau_list:
             res_str += 'Tau: {}, Epoch: {}. Test Accuracy: {:.2f} Prune Accuracy: {:.2f} Sparsity: {:.2f}\n'.format(tau, epoch+1, test_acc[0], prune_acc[0], sparsity)
             print('Tau: {}, Epoch: {}. Test Accuracy: {:.2f} Prune Accuracy: {:.2f} Sparsity: {:.2f}'.format(tau, epoch+1, test_acc[0], prune_acc[0], sparsity))
             print(res_list)
-            show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)
+            #show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)
 print (res_str)
