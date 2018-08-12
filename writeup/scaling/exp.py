@@ -43,7 +43,7 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
     zab = get_ab(zmean, zvar)
     
     scaling = False
-    if (scaling_g == "fixed" or scaling == "free"):
+    if (scaling_g == "fixed" or scaling_g == "free"):
         scaling = True
 
     if(data_size == 'search'):
