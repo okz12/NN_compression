@@ -29,6 +29,14 @@ test_labels_full = Variable(test_data(fetch = "labels")).cuda()
 #val_data_full = Variable(search_validation_data(fetch = "data")).cuda()
 #val_labels_full = Variable(search_validation_data(fetch = "labels")).cuda()
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
+args = parser.parse_args()
+mode = args.mode
+
+
 scaling = False
 res_str = ""
 res_list = []
