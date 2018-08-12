@@ -44,7 +44,7 @@ if (mode == 1):
     tau_list = [1.5e-5, 2e-5, 2.5e-5]
 if (mode == 2):
     tau_list = [3e-5, 3.5e-5, 5e-5]
-for tau in taulist:
+for tau in tau_list:
     model_name = "LeNet_300_100"
     data_size = "full"
     model_file = 'mnist_{}_{}_{}'.format(model_name, 100, data_size)
