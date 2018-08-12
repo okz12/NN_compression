@@ -81,7 +81,7 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
     if (scaling):
         if "SWS" in model_name:
-            slr = 5e-5
+            slr = 1e-4
         else:
             slr = 1e-6
     if (scaling_g == "free"):
