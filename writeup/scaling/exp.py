@@ -81,7 +81,7 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
         {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
     if (scaling):
         if "SWS" in model_name:
-            slr = 1e-5
+            slr = 5e-5
         else:
             slr = 1e-6
     if (scaling_g == "free"):
@@ -195,7 +195,7 @@ if (mode == 31):
     model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 2e-6, int(0), 16, "SWSModel", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", fn="_S0")
     model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 2e-6, int(0), 16, "SWSModel", "full", 'CESNT', scaling_g = "free", model_save_dir = "./files")
  
-    if (mode == 32):
+if (mode == 32):
     model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-7, 4,  16, "SWSModel", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", fn = "_MSE_S0")
     model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-7, 4, 16, "SWSModel", "full", 'MSEST', scaling_g = "free", model_save_dir = "./files", fn = "_MSE")
  
