@@ -22,7 +22,7 @@ def stack_weights(weight_dict):
 
 #Codebook
 #Create Indexbook
-def create_index(bpi, nz_list):
+def create_index(bpi, nz_list, weight_p):
     max_skip = 2**bpi
     if (nz_list[0] != 0):
         ridx_list = [0]
@@ -68,9 +68,9 @@ def cr_calc(res):
     res_dict = {}
     
     for bpi in range(2,10):
-        rl, wl = create_index (bpi, nz_list)
+        rl, wl = create_index (bpi, nz_list, weight_p)
         #rec = recover_index(rl, wl, len(weight_p))
-        ib = bpi * len(ridx_list)
+        ib = bpi * len(rl)
         bpw = np.ceil(np.log2(res['mixtures']))
         wb = bpw * len(wl)
         cr = orig_net / (cb + wb + ib + sb)
