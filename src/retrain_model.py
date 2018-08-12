@@ -56,7 +56,11 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
 		{'params': [gmp.means], 'lr': mlr},
 		{'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}]
 	if (scaling):
-		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': 1e-6}]
+		if "SWS" in model:
+			slr = 2e-5
+		else:
+			slr = 1e-6
+		optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': slr}]
 	
 	opt = torch.optim.Adam(optimizable_params)#log precisions and mixing proportions
 
