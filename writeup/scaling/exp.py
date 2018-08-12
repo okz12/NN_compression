@@ -15,12 +15,15 @@ import model_archs
 
 
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, layer_accuracy
-from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab, get_sparsity
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
 from extract_targets import get_targets
 from retrain_layer import init_retrain_layer
 #from retrain_model import retrain_model
+
+from utils_plot import show_sws_weights, show_weights, print_dims, prune_plot, draw_sws_graphs, joint_plot, plot_data
+from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty
+from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy, compressed_model
 
 import numpy as np
 import pickle
