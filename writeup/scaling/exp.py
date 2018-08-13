@@ -84,7 +84,7 @@ def retrain_model(mean, var, zmean, zvar, tau, temp, mixtures, model_name, data_
             slr = 2e-4
             print(slr)
         else:
-            slr = 1e-6
+            slr = 2e-4
     if (scaling_g == "free"):
         optimizable_params = optimizable_params + [{'params': gmp.scale, 'lr': slr}]
 
@@ -199,4 +199,7 @@ if (mode == 31):
 if (mode == 32):
     #model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-7, 4,  16, "SWSModel", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", fn = "_MSE_S0")
     model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-7, 4, 16, "SWSModel", "full", 'MSEST', scaling_g = "free", model_save_dir = "./files", fn = "_MSE")
+    
+if (mode == 33):
+    model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-6, 4, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "free", model_save_dir = "./files", fn = "_MSE_LNLR")
  
