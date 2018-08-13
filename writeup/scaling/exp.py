@@ -202,4 +202,13 @@ if (mode == 32):
     
 if (mode == 33):
     model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-6, 4, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "free", model_save_dir = "./files", fn = "_MSE_LNLR")
+    
+if (mode == 41):
+    #LeNet SWS
+
+if (mode == 42):
+    #LeNET SWS + KD
+    
+if (mode == 43):
+    #FMNIST
  
