@@ -16,6 +16,7 @@ import argparse
 model_dir = "./models/"
 import model_archs
 from utils_model import test_accuracy, train_epoch, retrain_sws_epoch, model_prune, get_weight_penalty, layer_accuracy
+from utils_plot import plot_data
 from utils_misc import trueAfterN, logsumexp, root_dir, model_load_dir, get_ab, get_sparsity
 from utils_sws import GaussianMixturePrior, special_flatten, KL, compute_responsibilies, merger, sws_prune, sws_prune_l2, sws_prune_copy, sws_replace, compressed_model
 from mnist_loader import search_train_data, search_retrain_data, search_validation_data, train_data, test_data, batch_size
@@ -40,14 +41,15 @@ mode = args.mode
 scaling = False
 res_str = ""
 res_list = []
+model_save_dir = "./files"
 if (mode == 1):
-    tau_list = [1.5e-5, 2e-5, 2.5e-5]
+    tau_list = [1e-5, 1.5e-5, 2e-5, 2.5e-5, 3e-5]
 if (mode == 2):
-    tau_list = [3e-5, 3.5e-5, 5e-5]
+    tau_list = [3.5e-5, 4e-5, 6e-5, 8e-5, 10e-5]
 for tau in tau_list:
     model_name = "LeNet_300_100"
     data_size = "full"
-    model_file = 'mnist_{}_{}_{}'.format(model_name, 100, data_size)
+    model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
     targets_dict = get_targets(model_file)
@@ -69,6 +71,12 @@ for tau in tau_list:
         opt_gmp = torch.optim.Adam([{'params': [gmp.means], 'lr': 0.5e-4}, {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])
     else:
         opt_gmp = torch.optim.Adam([{'params': [gmp.means], 'lr': 0.5e-4}, {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}, {'params': [gmp.scale], 'lr': 1e-6}])
+        
+        
+        
+    r = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (mean, var), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures, dset = dset)
+    s_hist = []
+    a_hist = []
 
 
     for epoch in range(retraining_epochs):
@@ -92,6 +100,13 @@ for tau in tau_list:
             opt_2.step()
             opt_3.step()
             opt_gmp.step()
+            
+        res_stats.data_epoch(epoch + 1, model, gmp)
+        nm = sws_prune_copy(model, gmp)
+		s = get_sparsity(nm)
+		a = test_accuracy(test_data_full, test_labels_full, nm)[0]
+		s_hist.append(s)
+		a_hist.append(a)
         if (trueAfterN(epoch, 25)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             prune_model = sws_prune_copy(model, gmp)
@@ -102,4 +117,16 @@ for tau in tau_list:
             print('Tau: {}, Epoch: {}. Test Accuracy: {:.2f} Prune Accuracy: {:.2f} Sparsity: {:.2f}'.format(tau, epoch+1, test_acc[0], prune_acc[0], sparsity))
             print(res_list)
             #show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)
+    model_prune = sws_prune_copy(model, gmp)
+
+	res_stats.data_prune(model_prune)
+	res = res_stats.gen_dict()
+	res['test_prune_acc'] = a_hist
+	res['test_prune_sp'] = s_hist
+    if(model_save_dir!=""):
+		torch.save(model, model_save_dir + '/{}_retrain_model_{}.m'.format(dset, exp_name))
+		with open(model_save_dir + '/{}_retrain_gmp_{}.p'.format(dset, exp_name),'wb') as f:
+			pickle.dump(gmp, f)
+		with open(model_save_dir + '/{}_retrain_res_{}.p'.format(dset, exp_name),'wb') as f:
+			pickle.dump(res, f)
 print (res_str)
