@@ -68,7 +68,7 @@ for tau in tau_list:
     gmp = GaussianMixturePrior(16, [x for x in model.parameters()], 0.99, zero_ab = get_ab(2000, 1000), ab = get_ab(100,10), scaling = scaling)
     opt_1 = torch.optim.Adam([{'params': model.conv1.parameters(), 'lr': 2e-4}])
     opt_2 = torch.optim.Adam([{'params': model.conv2.parameters(), 'lr': 2e-4}])
-    opt_3 = torch.optim.Adam([{'params': model.fc3.parameters(), 'lr': 2e-4}])
+    opt_3 = torch.optim.Adam([{'params': model.fc1.parameters(), 'lr': 2e-4}])
     opt_4 = torch.optim.Adam([{'params': model.fc2.parameters(), 'lr': 2e-4}])
     if (not scaling):
         opt_gmp = torch.optim.Adam([{'params': [gmp.means], 'lr': 0.5e-4}, {'params': [gmp.gammas, gmp.rhos], 'lr': 3e-3}])
