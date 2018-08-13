@@ -66,9 +66,6 @@ class SWSModel(nn.Module):
         return out
         
     def layer_forward(self, x):
-        x = x.view(-1, 28 * 28)
-        d = x.shape[0]
-        print (x.shape)
         out1 = self.conv1(x)
         out2 = self.relu1(out1)
         out2 = self.conv2(out2)
@@ -76,6 +73,11 @@ class SWSModel(nn.Module):
         out3 = self.fc1(out3)
         out4 = self.relu3(out3)
         out4 = self.fc2(out4)
+        print (x.shape)
+        print (out1.shape)
+        print (out2.shape)
+        print (out3.shape)
+        print (out4.shape)
         return torch.cat((out1.view(d, -1), out2.view(d, -1), out3, out4), 1)
         
     def kd_layer_targets(self, x, T=1.0):
