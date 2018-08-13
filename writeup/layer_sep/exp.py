@@ -84,7 +84,7 @@ for tau in tau_list:
             images=images.cuda()
             targets=targets.cuda()
             images = Variable(images)
-            targets = Variable(targets)	
+            targets = Variable(targets)    
             opt_1.zero_grad()
             opt_2.zero_grad()
             opt_3.zero_grad()
@@ -103,10 +103,10 @@ for tau in tau_list:
             
         res_stats.data_epoch(epoch + 1, model, gmp)
         nm = sws_prune_copy(model, gmp)
-		s = get_sparsity(nm)
-		a = test_accuracy(test_data_full, test_labels_full, nm)[0]
-		s_hist.append(s)
-		a_hist.append(a)
+        s = get_sparsity(nm)
+        a = test_accuracy(test_data_full, test_labels_full, nm)[0]
+        s_hist.append(s)
+        a_hist.append(a)
         if (trueAfterN(epoch, 25)):
             test_acc = test_accuracy(test_data_full, test_labels_full, model)
             prune_model = sws_prune_copy(model, gmp)
@@ -119,14 +119,14 @@ for tau in tau_list:
             #show_sws_weights(model = model, means = list(gmp.means.data.clone().cpu()), precisions = list(gmp.gammas.data.clone().cpu()), epoch = epoch)
     model_prune = sws_prune_copy(model, gmp)
 
-	res_stats.data_prune(model_prune)
-	res = res_stats.gen_dict()
-	res['test_prune_acc'] = a_hist
-	res['test_prune_sp'] = s_hist
+    res_stats.data_prune(model_prune)
+    res = res_stats.gen_dict()
+    res['test_prune_acc'] = a_hist
+    res['test_prune_sp'] = s_hist
     if(model_save_dir!=""):
-		torch.save(model, model_save_dir + '/{}_retrain_model_{}.m'.format(dset, exp_name))
-		with open(model_save_dir + '/{}_retrain_gmp_{}.p'.format(dset, exp_name),'wb') as f:
-			pickle.dump(gmp, f)
-		with open(model_save_dir + '/{}_retrain_res_{}.p'.format(dset, exp_name),'wb') as f:
-			pickle.dump(res, f)
+        torch.save(model, model_save_dir + '/{}_retrain_model_{}.m'.format(dset, exp_name))
+        with open(model_save_dir + '/{}_retrain_gmp_{}.p'.format(dset, exp_name),'wb') as f:
+            pickle.dump(gmp, f)
+        with open(model_save_dir + '/{}_retrain_res_{}.p'.format(dset, exp_name),'wb') as f:
+            pickle.dump(res, f)
 print (res_str)
