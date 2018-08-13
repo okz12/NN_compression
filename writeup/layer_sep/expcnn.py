@@ -56,7 +56,7 @@ for tau in tau_list:
 
     targets_dict = get_targets(model_file)
     inputs = train_data(fetch = "data", dset = dset).cuda()
-    targets = torch.cat((targets_dict['conv1.out'],targets_dict['conv2.out'],targets_dict['fc1.out'],targets_dict['fc2.out']), 1).data.cuda()
+    targets = torch.cat((targets_dict['conv1.out'].view(-1),targets_dict['conv2.out'].view(-1),targets_dict['fc1.out'].view(-1),targets_dict['fc2.out'].view(-1)), 1).data.cuda()
     if data_size == "search":
         inputs = inputs[0:10000]
         targets = targets[0:10000]
@@ -100,7 +100,7 @@ for tau in tau_list:
             opt_4.zero_grad()
             opt_gmp.zero_grad()
 
-            forward = model.layer_forward(images)
+            forward = model.layer_forward(images).view(-1)
             loss_acc = nn.MSELoss()(forward, targets)
 
             loss = loss_acc + tau * gmp.call()
