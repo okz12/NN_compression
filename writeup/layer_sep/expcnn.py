@@ -100,7 +100,7 @@ for tau in tau_list:
             opt_4.zero_grad()
             opt_gmp.zero_grad()
 
-            forward = model.layer_forward(images).view(batch_size, -1)
+            forward = model.layer_forward(images)
             loss_acc = nn.MSELoss()(forward, targets)
 
             loss = loss_acc + tau * gmp.call()

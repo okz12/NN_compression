@@ -76,11 +76,6 @@ class SWSModel(nn.Module):
         out3 = self.fc1(out3)
         out4 = self.relu3(out3)
         out4 = self.fc2(out4)
-        print (x.shape)
-        print (out1.shape)
-        print (out2.shape)
-        print (out3.shape)
-        print (out4.shape)
         return torch.cat((out1.view(d, -1), out2.view(d, -1), out3, out4), 1)
         
     def kd_layer_targets(self, x, T=1.0):
