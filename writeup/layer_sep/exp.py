@@ -49,8 +49,9 @@ if (mode == 1):
 if (mode == 2):
     tau_list = [3.5e-5, 4e-5, 6e-5, 8e-5, 10e-5]
     
-if (dset == "fashionmnist"):
-    tau_list = []
+if (mode == 3):
+    tau_list = [2e-5,4e-5,10e-5]
+    
 for tau in tau_list:
     model_name = "LeNet_300_100"
     data_size = "full"

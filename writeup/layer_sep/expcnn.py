@@ -34,10 +34,13 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dset', dest = "dset", help = "Path to model to extract from", required = True)
+parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
 args = parser.parse_args()
 dset = args.dset
+mode = args.mode
 
-
+if (mode == 3):
+    tau_list = [2e-5,4e-5,10e-5]
 
 scaling = False
 res_str = ""
