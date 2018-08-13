@@ -71,6 +71,7 @@ class SWSModel(nn.Module):
         out2 = self.relu1(out1)
         out2 = self.conv2(out2)
         out3 = self.relu2(out2)
+        out3 = out3.view(out.size(0), -1)
         out3 = self.fc1(out3)
         out4 = self.relu3(out3)
         out4 = self.fc2(out4)
