@@ -33,10 +33,8 @@ test_labels_full = Variable(test_data(fetch = "labels")).cuda()
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
 parser.add_argument('--dset', dest = "dset", help = "Path to model to extract from", required = True)
 args = parser.parse_args()
-mode = args.mode
 dset = args.dset
 
 
@@ -44,10 +42,7 @@ scaling = False
 res_str = ""
 res_list = []
 model_save_dir = "./files"
-if (mode == 1):
-    tau_list = [1e-6, 1.5e-6, 2e-6, 2.5e-6, 3e-6]
-if (mode == 2):
-    tau_list = [3.5e-6, 4e-6, 6e-6, 8e-6, 10e-6]
+tau_list = [4e-6, 8e-6, 1e-5, 2e-5, 4e-5, 8e-5, 10e-5]
 for tau in tau_list:
     model_name = "SWSModel"
     data_size = "full"
