@@ -82,7 +82,7 @@ for tau in tau_list:
     temp = 1
     mixtures = 16
     exp_name = "{}_m{}_zm{}_r{}_t{}_m{}_kdT{}_{}_{}".format(model.name, mean, zmean, retraining_epochs, tau, int(mixtures), int(temp), "f", "full")
-    r = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (100, 10), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures, dset = dset)
+    res_stats = plot_data(init_model = model, gmp = gmp, mode = 'retrain', data_size = data_size, loss_type='CE', mv = (100, 10), zmv = (zmean, zvar), tau = tau, temp = temp, mixtures = mixtures, dset = dset)
     s_hist = []
     a_hist = []
 
