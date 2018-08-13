@@ -34,8 +34,10 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
+parser.add_argument('--dset', dest = "dset", help = "Path to model to extract from", required = True)
 args = parser.parse_args()
 mode = args.mode
+dset = args.dset
 
 
 scaling = False
