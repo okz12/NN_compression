@@ -67,6 +67,7 @@ class SWSModel(nn.Module):
         
     def layer_forward(self, x):
         x = x.view(-1, 1, 28, 28)
+        d = x.shape[0]
         out1 = self.conv1(x)
         out2 = self.relu1(out1)
         out2 = self.conv2(out2)
