@@ -238,3 +238,6 @@ if (mode == 53):
     #FMNIST SWS + SWS Model
     model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 2e-6, int(0), 16, "SWSModel", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", fn="_S0", dset = 'fashionmnist')
     
+if (mode == 54):
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 1e-6, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn="_S0")
+    
