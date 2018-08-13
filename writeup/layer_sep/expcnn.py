@@ -46,9 +46,7 @@ scaling = False
 res_str = ""
 res_list = []
 model_save_dir = "./files"
-tau_list = [4e-6, 8e-6, 1e-5, 2e-5, 4e-5, 8e-5, 10e-5]
-if (dset == "fashionmnist"):
-    tau_list = []
+#tau_list = [4e-6, 8e-6, 1e-5, 2e-5, 4e-5, 8e-5, 10e-5]
 for tau in tau_list:
     model_name = "SWSModel"
     data_size = "full"
