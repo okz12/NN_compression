@@ -53,7 +53,7 @@ for tau in tau_list:
     model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
-    targets_dict = get_targets(model_file, dset)
+    targets_dict = get_targets(model_file, dset=dset)
     inputs = train_data(fetch = "data", dset = dset).cuda()
     targets = torch.cat((targets_dict['conv1.out'].view(60000, -1),targets_dict['conv2.out'].view(60000, -1),targets_dict['fc1.out'].view(60000, -1),targets_dict['fc2.out'].view(60000, -1)), 1).data.cuda()
     if data_size == "search":

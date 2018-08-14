@@ -50,7 +50,7 @@ if (mode == 2):
     tau_list = [3.5e-5, 4e-5, 6e-5, 8e-5, 10e-5]
     
 if (mode == 3):
-    tau_list = [2e-7,4e-7,10e-7]
+    tau_list = [2e-5,4e-5,10e-5]
     
 for tau in tau_list:
     model_name = "LeNet_300_100"
@@ -58,7 +58,7 @@ for tau in tau_list:
     model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
-    targets_dict = get_targets(model_file, dset)
+    targets_dict = get_targets(model_file, dset=dset)
     inputs = train_data(fetch = "data", dset = dset).cuda()
     targets = torch.cat((targets_dict['fc1.out'],targets_dict['fc2.out'],targets_dict['fc3.out']), 1).data.cuda()
     if data_size == "search":
