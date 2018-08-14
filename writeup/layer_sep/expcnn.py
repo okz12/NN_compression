@@ -40,7 +40,7 @@ test_data_full = Variable(test_data(fetch = "data", dset=dset)).cuda()
 test_labels_full = Variable(test_data(fetch = "labels", dset = dset)).cuda()
 
 if (mode == 3):
-    tau_list = [2e-5,4e-5,10e-5]
+    tau_list = [8e-6, 1e-5, 2e-5]
 
 scaling = False
 res_str = ""
