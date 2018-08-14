@@ -24,12 +24,6 @@ from extract_targets import get_targets, get_layer_data
 from retrain_layer import retrain_layer
 retraining_epochs = 50
 
-
-test_data_full = Variable(test_data(fetch = "data")).cuda()
-test_labels_full = Variable(test_data(fetch = "labels")).cuda()
-#val_data_full = Variable(search_validation_data(fetch = "data")).cuda()
-#val_labels_full = Variable(search_validation_data(fetch = "labels")).cuda()
-
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -39,6 +33,8 @@ args = parser.parse_args()
 mode = args.mode
 dset = args.dset
 
+test_data_full = Variable(test_data(fetch = "data", dset=dset)).cuda()
+test_labels_full = Variable(test_data(fetch = "labels", dset = dset)).cuda()
 
 scaling = False
 res_str = ""

@@ -24,9 +24,6 @@ from extract_targets import get_targets, get_layer_data
 from retrain_layer import retrain_layer
 retraining_epochs = 50
 
-
-test_data_full = Variable(test_data(fetch = "data")).cuda()
-test_labels_full = Variable(test_data(fetch = "labels")).cuda()
 #val_data_full = Variable(search_validation_data(fetch = "data")).cuda()
 #val_labels_full = Variable(search_validation_data(fetch = "labels")).cuda()
 
@@ -38,6 +35,9 @@ parser.add_argument('--mode', dest = "mode", help = "Exp number", required = Tru
 args = parser.parse_args()
 dset = args.dset
 mode = args.mode
+
+test_data_full = Variable(test_data(fetch = "data", dset=dset)).cuda()
+test_labels_full = Variable(test_data(fetch = "labels", dset = dset)).cuda()
 
 if (mode == 3):
     tau_list = [2e-5,4e-5,10e-5]
