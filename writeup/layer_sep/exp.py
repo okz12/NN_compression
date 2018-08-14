@@ -24,12 +24,6 @@ from extract_targets import get_targets, get_layer_data
 from retrain_layer import retrain_layer
 retraining_epochs = 50
 
-
-test_data_full = Variable(test_data(fetch = "data")).cuda()
-test_labels_full = Variable(test_data(fetch = "labels")).cuda()
-#val_data_full = Variable(search_validation_data(fetch = "data")).cuda()
-#val_labels_full = Variable(search_validation_data(fetch = "labels")).cuda()
-
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -39,6 +33,8 @@ args = parser.parse_args()
 mode = args.mode
 dset = args.dset
 
+test_data_full = Variable(test_data(fetch = "data", dset=dset)).cuda()
+test_labels_full = Variable(test_data(fetch = "labels", dset = dset)).cuda()
 
 scaling = False
 res_str = ""
@@ -48,13 +44,17 @@ if (mode == 1):
     tau_list = [1e-5, 1.5e-5, 2e-5, 2.5e-5, 3e-5]
 if (mode == 2):
     tau_list = [3.5e-5, 4e-5, 6e-5, 8e-5, 10e-5]
+    
+if (mode == 3):
+    tau_list = [8e-6, 1e-5, 2e-5]
+    
 for tau in tau_list:
     model_name = "LeNet_300_100"
     data_size = "full"
     model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
-    targets_dict = get_targets(model_file)
+    targets_dict = get_targets(model_file, dset=dset)
     inputs = train_data(fetch = "data", dset = dset).cuda()
     targets = torch.cat((targets_dict['fc1.out'],targets_dict['fc2.out'],targets_dict['fc3.out']), 1).data.cuda()
     if data_size == "search":

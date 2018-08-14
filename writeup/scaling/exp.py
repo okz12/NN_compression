@@ -218,3 +218,31 @@ if (mode == 43):
     model, gmp, res = retrain_model(250, 10, 2500, 1250, 1.3e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn = "_MSE_S0")
     model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 1e-6, int(0), 16, "SWSModel", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist')
  
+if (mode == 51):
+    #LeNet SWS
+    for tau in [6e-7, 9e-7, 2e-6, 3e-6, 7e-7]:
+        model, gmp, res = retrain_model(1, 0.1, 1000, 1000, tau, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", fn="_S0")
+
+if (mode == 52):
+    #LeNET SWS + KD
+    for tau in [6e-7, 9e-7, 2e-6, 3e-6, 7e-7]:
+        model, gmp, res = retrain_model(250, 10, 2500, 1250,  tau, 4,  16, "LeNet_300_100", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", fn = "_MSE_S0")
+    
+if (mode == 53):
+    #FMNIST SWS + KD + LeNet
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 3e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn = "_MSE_S0")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 5e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn = "_MSE_S0")
+    #FMNIST SWS + LeNet -- Done
+    #FMNIST SWS + KD + SWSModel
+    model, gmp, res = retrain_model(250, 10, 2500, 1250,  2e-7, 4,  16, "SWSModel", "full", 'MSEST', scaling_g = "fixed", model_save_dir = "./files", fn = "_MSE_S0", dset = 'fashionmnist')
+    #FMNIST SWS + SWS Model
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 2e-6, int(0), 16, "SWSModel", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", fn="_S0", dset = 'fashionmnist')
+    
+if (mode == 54):
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 3e-6, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn="_S0")
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 5e-6, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "fixed", model_save_dir = "./files", dset = 'fashionmnist', fn="_S0")
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 3e-6, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "false", model_save_dir = "./files", dset = 'fashionmnist')
+    model, gmp, res = retrain_model(1, 0.1, 1000, 1000, 5e-6, int(0), 16, "LeNet_300_100", "full", 'CESNT', scaling_g = "false", model_save_dir = "./files", dset = 'fashionmnist')
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 3e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "false", model_save_dir = "./files", dset = 'fashionmnist', fn = "_MSE_S0")
+    model, gmp, res = retrain_model(250, 10, 2500, 1250, 5e-6, 5, 16, "LeNet_300_100", "full", 'MSEST', scaling_g = "false", model_save_dir = "./files", dset = 'fashionmnist', fn = "_MSE_S0")
+    

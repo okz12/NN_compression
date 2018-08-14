@@ -24,37 +24,36 @@ from extract_targets import get_targets, get_layer_data
 from retrain_layer import retrain_layer
 retraining_epochs = 50
 
-
-test_data_full = Variable(test_data(fetch = "data")).cuda()
-test_labels_full = Variable(test_data(fetch = "labels")).cuda()
 #val_data_full = Variable(search_validation_data(fetch = "data")).cuda()
 #val_labels_full = Variable(search_validation_data(fetch = "labels")).cuda()
 
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
 parser.add_argument('--dset', dest = "dset", help = "Path to model to extract from", required = True)
+parser.add_argument('--mode', dest = "mode", help = "Exp number", required = True, type=int)
 args = parser.parse_args()
-mode = args.mode
 dset = args.dset
+mode = args.mode
 
+test_data_full = Variable(test_data(fetch = "data", dset=dset)).cuda()
+test_labels_full = Variable(test_data(fetch = "labels", dset = dset)).cuda()
+
+if (mode == 3):
+    tau_list = [8e-6, 1e-5, 2e-5]
 
 scaling = False
 res_str = ""
 res_list = []
 model_save_dir = "./files"
-if (mode == 1):
-    tau_list = [1e-6, 1.5e-6, 2e-6, 2.5e-6, 3e-6]
-if (mode == 2):
-    tau_list = [3.5e-6, 4e-6, 6e-6, 8e-6, 10e-6]
+#tau_list = [4e-6, 8e-6, 1e-5, 2e-5, 4e-5, 8e-5, 10e-5]
 for tau in tau_list:
     model_name = "SWSModel"
     data_size = "full"
     model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
-    targets_dict = get_targets(model_file)
+    targets_dict = get_targets(model_file, dset=dset)
     inputs = train_data(fetch = "data", dset = dset).cuda()
     targets = torch.cat((targets_dict['conv1.out'].view(60000, -1),targets_dict['conv2.out'].view(60000, -1),targets_dict['fc1.out'].view(60000, -1),targets_dict['fc2.out'].view(60000, -1)), 1).data.cuda()
     if data_size == "search":
@@ -100,7 +99,7 @@ for tau in tau_list:
             opt_4.zero_grad()
             opt_gmp.zero_grad()
 
-            forward = model.layer_forward(images).view(batch_size, -1)
+            forward = model.layer_forward(images)
             loss_acc = nn.MSELoss()(forward, targets)
 
             loss = loss_acc + tau * gmp.call()
