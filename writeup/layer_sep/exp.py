@@ -58,7 +58,7 @@ for tau in tau_list:
     model_file = '{}_{}_{}_{}'.format(dset, model_name, 100, data_size)
     model = torch.load(model_load_dir + model_file + '.m').cuda()
 
-    targets_dict = get_targets(model_file)
+    targets_dict = get_targets(model_file, dset)
     inputs = train_data(fetch = "data", dset = dset).cuda()
     targets = torch.cat((targets_dict['fc1.out'],targets_dict['fc2.out'],targets_dict['fc3.out']), 1).data.cuda()
     if data_size == "search":
