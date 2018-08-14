@@ -50,7 +50,7 @@ if (mode == 2):
     tau_list = [3.5e-5, 4e-5, 6e-5, 8e-5, 10e-5]
     
 if (mode == 3):
-    tau_list = [2e-4,4e-4,10e-4]
+    tau_list = [2e-7,4e-7,10e-7]
     
 for tau in tau_list:
     model_name = "LeNet_300_100"

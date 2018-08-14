@@ -40,7 +40,7 @@ dset = args.dset
 mode = args.mode
 
 if (mode == 3):
-    tau_list = [2e-5,4e-5,10e-5]
+    tau_list = [2e-7,4e-7,10e-7]
 
 scaling = False
 res_str = ""
